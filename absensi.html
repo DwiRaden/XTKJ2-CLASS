@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Absensi TKJ 2</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: #f2f7f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 20px;
+            padding: 10px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(0, 40, 0, 0.15);
+            border: 1px solid #b8d9b0;
+        }
+        h2 {
+            text-align: center;
+            color: #1f4f1f;
+            margin-bottom: 20px;
+            font-weight: 500;
+            border-bottom: 2px dashed #9ac79a;
+            padding-bottom: 12px;
+        }
+        .grid-button {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 20px 0 16px 0;
+        }
+        .grid-button button {
+            padding: 10px 6px;
+            background: #e3f0e3;
+            border: 1px solid #b0cfb0;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #1f4a1f;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 2px 4px rgba(0,30,0,0.05);
+            text-align: center;
+            line-height: 1.3;
+            min-height: 52px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .grid-button button .nomor {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .grid-button button .nama {
+            font-weight: 400;
+            font-size: 0.65rem;
+            color: #2d5a2d;
+            margin-top: 2px;
+            line-height: 1.2;
+            max-width: 100%;
+            word-break: break-word;
+        }
+        .grid-button button .status-label {
+            font-size: 0.5rem;
+            background: rgba(0,0,0,0.1);
+            border-radius: 30px;
+            padding: 1px 8px;
+            margin-top: 2px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .grid-button button:hover {
+            background: #c6e2c6;
+            transform: scale(1.02);
+            border-color: #6f9e6f;
+        }
+        .grid-button button.active-presence {
+            background: #1f7a1f;
+            border-color: #135013;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,80,0,0.2);
+        }
+        .grid-button button.active-presence .nama {
+            color: #d4f0d4;
+        }
+        .grid-button button.status-sakit {
+            background: #f5c6a0;
+            border-color: #d4875a;
+        }
+        .grid-button button.status-sakit .nama {
+            color: #6b3a1a;
+        }
+        .grid-button button.status-izin {
+            background: #f5e6a0;
+            border-color: #d4b84a;
+        }
+        .grid-button button.status-izin .nama {
+            color: #6b5a1a;
+        }
+        .grid-button button.status-alfa {
+            background: #f0a0a0;
+            border-color: #c45a5a;
+        }
+        .grid-button button.status-alfa .nama {
+            color: #6b1a1a;
+        }
+        .grid-button button.active-presence .status-label {
+            background: rgba(255,255,255,0.2);
+            color: #d4f0d4;
+        }
+        .grid-button button.selected {
+            outline: 3px solid #1a6b1a;
+            outline-offset: -2px;
+        }
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            background: #f4faf4;
+            padding: 12px 16px;
+            border-radius: 40px;
+            margin: 12px 0 16px 0;
+            border: 1px solid #cde0cd;
+        }
+        .info-item {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            font-size: 0.95rem;
+        }
+        .info-item strong {
+            color: #1b4c1b;
+            margin-right: 4px;
+        }
+        .info-item span {
+            font-weight: 600;
+            color: #0b3b0b;
+            background: #dcebd9;
+            padding: 0 10px;
+            border-radius: 30px;
+            min-width: 30px;
+            text-align: center;
+        }
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+            align-items: center;
+        }
+        .action-buttons .btn-status {
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid #b0cfb0;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.1s;
+            background: #e8f0e8;
+            color: #1f4a1f;
+        }
+        .action-buttons .btn-status:hover {
+            transform: scale(1.03);
+        }
+        .action-buttons .btn-status.sakit {
+            background: #f5c6a0;
+            border-color: #d4875a;
+        }
+        .action-buttons .btn-status.izin {
+            background: #f5e6a0;
+            border-color: #d4b84a;
+        }
+        .action-buttons .btn-status.alfa {
+            background: #f0a0a0;
+            border-color: #c45a5a;
+        }
+        .action-buttons .btn-status.hadir {
+            background: #9acf9a;
+            border-color: #4f8f4f;
+        }
+        .action-buttons .btn-status.hadir:hover {
+            background: #7dbd7d;
+        }
+        .action-buttons .btn-status.sakit:hover {
+            background: #ebb88a;
+        }
+        .action-buttons .btn-status.izin:hover {
+            background: #ebd88a;
+        }
+        .action-buttons .btn-status.alfa:hover {
+            background: #e88a8a;
+        }
+        .action-buttons .btn-clear-selected {
+            background: #e6d5d5;
+            border-color: #c6aeae;
+            color: #4f2f2f;
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid #c6aeae;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .action-buttons .btn-clear-selected:hover {
+            background: #dac9c9;
+        }
+        .selected-info {
+            font-size: 0.85rem;
+            color: #2d5a2d;
+            background: #eef7ee;
+            padding: 4px 14px;
+            border-radius: 40px;
+            border: 1px solid #cde0cd;
+        }
+        .report-box {
+            background: #fafffa;
+            border-radius: 20px;
+            padding: 18px 20px;
+            margin: 18px 0 10px 0;
+            border: 1px solid #c5dec5;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #1a3a1a;
+            box-shadow: inset 0 2px 6px rgba(0,30,0,0.03);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .footer-action {
+            display: flex;
+            justify-content: flex-end;
+            margin: 10px 0 5px 0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn-copy, .btn-reset-all {
+            background: #deecde;
+            border: 1px solid #aac8aa;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 500;
+            color: #1d4a1d;
+            cursor: pointer;
+            transition: 0.1s;
+            font-size: 0.9rem;
+        }
+        .btn-copy:hover, .btn-reset-all:hover {
+            background: #c4ddc4;
+        }
+        .btn-reset-all {
+            background: #f0e6e6;
+            border-color: #d4bdbd;
+            color: #5a3a3a;
+        }
+        .btn-reset-all:hover {
+            background: #e6d5d5;
+        }
+        .day-indicator {
+            background: #e2f0e2;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-weight: 500;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 18px; }
+            .grid-button { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+            .grid-button button { font-size: 0.7rem; min-height: 44px; padding: 6px 4px; }
+            .grid-button button .nama { font-size: 0.55rem; }
+            .info-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+            .action-buttons { gap: 5px; }
+            .action-buttons .btn-status { font-size: 0.7rem; padding: 4px 12px; }
+        }
+        @media (max-width: 400px) {
+            .grid-button { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>📋 Laporan Absensi · TKJ 2</h2>
+
+    <!-- Tombol 1-31 dengan nama -->
+    <div class="grid-button" id="buttonGrid"></div>
+
+    <!-- Action buttons untuk status -->
+    <div class="action-buttons">
+        <span class="selected-info" id="selectedInfo">Belum ada siswa dipilih</span>
+        <button class="btn-status hadir" data-status="hadir">✅ Hadir</button>
+        <button class="btn-status sakit" data-status="sakit">🤒 Sakit</button>
+        <button class="btn-status izin" data-status="izin">📝 Izin</button>
+        <button class="btn-status alfa" data-status="alfa">❌ Alfa</button>
+        <button class="btn-clear-selected" id="clearSelected">✖ Batal Pilih</button>
+    </div>
+
+    <!-- Info ringkas -->
+    <div class="info-row">
+        <div class="info-item"><strong>👥 Total</strong> <span id="totalDisplay">31</span></div>
+        <div class="info-item"><strong>✅ Hadir</strong> <span id="presentDisplay">0</span></div>
+        <div class="info-item"><strong>📅 Hari</strong> <span id="dayDisplay" class="day-indicator">Wednesday</span></div>
+        <div class="info-item"><strong>📆 Tanggal</strong> <span id="dateDisplay">29 July 2026</span></div>
+    </div>
+
+    <!-- Laporan lengkap -->
+    <div class="report-box" id="reportContainer"></div>
+
+    <div class="footer-action">
+        <button class="btn-copy" id="copyReportBtn">📋 Salin Laporan</button>
+        <button class="btn-reset-all" id="resetAbsentBtn">↺ Reset Semua Hadir</button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- Daftar Nama Siswa -----
+        const NAMA_SISWA = [
+            "Abrizam Al Faridzi Ardiansyah",
+            "Alfien Ulinuha",
+            "Anisha Noviansyah",
+            "Aozora Aulia Dewi",
+            "Aura Pricilla Dwi Hidayat",
+            "Bravyan Agmar Ashra",
+            "Dea Aulia Hasyim",
+            "Dwijendra Basunjaya",
+            "Evelyn Valda Sherleen Atmo Widjoyo",
+            "Faisal Tri Putra Firdaus",
+            "Firda Nashifah Nafaturrohmah",
+            "Galuh Ardana",
+            "Hana Khairunnisa",
+            "Ikram Hanif Prakoso",
+            "Keisya Salsabila",
+            "Kesya Amelia Definto",
+            "Khairul Faqih Rausyan Fekr",
+            "Kianu Apriliano Susanto",
+            "Mazaya Regina Rashiya",
+            "Muhamad Nizar Latif",
+            "Muhammad Fahma Adhiya",
+            "Muhammad Kenzie Ardiyan Putra",
+            "Mutia Reyvazenka Aufklarung",
+            "Naila Khalisha Safhadilla",
+            "Narendra Wahyu Setiyadi",
+            "Nicky Evan Wong",
+            "Radhival Mirza Rifai",
+            "Raka Putra Pratama",
+            "Rasya Dwi Maulana",
+            "Steven George Manahan Panjalatan",
+            "Zia Yeva Callista"
+        ];
+
+        const totalStudents = NAMA_SISWA.length;
+        // Status: 0=hadir, 1=sakit, 2=izin, 3=alfa
+        let statusSiswa = new Array(totalStudents).fill(0);
+        let selectedIndex = null;
+        let absentRemarks = [];
+
+        // DOM elements
+        const grid = document.getElementById('buttonGrid');
+        const totalDisplay = document.getElementById('totalDisplay');
+        const presentDisplay = document.getElementById('presentDisplay');
+        const dayDisplay = document.getElementById('dayDisplay');
+        const dateDisplay = document.getElementById('dateDisplay');
+        const reportContainer = document.getElementById('reportContainer');
+        const selectedInfo = document.getElementById('selectedInfo');
+        const clearSelectedBtn = document.getElementById('clearSelected');
+        const copyBtn = document.getElementById('copyReportBtn');
+        const resetBtn = document.getElementById('resetAbsentBtn');
+
+        // ----- helper tanggal -----
+        function getCurrentDateInfo() {
+            const now = new Date();
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const dayName = days[now.getDay()];
+            const dayNum = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            return { dayName, dayNum, monthName, year };
+        }
+
+        function formatDate(dateInfo) {
+            return `${dateInfo.dayNum} ${dateInfo.monthName} ${dateInfo.year}`;
+        }
+
+        // ----- render tombol -----
+        function renderButtons() {
+            grid.innerHTML = '';
+            for (let i = 0; i < totalStudents; i++) {
+                const btn = document.createElement('button');
+                btn.dataset.index = i;
+                
+                const nomorSpan = document.createElement('span');
+                nomorSpan.className = 'nomor';
+                nomorSpan.textContent = i + 1;
+                
+                const namaSpan = document.createElement('span');
+                namaSpan.className = 'nama';
+                namaSpan.textContent = NAMA_SISWA[i];
+                
+                const statusSpan = document.createElement('span');
+                statusSpan.className = 'status-label';
+                const statusText = ['Hadir', 'Sakit', 'Izin', 'Alfa'][statusSiswa[i]];
+                statusSpan.textContent = statusText;
+                
+                btn.appendChild(nomorSpan);
+                btn.appendChild(namaSpan);
+                btn.appendChild(statusSpan);
+                
+                updateButtonClass(btn, i);
+                
+                btn.addEventListener('click', function(e) {
+                    const idx = parseInt(this.dataset.index);
+                    if (selectedIndex === idx) {
+                        selectedIndex = null;
+                    } else {
+                        selectedIndex = idx;
+                    }
+                    updateSelectedInfo();
+                    highlightSelected();
+                });
+                grid.appendChild(btn);
+            }
+        }
+
+        function updateButtonClass(btn, idx) {
+            btn.classList.remove('active-presence', 'status-sakit', 'status-izin', 'status-alfa', 'selected');
+            const status = statusSiswa[idx];
+            if (status === 0) {
+                btn.classList.add('active-presence');
+            } else if (status === 1) {
+                btn.classList.add('status-sakit');
+            } else if (status === 2) {
+                btn.classList.add('status-izin');
+            } else if (status === 3) {
+                btn.classList.add('status-alfa');
+            }
+            const label = btn.querySelector('.status-label');
+            if (label) {
+                const statusText = ['Hadir', 'Sakit', 'Izin', 'Alfa'][status];
+                label.textContent = statusText;
+            }
+        }
+
+        function highlightSelected() {
+            const buttons = grid.querySelectorAll('button');
+            buttons.forEach((btn, idx) => {
+                btn.classList.remove('selected');
+                if (idx === selectedIndex) {
+                    btn.classList.add('selected');
+                }
+            });
+        }
+
+        function updateSelectedInfo() {
+            if (selectedIndex === null) {
+                selectedInfo.textContent = 'Belum ada siswa dipilih';
+                return;
+            }
+            const nama = NAMA_SISWA[selectedIndex];
+            const status = ['Hadir', 'Sakit', 'Izin', 'Alfa'][statusSiswa[selectedIndex]];
+            selectedInfo.textContent = `📌 ${selectedIndex+1}. ${nama} (${status})`;
+        }
+
+        // ----- set status untuk siswa yang dipilih -----
+        function setStatusForSelected(newStatus) {
+            if (selectedIndex === null) {
+                alert('Silakan pilih siswa terlebih dahulu dengan mengklik tombol nama.');
+                return;
+            }
+            const idx = selectedIndex;
+            statusSiswa[idx] = newStatus;
+            
+            const buttons = grid.querySelectorAll('button');
+            updateButtonClass(buttons[idx], idx);
+            
+            updateAbsentRemarks();
+            updateAll();
+            updateSelectedInfo();
+        }
+
+        // ----- update catatan absen otomatis (dengan nomor 1., 2., 3., dst) -----
+        function updateAbsentRemarks() {
+            const remarks = [];
+            let counter = 1;
+            for (let i = 0; i < totalStudents; i++) {
+                const status = statusSiswa[i];
+                if (status === 1) {
+                    remarks.push(`${counter}. ${NAMA_SISWA[i]} (Sakit)`);
+                    counter++;
+                } else if (status === 2) {
+                    remarks.push(`${counter}. ${NAMA_SISWA[i]} (Izin)`);
+                    counter++;
+                } else if (status === 3) {
+                    remarks.push(`${counter}. ${NAMA_SISWA[i]} (Alfa)`);
+                    counter++;
+                }
+            }
+            absentRemarks = remarks;
+        }
+
+        // ----- hitung hadir -----
+        function countPresent() {
+            return statusSiswa.filter(s => s === 0).length;
+        }
+
+        // ----- generate laporan -----
+        function generateReport() {
+            const info = getCurrentDateInfo();
+            const dayName = info.dayName;
+            const dateStr = formatDate(info);
+            const presentCount = countPresent();
+            const remarkText = absentRemarks.length === 0 ? '-' : absentRemarks.join('\n');
+
+            return `Assalamualaikum warahmatullahi wabarakatuh
+
+Dear Mr/Mrs and friends,
+Apologies for the interruption. Kindly allow me to submit the attendance report for Grade X - TKJ 2.
+
+🗓️ Day: *${dayName.toLowerCase()}* 
+📅 Date: ${dateStr.toLowerCase()}
+
+🌀 Total Students: ${totalStudents}
+
+🌀 Present : ${presentCount}
+
+Remarks on Absentees:
+
+${remarkText}
+
+Thank you very much for your kind attention.
+ 
+Wassalamualaikum warahmatullahi wabarakatu`;
+        }
+
+        // ----- update semua tampilan -----
+        function updateAll() {
+            const info = getCurrentDateInfo();
+            const presentCount = countPresent();
+            
+            presentDisplay.textContent = presentCount;
+            totalDisplay.textContent = totalStudents;
+            dayDisplay.textContent = info.dayName;
+            dateDisplay.textContent = formatDate(info);
+            reportContainer.textContent = generateReport();
+        }
+
+        // ----- reset semua ke hadir -----
+        function resetAll() {
+            statusSiswa.fill(0);
+            absentRemarks = [];
+            selectedIndex = null;
+            const buttons = grid.querySelectorAll('button');
+            buttons.forEach((btn, idx) => {
+                updateButtonClass(btn, idx);
+                btn.classList.remove('selected');
+            });
+            updateAll();
+            updateSelectedInfo();
+        }
+
+        // ----- copy laporan -----
+        function copyReport() {
+            const reportText = generateReport();
+            navigator.clipboard.writeText(reportText).then(() => {
+                alert('✅ Laporan berhasil disalin ke clipboard!');
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = reportText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('✅ Laporan disalin (fallback).');
+            });
+        }
+
+        // ----- inisialisasi -----
+        function init() {
+            statusSiswa.fill(0);
+            absentRemarks = [];
+            selectedIndex = null;
+            renderButtons();
+            updateAll();
+            updateSelectedInfo();
+            
+            document.querySelectorAll('.btn-status').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const statusMap = {
+                        'hadir': 0,
+                        'sakit': 1,
+                        'izin': 2,
+                        'alfa': 3
+                    };
+                    const status = statusMap[this.dataset.status];
+                    if (status !== undefined) {
+                        setStatusForSelected(status);
+                    }
+                });
+            });
+            
+            clearSelectedBtn.addEventListener('click', function() {
+                selectedIndex = null;
+                highlightSelected();
+                updateSelectedInfo();
+            });
+            
+            resetBtn.addEventListener('click', resetAll);
+            copyBtn.addEventListener('click', copyReport);
+        }
+
+        init();
+    })();
+</script>
+</body>
+  </html>
