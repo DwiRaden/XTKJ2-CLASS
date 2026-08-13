@@ -8,7 +8,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Kelas Kita</title>
+    <title>Kelas Kita - TKJ 2</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -26,7 +26,9 @@
             <div class="dashboard-top">
 
                 <div>
-                    <div class="badge">SMK • TKJ 2</div>
+                    <div class="badge">
+                        SMK • TKJ 2
+                    </div>
 
                     <h1>Kelas Kita 👋</h1>
 
@@ -46,7 +48,7 @@
 
 
         <!-- =========================
-             MENU
+             MENU KELAS
         ========================== -->
 
         <section class="menu-section">
@@ -57,86 +59,105 @@
                 Pilih menu yang ingin kamu buka
             </p>
 
-
             <div class="menu-grid">
 
                 <!-- JADWAL PELAJARAN -->
                 <a
-                    href="pelajaran.jpg"
+                    href="https://xtkj-2.vercel.app/pelajaran.jpg"
                     class="menu-card"
                 >
+
                     <div class="menu-icon blue">
                         📚
                     </div>
 
                     <div>
                         <h3>Jadwal Pelajaran</h3>
+
                         <p>
                             Lihat jadwal pelajaran kelas
                         </p>
                     </div>
 
-                    <span class="arrow">→</span>
+                    <span class="arrow">
+                        →
+                    </span>
+
                 </a>
 
 
                 <!-- JADWAL PIKET -->
                 <a
-                    href="piket.jpg"
+                    href="https://xtkj-2.vercel.app/piket.jpg"
                     class="menu-card"
                 >
+
                     <div class="menu-icon green">
                         🧹
                     </div>
 
                     <div>
                         <h3>Jadwal Piket</h3>
+
                         <p>
                             Lihat jadwal piket kelas
                         </p>
                     </div>
 
-                    <span class="arrow">→</span>
+                    <span class="arrow">
+                        →
+                    </span>
+
                 </a>
 
 
                 <!-- ABSENSI -->
                 <a
-                    href="absensi.html"
+                    href="https://xtkj-2.vercel.app/absensi.html"
                     class="menu-card"
                 >
+
                     <div class="menu-icon orange">
                         📝
                     </div>
 
                     <div>
                         <h3>Absensi</h3>
+
                         <p>
                             Cek dan isi absensi kelas
                         </p>
                     </div>
 
-                    <span class="arrow">→</span>
+                    <span class="arrow">
+                        →
+                    </span>
+
                 </a>
 
 
                 <!-- KOMENTAR -->
                 <a
-                    href="comment"
+                    href="https://xtkj-2.vercel.app/comment"
                     class="menu-card"
                 >
+
                     <div class="menu-icon purple">
                         💬
                     </div>
 
                     <div>
                         <h3>Komentar</h3>
+
                         <p>
                             Ngobrol bersama teman kelas
                         </p>
                     </div>
 
-                    <span class="arrow">→</span>
+                    <span class="arrow">
+                        →
+                    </span>
+
                 </a>
 
             </div>
@@ -148,15 +169,20 @@
              KOMENTAR
         ========================== -->
 
-        <section class="comment-box">
+        <section class="comments">
 
             <div class="section-title">
-                <div>
-                    <h2>💬 Tulis Komentar</h2>
-                    <p>Bagikan sesuatu kepada teman kelas.</p>
-                </div>
+
+                <h2>💬 Komentar Kelas</h2>
+
+                <p>
+                    Bagikan sesuatu kepada teman kelas.
+                </p>
+
             </div>
 
+
+            <!-- INPUT NAMA -->
 
             <input
                 type="text"
@@ -167,12 +193,16 @@
             >
 
 
+            <!-- INPUT KOMENTAR -->
+
             <textarea
                 id="message"
                 placeholder="Tulis komentar..."
                 maxlength="500"
             ></textarea>
 
+
+            <!-- BUTTON -->
 
             <button
                 type="button"
@@ -181,25 +211,17 @@
                 Kirim Komentar
             </button>
 
-        </section>
+
+            <!-- PEMISAH -->
+
+            <div class="comment-divider"></div>
 
 
-        <!-- =========================
-             DAFTAR KOMENTAR
-        ========================== -->
+            <!-- KOMENTAR TERBARU -->
 
-        <section class="comments">
-
-            <div class="section-title">
-
-                <div>
-                    <h2>🗨️ Komentar Kelas</h2>
-                    <p>
-                        Percakapan terbaru dari teman kelas.
-                    </p>
-                </div>
-
-            </div>
+            <h3 class="latest-title">
+                Komentar Terbaru
+            </h3>
 
 
             <div id="commentList">
@@ -213,19 +235,31 @@
         </section>
 
 
+        <!-- =========================
+             FOOTER
+        ========================== -->
+
         <footer>
-            <p>© 2026 TKJ 2 • Kelas Kita</p>
+
+            <p>
+                © 2026 TKJ 2 • Kelas Kita
+            </p>
+
         </footer>
 
     </div>
 
 
     <!-- SUPABASE -->
+
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
+
+    <!-- SCRIPT -->
+
     <script src="script.js"></script>
 
 </body>
-  </html>
+    </html>
