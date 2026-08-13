@@ -20,12 +20,20 @@ body {
 }
 
 
+/* =========================
+   CONTAINER
+========================= */
+
 .container {
     width: 100%;
     max-width: 900px;
 
     margin: auto;
-    padding: 25px 18px 40px;
+
+    padding:
+        25px
+        18px
+        40px;
 }
 
 
@@ -50,39 +58,42 @@ body {
     margin-bottom: 30px;
 
     box-shadow:
-        0 15px 35px rgba(15, 23, 42, 0.18);
+        0 15px 35px
+        rgba(15, 23, 42, 0.18);
 }
-
 
 .dashboard-top {
     display: flex;
 
     align-items: center;
+
     justify-content: space-between;
 
     gap: 20px;
 }
 
-
 .badge {
     display: inline-block;
 
-    background: rgba(255,255,255,0.12);
+    background:
+        rgba(255, 255, 255, 0.12);
 
-    border: 1px solid rgba(255,255,255,0.15);
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.15);
 
     padding: 7px 12px;
 
     border-radius: 999px;
 
     font-size: 12px;
+
     font-weight: 700;
 
     letter-spacing: 0.5px;
 
     margin-bottom: 14px;
 }
-
 
 .dashboard h1 {
     font-size: 34px;
@@ -92,7 +103,6 @@ body {
     margin-bottom: 10px;
 }
 
-
 .dashboard p {
     color: #cbd5e1;
 
@@ -100,7 +110,6 @@ body {
 
     line-height: 1.6;
 }
-
 
 .school-icon {
     width: 70px;
@@ -111,7 +120,8 @@ body {
     align-items: center;
     justify-content: center;
 
-    background: rgba(255,255,255,0.1);
+    background:
+        rgba(255, 255, 255, 0.1);
 
     border-radius: 20px;
 
@@ -127,13 +137,11 @@ body {
     margin-bottom: 30px;
 }
 
-
 .menu-section h2 {
     font-size: 24px;
 
     margin-bottom: 5px;
 }
-
 
 .subtitle {
     color: #64748b;
@@ -143,7 +151,6 @@ body {
     margin-bottom: 18px;
 }
 
-
 .menu-grid {
     display: grid;
 
@@ -152,7 +159,6 @@ body {
 
     gap: 14px;
 }
-
 
 .menu-card {
     position: relative;
@@ -169,7 +175,9 @@ body {
 
     background: white;
 
-    border: 1px solid #e5e7eb;
+    border:
+        1px solid
+        #e5e7eb;
 
     border-radius: 20px;
 
@@ -183,21 +191,19 @@ body {
         border-color 0.2s;
 }
 
-
-.menu-card:active {
-    transform: scale(0.97);
-}
-
-
 .menu-card:hover {
     transform: translateY(-3px);
 
     box-shadow:
-        0 12px 25px rgba(15, 23, 42, 0.09);
+        0 12px 25px
+        rgba(15, 23, 42, 0.09);
 
     border-color: #cbd5e1;
 }
 
+.menu-card:active {
+    transform: scale(0.97);
+}
 
 .menu-icon {
     width: 52px;
@@ -215,7 +221,6 @@ body {
     font-size: 25px;
 }
 
-
 .blue {
     background: #dbeafe;
 }
@@ -232,13 +237,11 @@ body {
     background: #f3e8ff;
 }
 
-
 .menu-card h3 {
     font-size: 16px;
 
     margin-bottom: 5px;
 }
-
 
 .menu-card p {
     color: #64748b;
@@ -249,7 +252,6 @@ body {
 
     padding-right: 20px;
 }
-
 
 .arrow {
     position: absolute;
@@ -266,11 +268,12 @@ body {
    KOMENTAR
 ========================= */
 
-.comment-box,
 .comments {
     background: white;
 
-    border: 1px solid #e5e7eb;
+    border:
+        1px solid
+        #e5e7eb;
 
     border-radius: 24px;
 
@@ -279,21 +282,19 @@ body {
     margin-bottom: 20px;
 
     box-shadow:
-        0 8px 25px rgba(15, 23, 42, 0.05);
+        0 8px 25px
+        rgba(15, 23, 42, 0.05);
 }
-
 
 .section-title {
     margin-bottom: 20px;
 }
-
 
 .section-title h2 {
     font-size: 22px;
 
     margin-bottom: 5px;
 }
-
 
 .section-title p {
     color: #64748b;
@@ -302,11 +303,17 @@ body {
 }
 
 
+/* =========================
+   INPUT
+========================= */
+
 input,
 textarea {
     width: 100%;
 
-    border: 1px solid #dbe1e8;
+    border:
+        1px solid
+        #dbe1e8;
 
     background: #f8fafc;
 
@@ -325,7 +332,6 @@ textarea {
     transition: 0.2s;
 }
 
-
 input:focus,
 textarea:focus {
     background: white;
@@ -333,9 +339,9 @@ textarea:focus {
     border-color: #64748b;
 
     box-shadow:
-        0 0 0 3px rgba(100,116,139,0.1);
+        0 0 0 3px
+        rgba(100, 116, 139, 0.1);
 }
-
 
 textarea {
     min-height: 120px;
@@ -343,6 +349,10 @@ textarea {
     resize: vertical;
 }
 
+
+/* =========================
+   BUTTON
+========================= */
 
 button {
     width: 100%;
@@ -366,21 +376,40 @@ button {
     transition: 0.2s;
 }
 
-
 button:hover {
     background: #1f2937;
 }
-
 
 button:active {
     transform: scale(0.98);
 }
 
-
 button:disabled {
     opacity: 0.6;
 
     cursor: wait;
+}
+
+
+/* =========================
+   PEMISAH KOMENTAR
+========================= */
+
+.comment-divider {
+    height: 1px;
+
+    background: #e5e7eb;
+
+    margin:
+        25px
+        0
+        20px;
+}
+
+.latest-title {
+    font-size: 16px;
+
+    margin-bottom: 14px;
 }
 
 
@@ -396,17 +425,19 @@ button:disabled {
     gap: 12px;
 }
 
-
 .comment {
     background: #f8fafc;
 
-    border: 1px solid #e5e7eb;
+    border:
+        1px solid
+        #e5e7eb;
 
     border-radius: 16px;
 
     padding: 15px;
-}
 
+    word-wrap: break-word;
+}
 
 .comment-name {
     font-weight: 700;
@@ -416,7 +447,6 @@ button:disabled {
     margin-bottom: 6px;
 }
 
-
 .comment-time {
     color: #94a3b8;
 
@@ -425,13 +455,14 @@ button:disabled {
     margin-top: 9px;
 }
 
-
 .empty {
     text-align: center;
 
     color: #94a3b8;
 
-    padding: 25px 10px;
+    padding:
+        25px
+        10px;
 
     font-size: 14px;
 }
@@ -448,20 +479,25 @@ footer {
 
     font-size: 12px;
 
-    padding: 15px 0 5px;
+    padding:
+        15px
+        0
+        5px;
 }
 
 
 /* =========================
-   HP
+   MOBILE
 ========================= */
 
 @media (max-width: 600px) {
 
     .container {
-        padding: 18px 14px 30px;
+        padding:
+            18px
+            14px
+            30px;
     }
-
 
     .dashboard {
         padding: 24px;
@@ -469,11 +505,9 @@ footer {
         border-radius: 22px;
     }
 
-
     .dashboard h1 {
         font-size: 29px;
     }
-
 
     .school-icon {
         width: 58px;
@@ -482,22 +516,17 @@ footer {
         font-size: 28px;
     }
 
-
     .menu-grid {
         grid-template-columns: 1fr;
     }
-
 
     .menu-card {
         min-height: 90px;
     }
 
-
-    .comment-box,
     .comments {
         padding: 20px;
 
         border-radius: 20px;
     }
-
-  }
+    }
