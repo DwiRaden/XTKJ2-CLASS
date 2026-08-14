@@ -20,48 +20,57 @@ const supabaseClient =
 // ========================================
 
 function getLoginStatus() {
-
-    return localStorage.getItem(
-        "loginStatus"
-    );
-
+    return localStorage.getItem("loginStatus");
 }
-
 
 function getUsername() {
-
-    return (
-        localStorage.getItem("username") ||
-        "Guest"
-    );
-
+    return localStorage.getItem("username");
 }
-
 
 function getRole() {
-
-    return (
-        localStorage.getItem("role") ||
-        "guest"
-    );
-
+    return localStorage.getItem("role");
 }
 
 
 // ========================================
-// ESCAPE HTML
+// SPOTIFY
 // ========================================
 
-function escapeHTML(text) {
+// MASUKKAN ID TRACK SPOTIFY DI SINI
+const SPOTIFY_TRACK_ID =
+    "GANTI_DENGAN_ID_TRACK_SPOTIFY";
 
-    const div =
-        document.createElement("div");
 
-    div.textContent =
-        text ?? "";
+function loadSpotify() {
 
-    return div.innerHTML;
+    const frame =
+        document.getElementById("spotifyFrame");
 
+    if (!frame) return;
+
+    if (
+        !SPOTIFY_TRACK_ID ||
+        SPOTIFY_TRACK_ID ===
+        "GANTI_DENGAN_ID_TRACK_SPOTIFY"
+    ) {
+        return;
+    }
+
+    frame.src =
+        `https://open.spotify.com/embed/track/${SPOTIFY_TRACK_ID}?utm_source=generator&theme=0`;
+}
+
+
+function closeSpotify() {
+
+    const player =
+        document.getElementById("spotifyPlayer");
+
+    if (player) {
+
+        player.style.display = "none";
+
+    }
 }
 
 
@@ -72,33 +81,26 @@ function escapeHTML(text) {
 async function loadComments() {
 
     const commentList =
-        document.getElementById(
-            "commentList"
-        );
+        document.getElementById("commentList");
 
     if (!commentList) return;
 
-
     commentList.innerHTML =
-        `<p class="empty">
-            Memuat komentar...
-        </p>`;
+        '<p class="empty">Memuat komentar...</p>';
 
 
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("comments")
-        .select(
-            "id, name, message, created_at, parent_id"
-        )
-        .order(
-            "created_at",
-            {
-                ascending: true
-            }
-        );
+    const { data, error } =
+        await supabaseClient
+            .from("comments")
+            .select(
+                "id, name, message, created_at, parent_id"
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
 
 
     if (error) {
@@ -111,17 +113,14 @@ async function loadComments() {
         commentList.innerHTML =
             `<p class="empty">
                 Gagal memuat komentar.<br>
-                ${escapeHTML(error.message)}
+                ${error.message}
             </p>`;
 
         return;
     }
 
 
-    if (
-        !data ||
-        data.length === 0
-    ) {
+    if (!data || data.length === 0) {
 
         commentList.innerHTML =
             `<p class="empty">
@@ -130,6 +129,13 @@ async function loadComments() {
 
         return;
     }
+
+
+    commentList.innerHTML = "";
+
+
+    const role =
+        getRole();
 
 
     const comments =
@@ -146,64 +152,44 @@ async function loadComments() {
         );
 
 
-    commentList.innerHTML = "";
+    comments.reverse();
 
 
-    comments
-        .sort(
-            (a, b) =>
-                new Date(b.created_at) -
-                new Date(a.created_at)
-        )
-        .forEach(
-            comment => {
+    comments.forEach(comment => {
 
-                renderComment(
-                    comment,
-                    replies,
-                    commentList
-                );
+        const box =
+            createCommentElement(
+                comment,
+                role,
+                replies
+            );
 
-            }
-        );
+        commentList.appendChild(box);
+
+    });
 
 }
 
 
 // ========================================
-// RENDER COMMENT
+// CREATE COMMENT
 // ========================================
 
-function renderComment(
+function createCommentElement(
     comment,
-    replies,
-    container
+    role,
+    replies
 ) {
 
-    const role =
-        getRole();
-
-    const currentUser =
-        getUsername();
-
-
     const box =
-        document.createElement(
-            "article"
-        );
+        document.createElement("article");
 
     box.className =
         "comment";
 
 
-    // ================================
-    // NAME
-    // ================================
-
     const name =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     name.className =
         "comment-name";
@@ -212,14 +198,8 @@ function renderComment(
         comment.name;
 
 
-    // ================================
-    // MESSAGE
-    // ================================
-
     const message =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     message.className =
         "comment-message";
@@ -228,14 +208,8 @@ function renderComment(
         comment.message;
 
 
-    // ================================
-    // TIME
-    // ================================
-
     const time =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     time.className =
         "comment-time";
@@ -247,31 +221,23 @@ function renderComment(
 
 
     box.appendChild(name);
-
     box.appendChild(message);
-
     box.appendChild(time);
 
 
-    // ================================
+    // ====================================
     // ACTIONS
-    // ================================
+    // ====================================
 
     const actions =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     actions.className =
         "comment-actions";
 
 
-    // REPLY BUTTON
-
     const replyButton =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     replyButton.type =
         "button";
@@ -280,16 +246,16 @@ function renderComment(
         "reply-button";
 
     replyButton.textContent =
-        "↩️ Balas";
+        "↩ Balas";
 
 
     replyButton.addEventListener(
         "click",
-        () => {
+        function () {
 
             showReplyForm(
-                comment,
-                box
+                box,
+                comment
             );
 
         }
@@ -301,16 +267,10 @@ function renderComment(
     );
 
 
-    // ADMIN DELETE
-
-    if (
-        role === "admin"
-    ) {
+    if (role === "admin") {
 
         const deleteButton =
-            document.createElement(
-                "button"
-            );
+            document.createElement("button");
 
         deleteButton.type =
             "button";
@@ -324,7 +284,7 @@ function renderComment(
 
         deleteButton.addEventListener(
             "click",
-            () => {
+            function () {
 
                 deleteComment(
                     comment.id
@@ -341,14 +301,12 @@ function renderComment(
     }
 
 
-    box.appendChild(
-        actions
-    );
+    box.appendChild(actions);
 
 
-    // ================================
+    // ====================================
     // REPLIES
-    // ================================
+    // ====================================
 
     const commentReplies =
         replies.filter(
@@ -358,14 +316,10 @@ function renderComment(
         );
 
 
-    if (
-        commentReplies.length > 0
-    ) {
+    if (commentReplies.length > 0) {
 
         const toggle =
-            document.createElement(
-                "button"
-            );
+            document.createElement("button");
 
         toggle.type =
             "button";
@@ -378,9 +332,7 @@ function renderComment(
 
 
         const repliesContainer =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         repliesContainer.className =
             "replies";
@@ -391,7 +343,7 @@ function renderComment(
 
         toggle.addEventListener(
             "click",
-            () => {
+            function () {
 
                 const hidden =
                     repliesContainer.style.display ===
@@ -399,9 +351,7 @@ function renderComment(
 
 
                 repliesContainer.style.display =
-                    hidden
-                        ? "flex"
-                        : "none";
+                    hidden ? "flex" : "none";
 
 
                 toggle.textContent =
@@ -413,29 +363,22 @@ function renderComment(
         );
 
 
-        box.appendChild(
-            toggle
+        commentReplies.forEach(
+            reply => {
+
+                repliesContainer.appendChild(
+                    createReplyElement(
+                        reply,
+                        comment,
+                        role
+                    )
+                );
+
+            }
         );
 
 
-        commentReplies
-            .sort(
-                (a, b) =>
-                    new Date(a.created_at) -
-                    new Date(b.created_at)
-            )
-            .forEach(
-                reply => {
-
-                    renderReply(
-                        reply,
-                        commentReplies,
-                        repliesContainer
-                    );
-
-                }
-            );
-
+        box.appendChild(toggle);
 
         box.appendChild(
             repliesContainer
@@ -444,53 +387,36 @@ function renderComment(
     }
 
 
-    container.appendChild(
-        box
-    );
-
+    return box;
 }
 
 
 // ========================================
-// RENDER REPLY
+// CREATE REPLY
 // ========================================
 
-function renderReply(
+function createReplyElement(
     reply,
-    allReplies,
-    container
+    parentComment,
+    role
 ) {
 
-    const role =
-        getRole();
+    const box =
+        document.createElement("article");
 
-
-    const replyBox =
-        document.createElement(
-            "article"
-        );
-
-    replyBox.className =
+    box.className =
         "comment reply";
 
 
-    // ================================
-    // HEADER
-    // ================================
-
     const header =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     header.className =
         "reply-header";
 
 
     const name =
-        document.createElement(
-            "span"
-        );
+        document.createElement("div");
 
     name.className =
         "comment-name";
@@ -499,36 +425,22 @@ function renderReply(
         reply.name;
 
 
-    const replyingTo =
-        document.createElement(
-            "span"
-        );
+    const replying =
+        document.createElement("span");
 
-    replyingTo.className =
+    replying.className =
         "replying-to";
 
-    replyingTo.textContent =
-        `membalas @${getParentName(
-            reply.parent_id,
-            allReplies
-        )}`;
+    replying.textContent =
+        `membalas ${parentComment.name}`;
 
 
     header.appendChild(name);
+    header.appendChild(replying);
 
-    header.appendChild(
-        replyingTo
-    );
-
-
-    // ================================
-    // MESSAGE
-    // ================================
 
     const message =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     message.className =
         "comment-message";
@@ -537,14 +449,8 @@ function renderReply(
         reply.message;
 
 
-    // ================================
-    // TIME
-    // ================================
-
     const time =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     time.className =
         "comment-time";
@@ -555,38 +461,24 @@ function renderReply(
         );
 
 
-    replyBox.appendChild(
-        header
-    );
-
-    replyBox.appendChild(
-        message
-    );
-
-    replyBox.appendChild(
-        time
-    );
+    box.appendChild(header);
+    box.appendChild(message);
+    box.appendChild(time);
 
 
-    // ================================
-    // ACTIONS
-    // ================================
+    // ====================================
+    // REPLY KE REPLY
+    // ====================================
 
     const actions =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     actions.className =
         "comment-actions";
 
 
-    // BALAS LAGI
-
     const replyButton =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     replyButton.type =
         "button";
@@ -595,16 +487,16 @@ function renderReply(
         "reply-button";
 
     replyButton.textContent =
-        "↩️ Balas";
+        "↩ Balas";
 
 
     replyButton.addEventListener(
         "click",
-        () => {
+        function () {
 
             showReplyForm(
-                reply,
-                replyBox
+                box,
+                reply
             );
 
         }
@@ -616,16 +508,10 @@ function renderReply(
     );
 
 
-    // ADMIN DELETE
-
-    if (
-        role === "admin"
-    ) {
+    if (role === "admin") {
 
         const deleteButton =
-            document.createElement(
-                "button"
-            );
+            document.createElement("button");
 
         deleteButton.type =
             "button";
@@ -639,7 +525,7 @@ function renderReply(
 
         deleteButton.addEventListener(
             "click",
-            () => {
+            function () {
 
                 deleteComment(
                     reply.id
@@ -656,44 +542,10 @@ function renderReply(
     }
 
 
-    replyBox.appendChild(
-        actions
-    );
+    box.appendChild(actions);
 
 
-    container.appendChild(
-        replyBox
-    );
-
-}
-
-
-// ========================================
-// GET PARENT NAME
-// ========================================
-
-function getParentName(
-    parentId,
-    replies
-) {
-
-    const parent =
-        replies.find(
-            item =>
-                String(item.id) ===
-                String(parentId)
-        );
-
-
-    if (parent) {
-
-        return parent.name;
-
-    }
-
-
-    return "pengguna";
-
+    return box;
 }
 
 
@@ -702,18 +554,18 @@ function getParentName(
 // ========================================
 
 function showReplyForm(
-    target,
-    box
+    container,
+    targetComment
 ) {
 
-    // Jangan buat dua form
-    if (
-        box.querySelector(
+    const oldForm =
+        document.querySelector(
             ".reply-form"
-        )
-    ) {
+        );
 
-        return;
+    if (oldForm) {
+
+        oldForm.remove();
 
     }
 
@@ -721,11 +573,11 @@ function showReplyForm(
     const loginStatus =
         getLoginStatus();
 
-    const role =
-        getRole();
-
     const username =
         getUsername();
+
+    const role =
+        getRole();
 
 
     if (
@@ -743,18 +595,14 @@ function showReplyForm(
 
 
     const form =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     form.className =
         "reply-form";
 
 
     const input =
-        document.createElement(
-            "textarea"
-        );
+        document.createElement("textarea");
 
     input.className =
         "reply-input";
@@ -763,22 +611,18 @@ function showReplyForm(
         500;
 
     input.placeholder =
-        `Membalas @${target.name}...`;
+        `Balas ${targetComment.name}...`;
 
 
     const bottom =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     bottom.className =
         "reply-form-bottom";
 
 
     const cancel =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     cancel.type =
         "button";
@@ -790,10 +634,16 @@ function showReplyForm(
         "Batal";
 
 
+    cancel.onclick =
+        function () {
+
+            form.remove();
+
+        };
+
+
     const send =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     send.type =
         "button";
@@ -805,19 +655,8 @@ function showReplyForm(
         "Balas";
 
 
-    cancel.addEventListener(
-        "click",
-        () => {
-
-            form.remove();
-
-        }
-    );
-
-
-    send.addEventListener(
-        "click",
-        async () => {
+    send.onclick =
+        async function () {
 
             const text =
                 input.value.trim();
@@ -827,20 +666,6 @@ function showReplyForm(
 
                 alert(
                     "Balasan belum diisi!"
-                );
-
-                input.focus();
-
-                return;
-            }
-
-
-            if (
-                text.length > 500
-            ) {
-
-                alert(
-                    "Balasan maksimal 500 karakter!"
                 );
 
                 return;
@@ -854,16 +679,15 @@ function showReplyForm(
                 "Mengirim...";
 
 
-            const {
-                error
-            } =
+            const { error } =
                 await supabaseClient
                     .from("comments")
                     .insert([
                         {
                             name: username,
                             message: text,
-                            parent_id: target.id
+                            parent_id:
+                                targetComment.id
                         }
                     ]);
 
@@ -880,7 +704,6 @@ function showReplyForm(
                     error.message
                 );
 
-
                 send.disabled =
                     false;
 
@@ -895,32 +718,18 @@ function showReplyForm(
 
             await loadComments();
 
-        }
-    );
+        };
 
 
-    bottom.appendChild(
-        cancel
-    );
-
-    bottom.appendChild(
-        send
-    );
+    bottom.appendChild(cancel);
+    bottom.appendChild(send);
 
 
-    form.appendChild(
-        input
-    );
-
-    form.appendChild(
-        bottom
-    );
+    form.appendChild(input);
+    form.appendChild(bottom);
 
 
-    box.appendChild(
-        form
-    );
-
+    container.appendChild(form);
 
     input.focus();
 
@@ -931,9 +740,7 @@ function showReplyForm(
 // FORMAT DATE
 // ========================================
 
-function formatDate(
-    date
-) {
+function formatDate(date) {
 
     return new Date(date)
         .toLocaleString(
@@ -978,9 +785,8 @@ async function addComment() {
 
 
     const messageInput =
-        document.getElementById(
-            "message"
-        );
+        document.getElementById("message");
+
 
     if (!messageInput) return;
 
@@ -995,15 +801,11 @@ async function addComment() {
             "Komentar belum diisi!"
         );
 
-        messageInput.focus();
-
         return;
     }
 
 
-    if (
-        message.length > 500
-    ) {
+    if (message.length > 500) {
 
         alert(
             "Komentar maksimal 500 karakter!"
@@ -1019,20 +821,14 @@ async function addComment() {
         );
 
 
-    if (button) {
+    button.disabled =
+        true;
 
-        button.disabled =
-            true;
-
-        button.textContent =
-            "Mengirim...";
-
-    }
+    button.textContent =
+        "Mengirim...";
 
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
             .from("comments")
             .insert([
@@ -1056,48 +852,29 @@ async function addComment() {
             error.message
         );
 
-
-        if (button) {
-
-            button.disabled =
-                false;
-
-            button.textContent =
-                "Kirim Komentar";
-
-        }
-
-        return;
-    }
-
-
-    messageInput.value =
-        "";
-
-
-    const charCount =
-        document.getElementById(
-            "charCount"
-        );
-
-
-    if (charCount) {
-
-        charCount.textContent =
-            "0 / 500";
-
-    }
-
-
-    if (button) {
-
         button.disabled =
             false;
 
         button.textContent =
             "Kirim Komentar";
 
+        return;
     }
+
+
+    messageInput.value = "";
+
+    document.getElementById(
+        "charCount"
+    ).textContent =
+        "0 / 500";
+
+
+    button.disabled =
+        false;
+
+    button.textContent =
+        "Kirim Komentar";
 
 
     await loadComments();
@@ -1109,16 +886,10 @@ async function addComment() {
 // DELETE COMMENT
 // ========================================
 
-async function deleteComment(
-    id
-) {
-
-    const role =
-        getRole();
-
+async function deleteComment(id) {
 
     if (
-        role !== "admin"
+        getRole() !== "admin"
     ) {
 
         alert(
@@ -1138,9 +909,7 @@ async function deleteComment(
     if (!confirmed) return;
 
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
             .from("comments")
             .delete()
@@ -1172,231 +941,11 @@ async function deleteComment(
 
 
 // ========================================
-// LOGOUT
-// ========================================
-
-function logout() {
-
-    localStorage.removeItem(
-        "loginStatus"
-    );
-
-    localStorage.removeItem(
-        "username"
-    );
-
-    localStorage.removeItem(
-        "name"
-    );
-
-    localStorage.removeItem(
-        "role"
-    );
-
-
-    sessionStorage.clear();
-
-
-    window.location.href =
-        "login.html";
-
-}
-
-
-// ========================================
-// GUEST / USER UI
-// ========================================
-
-function setupLoginUI() {
-
-    const username =
-        getUsername();
-
-    const role =
-        getRole();
-
-    const loginStatus =
-        getLoginStatus();
-
-
-    const welcomeUser =
-        document.getElementById(
-            "welcomeUser"
-        );
-
-
-    if (welcomeUser) {
-
-        welcomeUser.textContent =
-            `Login sebagai ${username}`;
-
-    }
-
-
-    const message =
-        document.getElementById(
-            "message"
-        );
-
-    const sendButton =
-        document.getElementById(
-            "sendCommentButton"
-        );
-
-    const guestNotice =
-        document.getElementById(
-            "guestNotice"
-        );
-
-
-    if (
-        loginStatus === "guest" ||
-        role === "guest"
-    ) {
-
-        message.disabled =
-            true;
-
-        sendButton.disabled =
-            true;
-
-        message.placeholder =
-            "Guest tidak dapat mengirim komentar";
-
-        sendButton.textContent =
-            "🔒 Login untuk Berkomentar";
-
-        guestNotice.style.display =
-            "block";
-
-    } else {
-
-        message.disabled =
-            false;
-
-        sendButton.disabled =
-            false;
-
-        message.placeholder =
-            "Tulis komentar...";
-
-        sendButton.textContent =
-            "Kirim Komentar";
-
-        guestNotice.style.display =
-            "none";
-
-    }
-
-}
-
-
-// ========================================
-// SPOTIFY
-// ========================================
-
-function setupSpotify() {
-
-    const popup =
-        document.getElementById(
-            "spotifyPopup"
-        );
-
-    const player =
-        document.getElementById(
-            "spotifyPlayer"
-        );
-
-    const yesButton =
-        document.getElementById(
-            "spotifyYes"
-        );
-
-    const noButton =
-        document.getElementById(
-            "spotifyNo"
-        );
-
-    const closeButton =
-        document.getElementById(
-            "closeSpotify"
-        );
-
-
-    if (
-        !popup ||
-        !player
-    ) return;
-
-
-    const loginStatus =
-        getLoginStatus();
-
-
-    // Hanya user yang melihat popup
-    if (
-        loginStatus === "user"
-    ) {
-
-        popup.style.display =
-            "flex";
-
-    } else {
-
-        popup.style.display =
-            "none";
-
-    }
-
-
-    yesButton.addEventListener(
-        "click",
-        function () {
-
-            popup.style.display =
-                "none";
-
-            player.classList.add(
-                "show"
-            );
-
-        }
-    );
-
-
-    noButton.addEventListener(
-        "click",
-        function () {
-
-            popup.style.display =
-                "none";
-
-        }
-    );
-
-
-    closeButton.addEventListener(
-        "click",
-        function () {
-
-            player.classList.remove(
-                "show"
-            );
-
-        }
-    );
-
-}
-
-
-// ========================================
 // REALTIME
 // ========================================
 
 supabaseClient
-    .channel(
-        "comments-realtime"
-    )
+    .channel("comments-realtime")
     .on(
         "postgres_changes",
         {
@@ -1431,16 +980,6 @@ document.addEventListener(
                 "charCount"
             );
 
-        const sendButton =
-            document.getElementById(
-                "sendCommentButton"
-            );
-
-        const refreshButton =
-            document.getElementById(
-                "refreshButton"
-            );
-
 
         if (
             messageInput &&
@@ -1460,29 +999,7 @@ document.addEventListener(
         }
 
 
-        if (sendButton) {
-
-            sendButton.addEventListener(
-                "click",
-                addComment
-            );
-
-        }
-
-
-        if (refreshButton) {
-
-            refreshButton.addEventListener(
-                "click",
-                loadComments
-            );
-
-        }
-
-
-        setupLoginUI();
-
-        setupSpotify();
+        loadSpotify();
 
         loadComments();
 
