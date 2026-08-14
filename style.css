@@ -125,7 +125,12 @@ a {
 
     box-shadow:
         0 20px 50px
-        rgba(15, 23, 42, .15);
+        rgba(
+            15,
+            23,
+            42,
+            .15
+        );
 }
 
 
@@ -442,6 +447,15 @@ a {
 }
 
 
+.comments textarea:disabled {
+    cursor: not-allowed;
+
+    background: #f1f5f9;
+
+    color: #94a3b8;
+}
+
+
 .comment-form-bottom {
     display: flex;
 
@@ -537,8 +551,23 @@ button:disabled {
     cursor: pointer;
 
     font-size: 18px;
+
+    transition:
+        background .15s ease,
+        transform .15s ease;
 }
 
+
+.refresh-button:hover {
+    background: #f8fafc;
+
+    transform: rotate(20deg);
+}
+
+
+/* =========================
+   MAIN COMMENT
+========================= */
 
 .comment {
     padding: 16px;
@@ -550,6 +579,24 @@ button:disabled {
     border-radius: 16px;
 
     background: #f8fafc;
+
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+
+
+.comment:hover {
+    border-color: #cbd5e1;
+
+    box-shadow:
+        0 5px 15px
+        rgba(
+            15,
+            23,
+            42,
+            .04
+        );
 }
 
 
@@ -582,7 +629,299 @@ button:disabled {
 }
 
 
+/* =========================
+   REPLY BUTTON
+========================= */
+
+.reply-toggle {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-top: 12px;
+
+    padding: 7px 11px;
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 9px;
+
+    color: #2563eb;
+
+    background: #eff6ff;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition:
+        background .15s ease,
+        transform .15s ease,
+        border-color .15s ease;
+}
+
+
+.reply-toggle:hover {
+    background: #dbeafe;
+
+    border-color: #bfdbfe;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   REPLIES CONTAINER
+========================= */
+
+.replies {
+    margin-top: 14px;
+
+    margin-left: 24px;
+
+    padding-left: 14px;
+
+    border-left: 2px solid #dbeafe;
+
+    animation:
+        replyOpen .2s ease;
+}
+
+
+@keyframes replyOpen {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================
+   REPLY
+========================= */
+
+.reply {
+    margin-bottom: 10px;
+
+    padding: 12px 14px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 13px;
+
+    background: white;
+
+    box-shadow:
+        0 3px 10px
+        rgba(
+            15,
+            23,
+            42,
+            .035
+        );
+}
+
+
+.reply:last-child {
+    margin-bottom: 0;
+}
+
+
+.reply-to {
+    margin-bottom: 6px;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.reply-name {
+    margin-bottom: 4px;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.reply-message {
+    color: #475569;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+.reply-time {
+    margin-top: 7px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   REPLY FORM
+========================= */
+
+.reply-form {
+    margin-top: 14px;
+
+    margin-left: 24px;
+
+    padding: 14px;
+
+    border-left: 2px solid #bfdbfe;
+
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    animation:
+        replyOpen .2s ease;
+}
+
+
+.reply-form-info {
+    margin-bottom: 9px;
+
+    color: #2563eb;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+
+.reply-form textarea {
+    width: 100%;
+
+    min-height: 80px;
+
+    resize: vertical;
+
+    padding: 11px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 11px;
+
+    outline: none;
+
+    color: #0f172a;
+
+    background: white;
+
+    font-size: 13px;
+}
+
+
+.reply-form textarea:focus {
+    border-color: #2563eb;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            37,
+            99,
+            235,
+            .08
+        );
+}
+
+
+.reply-form-bottom {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    margin-top: 9px;
+}
+
+
+.reply-form-bottom button {
+    padding: 8px 12px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+}
+
+
+.reply-form-bottom button:hover {
+    transform: translateY(-1px);
+}
+
+
+.reply-cancel {
+    color: #475569;
+
+    background: #e2e8f0;
+}
+
+
+.reply-cancel:hover {
+    background: #cbd5e1;
+}
+
+
+.reply-send {
+    color: white;
+
+    background: #2563eb;
+}
+
+
+.reply-send:hover {
+    background: #1d4ed8;
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
 .delete-comment {
+    display: inline-flex;
+
+    align-items: center;
+
     margin-top: 11px;
 
     padding: 7px 11px;
@@ -600,13 +939,23 @@ button:disabled {
     font-size: 12px;
 
     font-weight: 700;
+
+    transition:
+        background .15s ease,
+        transform .15s ease;
 }
 
 
 .delete-comment:hover {
     background: #fecaca;
+
+    transform: translateY(-1px);
 }
 
+
+/* =========================
+   EMPTY
+========================= */
 
 .empty {
     padding: 30px;
@@ -618,6 +967,10 @@ button:disabled {
     font-size: 13px;
 }
 
+
+/* =========================
+   GUEST NOTICE
+========================= */
 
 .guest-notice {
     display: none;
@@ -673,6 +1026,14 @@ footer {
     cursor: pointer;
 
     font-size: 12px;
+
+    transition:
+        background .15s ease;
+}
+
+
+.logout-button:hover {
+    background: #f1f5f9;
 }
 
 
@@ -946,6 +1307,18 @@ footer {
         width: 100%;
     }
 
+
+    .replies {
+        margin-left: 10px;
+
+        padding-left: 10px;
+    }
+
+
+    .reply-form {
+        margin-left: 10px;
+    }
+
 }
 
 
@@ -963,6 +1336,16 @@ footer {
 
     .login-card {
         padding: 25px 20px;
+    }
+
+
+    .reply-form-bottom {
+        flex-direction: column;
+    }
+
+
+    .reply-form-bottom button {
+        width: 100%;
     }
 
 }
