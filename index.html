@@ -2,15 +2,27 @@
 <html lang="id">
 
 <head>
+
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Kelas Kita • TKJ 2</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <!-- =========================
+         CEK LOGIN
+    ========================== -->
 
     <script>
+
         const loginStatus =
             localStorage.getItem("loginStatus");
 
@@ -18,49 +30,41 @@
             loginStatus !== "user" &&
             loginStatus !== "guest"
         ) {
-            window.location.replace("login.html");
+
+            window.location.replace(
+                "login.html"
+            );
+
         }
+
     </script>
+
 </head>
 
 
 <body>
 
+
     <!-- =========================
-         MINI SPOTIFY
+         SPOTIFY
     ========================== -->
 
-    <div
-        class="spotify-mini-player"
-        id="spotifyPlayer"
-    >
-
-        <div class="spotify-title">
-            🎵 Every Breath You Take
-        </div>
-
-        <button
-            type="button"
-            class="spotify-close"
-            onclick="closeSpotify()"
-        >
-            ×
-        </button>
+    <div class="spotify-mini">
 
         <iframe
-            id="spotifyFrame"
-            src=""
+            src="https://open.spotify.com/embed/track/1JSTJqkT5qHq8MDJnJbRE1?utm_source=generator"
             width="100%"
             height="80"
             frameborder="0"
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-        ></iframe>
+            loading="lazy">
+        </iframe>
 
     </div>
 
 
     <main class="container">
+
 
         <!-- =========================
              DASHBOARD
@@ -81,7 +85,8 @@
                     </h1>
 
                     <p>
-                        Dashboard informasi dan komunikasi kelas.
+                        Dashboard informasi dan
+                        komunikasi kelas.
                     </p>
 
                     <div
@@ -90,6 +95,7 @@
                     ></div>
 
                 </div>
+
 
                 <div class="dashboard-logo">
                     🏫
@@ -120,6 +126,7 @@
 
 
             <div class="menu-grid">
+
 
                 <a
                     href="https://xtkj-2.vercel.app/pelajaran.jpg"
@@ -232,6 +239,7 @@
 
                 </a>
 
+
             </div>
 
         </section>
@@ -256,6 +264,8 @@
             </div>
 
 
+            <!-- GUEST NOTICE -->
+
             <div
                 id="guestNotice"
                 class="guest-notice"
@@ -264,6 +274,8 @@
                 Login sebagai siswa untuk mengirim komentar.
             </div>
 
+
+            <!-- INPUT -->
 
             <textarea
                 id="message"
@@ -278,10 +290,10 @@
                     0 / 500
                 </span>
 
+
                 <button
                     type="button"
                     id="sendCommentButton"
-                    onclick="addComment()"
                 >
                     Kirim Komentar
                 </button>
@@ -292,22 +304,27 @@
             <div class="comment-divider"></div>
 
 
+            <!-- HEADER -->
+
             <div class="latest-header">
 
                 <h3>
                     Komentar Terbaru
                 </h3>
 
+
                 <button
                     type="button"
                     class="refresh-button"
-                    onclick="loadComments()"
+                    id="refreshButton"
                 >
                     ↻
                 </button>
 
             </div>
 
+
+            <!-- LIST -->
 
             <div id="commentList">
 
@@ -330,9 +347,10 @@
                 © 2026 TKJ 2 • Kelas Kita
             </p>
 
+
             <button
                 type="button"
-                onclick="logout()"
+                id="logoutButton"
                 class="logout-button"
             >
                 Keluar
@@ -340,119 +358,25 @@
 
         </footer>
 
+
     </main>
 
 
-    <!-- SUPABASE -->
+    <!-- =========================
+         SUPABASE
+    ========================== -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- SCRIPT UTAMA -->
-
-    <script src="script.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
 
 
     <!-- =========================
-         LOGIN UI
+         SCRIPT
     ========================== -->
 
-    <script>
+    <script src="script.js"></script>
 
-        const currentUsername =
-            localStorage.getItem("username") || "Guest";
-
-        const currentRole =
-            localStorage.getItem("role") || "guest";
-
-        const currentLoginStatus =
-            localStorage.getItem("loginStatus");
-
-
-        const welcomeUser =
-            document.getElementById("welcomeUser");
-
-
-        if (welcomeUser) {
-
-            welcomeUser.textContent =
-                `Login sebagai ${currentUsername}`;
-
-        }
-
-
-        const message =
-            document.getElementById("message");
-
-        const sendButton =
-            document.getElementById("sendCommentButton");
-
-        const guestNotice =
-            document.getElementById("guestNotice");
-
-
-        if (
-            currentLoginStatus === "guest" ||
-            currentRole === "guest"
-        ) {
-
-            message.disabled = true;
-
-            sendButton.disabled = true;
-
-            message.placeholder =
-                "Guest tidak dapat mengirim komentar";
-
-            sendButton.textContent =
-                "🔒 Login untuk Berkomentar";
-
-            guestNotice.style.display =
-                "block";
-
-        } else {
-
-            message.disabled = false;
-
-            sendButton.disabled = false;
-
-            message.placeholder =
-                "Tulis komentar...";
-
-            sendButton.textContent =
-                "Kirim Komentar";
-
-            guestNotice.style.display =
-                "none";
-
-        }
-
-
-        message.addEventListener(
-            "input",
-            function () {
-
-                document.getElementById(
-                    "charCount"
-                ).textContent =
-                    `${message.value.length} / 500`;
-
-            }
-        );
-
-
-        function logout() {
-
-            localStorage.removeItem("loginStatus");
-            localStorage.removeItem("username");
-            localStorage.removeItem("name");
-            localStorage.removeItem("role");
-
-            sessionStorage.clear();
-
-            window.location.href =
-                "login.html";
-        }
-
-    </script>
 
 </body>
 
