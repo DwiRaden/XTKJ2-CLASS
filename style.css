@@ -4,7 +4,6 @@
     padding: 0;
 }
 
-
 :root {
     font-family:
         Inter,
@@ -15,10 +14,8 @@
         sans-serif;
 
     color: #0f172a;
-
     background: #f8fafc;
 }
-
 
 body {
     min-height: 100vh;
@@ -32,13 +29,11 @@ body {
         #f8fafc;
 }
 
-
 button,
 input,
 textarea {
     font: inherit;
 }
-
 
 button,
 a {
@@ -133,7 +128,6 @@ a {
         );
 }
 
-
 .dashboard::after {
     content: "";
 
@@ -156,7 +150,6 @@ a {
         );
 }
 
-
 .dashboard-content {
     position: relative;
 
@@ -171,7 +164,6 @@ a {
     gap: 25px;
 }
 
-
 .dashboard h1 {
     margin-top: 14px;
 
@@ -184,7 +176,6 @@ a {
     line-height: 1.05;
 }
 
-
 .dashboard p {
     margin-top: 10px;
 
@@ -192,7 +183,6 @@ a {
 
     line-height: 1.6;
 }
-
 
 .dashboard-logo {
     width: 95px;
@@ -218,7 +208,6 @@ a {
 
     font-size: 48px;
 }
-
 
 .welcome-user {
     margin-top: 15px !important;
@@ -255,16 +244,13 @@ a {
         );
 }
 
-
 .section-heading {
     margin-bottom: 20px;
 }
 
-
 .section-heading h2 {
     font-size: 22px;
 }
-
 
 .section-heading p {
     margin-top: 5px;
@@ -290,7 +276,6 @@ a {
 
     gap: 14px;
 }
-
 
 .menu-card {
     position: relative;
@@ -321,7 +306,6 @@ a {
         border-color .2s ease;
 }
 
-
 .menu-card:hover {
     transform: translateY(-3px);
 
@@ -336,7 +320,6 @@ a {
             .08
         );
 }
-
 
 .menu-icon {
     width: 52px;
@@ -355,36 +338,29 @@ a {
     font-size: 25px;
 }
 
-
 .menu-icon.blue {
     background: #dbeafe;
 }
-
 
 .menu-icon.green {
     background: #dcfce7;
 }
 
-
 .menu-icon.orange {
     background: #ffedd5;
 }
-
 
 .menu-icon.purple {
     background: #f3e8ff;
 }
 
-
 .menu-info {
     min-width: 0;
 }
 
-
 .menu-info h3 {
     font-size: 15px;
 }
-
 
 .menu-info p {
     margin-top: 4px;
@@ -395,7 +371,6 @@ a {
 
     line-height: 1.4;
 }
-
 
 .menu-arrow {
     margin-left: auto;
@@ -430,7 +405,6 @@ a {
     background: #f8fafc;
 }
 
-
 .comments textarea:focus {
     border-color: #2563eb;
 
@@ -446,7 +420,6 @@ a {
         );
 }
 
-
 .comments textarea:disabled {
     cursor: not-allowed;
 
@@ -454,7 +427,6 @@ a {
 
     background: #f1f5f9;
 }
-
 
 .comment-form-bottom {
     display: flex;
@@ -468,13 +440,11 @@ a {
     margin-top: 10px;
 }
 
-
 #charCount {
     color: #94a3b8;
 
     font-size: 12px;
 }
-
 
 #sendCommentButton {
     border: 0;
@@ -496,11 +466,9 @@ a {
         opacity .15s ease;
 }
 
-
 #sendCommentButton:hover {
     transform: translateY(-1px);
 }
-
 
 button:disabled {
     cursor: not-allowed;
@@ -523,7 +491,6 @@ button:disabled {
     background: #e2e8f0;
 }
 
-
 .latest-header {
     display: flex;
 
@@ -534,11 +501,9 @@ button:disabled {
     margin-bottom: 15px;
 }
 
-
 .latest-header h3 {
     font-size: 16px;
 }
-
 
 .refresh-button {
     width: 35px;
@@ -557,7 +522,7 @@ button:disabled {
 
 
 /* =========================
-   COMMENT
+   COMMENT UTAMA
 ========================= */
 
 .comment {
@@ -572,13 +537,11 @@ button:disabled {
     background: #f8fafc;
 }
 
-
 .comment-name {
     font-size: 14px;
 
     font-weight: 800;
 }
-
 
 .comment-message {
     margin-top: 6px;
@@ -592,13 +555,40 @@ button:disabled {
     line-height: 1.55;
 }
 
-
 .comment-time {
     margin-top: 9px;
 
     color: #94a3b8;
 
     font-size: 11px;
+}
+
+
+/* =========================
+   COMMENT HEADER
+========================= */
+
+.reply-header {
+    display: flex;
+
+    align-items: baseline;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+
+/* =========================
+   "MEMBALAS USER"
+========================= */
+
+.replying-to {
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 500;
 }
 
 
@@ -611,11 +601,12 @@ button:disabled {
 
     align-items: center;
 
+    flex-wrap: wrap;
+
     gap: 8px;
 
     margin-top: 11px;
 }
-
 
 .reply-button,
 .delete-comment {
@@ -632,25 +623,21 @@ button:disabled {
     font-weight: 700;
 }
 
-
 .reply-button {
     color: #1d4ed8;
 
     background: #dbeafe;
 }
 
-
 .reply-button:hover {
     background: #bfdbfe;
 }
-
 
 .delete-comment {
     color: #b91c1c;
 
     background: #fee2e2;
 }
-
 
 .delete-comment:hover {
     background: #fecaca;
@@ -681,78 +668,17 @@ button:disabled {
     font-weight: 700;
 }
 
-
 .reply-toggle:hover {
     background: #cbd5e1;
 }
 
 
 /* =========================
-   REPLIES
+   REPLY FORM CONTAINER
 ========================= */
 
-.replies {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 9px;
-
-    margin-top: 10px;
-
-    margin-left: 24px;
-
-    padding-left: 13px;
-
-    border-left: 2px solid #dbeafe;
-}
-
-
-.comment.reply {
-    margin-bottom: 0;
-
-    padding: 12px 14px;
-
-    border-radius: 13px;
-
-    background: white;
-}
-
-
-.reply-header {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    align-items: baseline;
-
-    gap: 7px;
-}
-
-
-.replying-to {
-    color: #64748b;
-
-    font-size: 11px;
-
-    font-weight: 500;
-}
-
-
-.comment.reply .comment-name {
-    font-size: 13px;
-}
-
-
-.comment.reply .comment-message {
-    font-size: 13px;
-
-    line-height: 1.5;
-}
-
-
-.comment.reply .comment-time {
-    font-size: 10px;
+.reply-form-container {
+    margin-top: 12px;
 }
 
 
@@ -761,8 +687,6 @@ button:disabled {
 ========================= */
 
 .reply-form {
-    margin-top: 13px;
-
     padding: 12px;
 
     border: 1px solid #dbeafe;
@@ -772,15 +696,24 @@ button:disabled {
     background: #eff6ff;
 }
 
+.reply-label {
+    margin-bottom: 8px;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
 
 .reply-input {
     width: 100%;
 
-    min-height: 80px;
+    min-height: 75px;
 
     resize: vertical;
 
-    padding: 11px;
+    padding: 10px;
 
     border: 1px solid #bfdbfe;
 
@@ -795,7 +728,6 @@ button:disabled {
     font-size: 13px;
 }
 
-
 .reply-input:focus {
     border-color: #2563eb;
 
@@ -809,7 +741,6 @@ button:disabled {
         );
 }
 
-
 .reply-form-bottom {
     display: flex;
 
@@ -822,6 +753,13 @@ button:disabled {
     margin-top: 9px;
 }
 
+.reply-counter {
+    margin-right: auto;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
 
 .reply-cancel,
 .reply-send {
@@ -838,18 +776,91 @@ button:disabled {
     font-weight: 700;
 }
 
-
 .reply-cancel {
     color: #475569;
 
     background: #e2e8f0;
 }
 
-
 .reply-send {
     color: white;
 
     background: #2563eb;
+}
+
+.reply-send:hover {
+    background: #1d4ed8;
+}
+
+
+/* =========================
+   REPLIES
+========================= */
+
+.replies {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+
+    margin-top: 10px;
+
+    margin-left: 25px;
+
+    padding-left: 13px;
+
+    border-left: 2px solid #dbeafe;
+}
+
+
+/* =========================
+   BALASAN LEBIH KECIL
+========================= */
+
+.comment.reply {
+    margin-bottom: 0;
+
+    padding: 11px 13px;
+
+    border-radius: 13px;
+
+    border: 1px solid #e2e8f0;
+
+    background: white;
+}
+
+.comment.reply .comment-name {
+    font-size: 13px;
+}
+
+.comment.reply .comment-message {
+    margin-top: 5px;
+
+    color: #475569;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.comment.reply .comment-time {
+    margin-top: 7px;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   BALASAN DARI BALASAN
+========================= */
+
+.comment.reply .replies {
+    margin-left: 20px;
+
+    padding-left: 11px;
+
+    border-left-width: 2px;
 }
 
 
@@ -913,7 +924,6 @@ footer {
     font-size: 12px;
 }
 
-
 .logout-button {
     padding: 8px 12px;
 
@@ -947,13 +957,11 @@ footer {
     padding: 20px;
 }
 
-
 .login-container {
     width: 100%;
 
     max-width: 430px;
 }
-
 
 .login-card {
     padding: 32px;
@@ -976,7 +984,6 @@ footer {
         );
 }
 
-
 .login-logo {
     width: 70px;
     height: 70px;
@@ -996,7 +1003,6 @@ footer {
     font-size: 34px;
 }
 
-
 .login-card .badge {
     color: #1d4ed8;
 
@@ -1005,13 +1011,11 @@ footer {
     border: 0;
 }
 
-
 .login-card h1 {
     margin-top: 14px;
 
     font-size: 30px;
 }
-
 
 .login-subtitle {
     margin: 7px 0 25px;
@@ -1020,7 +1024,6 @@ footer {
 
     font-size: 13px;
 }
-
 
 .login-card label {
     display: block;
@@ -1036,7 +1039,6 @@ footer {
     font-weight: 700;
 }
 
-
 .login-card input {
     width: 100%;
 
@@ -1050,7 +1052,6 @@ footer {
 
     background: #f8fafc;
 }
-
 
 .login-card input:focus {
     border-color: #2563eb;
@@ -1066,7 +1067,6 @@ footer {
             .1
         );
 }
-
 
 .login-card #loginButton {
     width: 100%;
@@ -1088,7 +1088,6 @@ footer {
     font-weight: 700;
 }
 
-
 .login-divider {
     display: flex;
 
@@ -1103,7 +1102,6 @@ footer {
     font-size: 12px;
 }
 
-
 .login-divider::before,
 .login-divider::after {
     content: "";
@@ -1114,7 +1112,6 @@ footer {
 
     background: #e2e8f0;
 }
-
 
 .guest-button {
     width: 100%;
@@ -1134,11 +1131,9 @@ footer {
     font-weight: 700;
 }
 
-
 .guest-button:hover {
     background: #e2e8f0 !important;
 }
-
 
 .login-message {
     min-height: 20px;
@@ -1147,7 +1142,6 @@ footer {
 
     font-size: 13px;
 }
-
 
 .login-message.error {
     color: #dc2626;
@@ -1169,13 +1163,11 @@ footer {
         padding-top: 9px;
     }
 
-
     .dashboard {
         padding: 25px;
 
         border-radius: 22px;
     }
-
 
     .dashboard-logo {
         width: 65px;
@@ -1186,7 +1178,6 @@ footer {
         font-size: 32px;
     }
 
-
     .menu-section,
     .comments {
         padding: 20px;
@@ -1194,11 +1185,9 @@ footer {
         border-radius: 20px;
     }
 
-
     .menu-grid {
         grid-template-columns: 1fr;
     }
-
 
     .comment-form-bottom {
         align-items: stretch;
@@ -1206,11 +1195,9 @@ footer {
         flex-direction: column;
     }
 
-
     #sendCommentButton {
         width: 100%;
     }
-
 
     .replies {
         margin-left: 8px;
@@ -1218,6 +1205,26 @@ footer {
         padding-left: 9px;
     }
 
+    .comment.reply .replies {
+        margin-left: 7px;
+
+        padding-left: 8px;
+    }
+
+    .reply-form-bottom {
+        flex-wrap: wrap;
+    }
+
+    .reply-counter {
+        width: 100%;
+
+        margin-right: 0;
+    }
+
+    .reply-cancel,
+    .reply-send {
+        flex: 1;
+    }
 
     footer {
         flex-direction: column;
@@ -1227,11 +1234,9 @@ footer {
         text-align: center;
     }
 
-
     .logout-button {
         width: 100%;
     }
-
 }
 
 
@@ -1241,14 +1246,11 @@ footer {
         align-items: flex-start;
     }
 
-
     .dashboard-logo {
         display: none;
     }
 
-
     .login-card {
         padding: 25px 20px;
     }
-
 }
