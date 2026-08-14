@@ -1,26 +1,65 @@
+// ========================================
+// CEK LOGIN YANG SUDAH ADA
+// ========================================
+
+const existingLogin =
+    localStorage.getItem("loginStatus");
+
+
+if (
+    existingLogin === "user" ||
+    existingLogin === "guest"
+) {
+
+    window.location.replace(
+        "index.html"
+    );
+
+}
+
+
+// ========================================
+// LOGIN
+// ========================================
+
 async function login() {
 
     const usernameInput =
-        document.getElementById("username");
+        document.getElementById(
+            "username"
+        );
+
 
     const passwordInput =
-        document.getElementById("password");
+        document.getElementById(
+            "password"
+        );
+
 
     const loginButton =
-        document.getElementById("loginButton");
+        document.getElementById(
+            "loginButton"
+        );
+
 
     const message =
-        document.getElementById("loginMessage");
+        document.getElementById(
+            "loginMessage"
+        );
 
 
     const username =
         usernameInput.value.trim();
 
+
     const password =
         passwordInput.value;
 
 
-    if (!username || !password) {
+    if (
+        !username ||
+        !password
+    ) {
 
         message.textContent =
             "Username dan password wajib diisi.";
@@ -29,6 +68,7 @@ async function login() {
             "login-message error";
 
         return;
+
     }
 
 
@@ -45,9 +85,11 @@ async function login() {
 
 
         if (!response.ok) {
+
             throw new Error(
                 "users.json tidak ditemukan."
             );
+
         }
 
 
@@ -56,14 +98,11 @@ async function login() {
 
 
         const user =
-            database.users.find(account => {
-
-                return (
+            database.users.find(
+                account =>
                     account.username === username &&
                     account.password === password
-                );
-
-            });
+            );
 
 
         if (!user) {
@@ -74,100 +113,131 @@ async function login() {
             message.className =
                 "login-message error";
 
-            loginButton.disabled = false;
+
+            loginButton.disabled =
+                false;
+
 
             loginButton.textContent =
                 "Masuk";
 
+
             return;
+
         }
 
 
-        sessionStorage.setItem(
+        // =================================
+        // SIMPAN LOGIN PERMANEN
+        // =================================
+
+        localStorage.setItem(
             "loginStatus",
             "user"
         );
 
-        sessionStorage.setItem(
+
+        localStorage.setItem(
             "username",
             user.username
         );
 
-        sessionStorage.setItem(
+
+        localStorage.setItem(
             "name",
             user.name
         );
 
-        sessionStorage.setItem(
+
+        localStorage.setItem(
             "role",
             user.role || "user"
         );
 
 
-        window.location.href =
-            "index.html";
+        window.location.replace(
+            "index.html"
+        );
 
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         message.textContent =
             "Gagal membaca database akun.";
 
+
         message.className =
             "login-message error";
 
-        loginButton.disabled = false;
+
+        loginButton.disabled =
+            false;
+
 
         loginButton.textContent =
             "Masuk";
+
     }
+
 }
 
 
-// ===============================
+// ========================================
 // GUEST
-// ===============================
+// ========================================
 
 function guestLogin() {
 
-    sessionStorage.setItem(
+    localStorage.setItem(
         "loginStatus",
         "guest"
     );
 
-    sessionStorage.setItem(
+
+    localStorage.setItem(
         "username",
         "Guest"
     );
 
-    sessionStorage.setItem(
+
+    localStorage.setItem(
         "name",
         "Guest"
     );
 
-    sessionStorage.setItem(
+
+    localStorage.setItem(
         "role",
         "guest"
     );
 
 
-    window.location.href =
-        "index.html";
+    window.location.replace(
+        "index.html"
+    );
+
 }
 
 
-// ===============================
+// ========================================
 // ENTER = LOGIN
-// ===============================
+// ========================================
 
 document.addEventListener(
     "keydown",
-    function(event) {
+    function (event) {
 
-        if (event.key === "Enter") {
+        if (
+            event.key === "Enter"
+        ) {
+
             login();
+
         }
 
     }
