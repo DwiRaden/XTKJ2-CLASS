@@ -2,341 +2,439 @@
 <html lang="id">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Kelas Kita • TKJ 2</title>
 
     <link rel="stylesheet" href="style.css">
 
+
+    <!-- =========================
+         CEK LOGIN
+    ========================== -->
+
     <script>
-        const loginStatus = localStorage.getItem("loginStatus");
+
+        const loginStatus =
+            localStorage.getItem("loginStatus");
 
         if (
             loginStatus !== "user" &&
             loginStatus !== "guest"
         ) {
+
             window.location.replace("login.html");
+
         }
+
     </script>
+
 </head>
+
 
 <body>
 
+<main class="container">
+
+
     <!-- =========================
-         SPOTIFY
+         DASHBOARD
     ========================== -->
 
-    <div class="music-player">
+    <header class="dashboard">
 
-        <iframe
-            src="https://open.spotify.com/embed/track/0wz1LjDb9ZNEu8v0Z3bN0Z?utm_source=generator"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy">
-        </iframe>
+        <div class="dashboard-content">
+
+            <div>
+
+                <div class="badge">
+                    SMK • TKJ 2
+                </div>
+
+                <h1>
+                    Kelas Kita 👋
+                </h1>
+
+                <p>
+                    Dashboard informasi dan
+                    komunikasi kelas.
+                </p>
+
+                <div
+                    class="welcome-user"
+                    id="welcomeUser"
+                ></div>
+
+            </div>
+
+
+            <div class="dashboard-logo">
+                🏫
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MENU
+    ========================== -->
+
+    <section class="menu-section">
+
+        <div class="section-heading">
+
+            <h2>
+                Dashboard Kelas
+            </h2>
+
+            <p>
+                Pilih menu yang ingin kamu buka.
+            </p>
+
+        </div>
+
+
+        <div class="menu-grid">
+
+
+            <a
+                href="https://xtkj-2.vercel.app/pelajaran.jpg"
+                class="menu-card"
+            >
+
+                <div class="menu-icon blue">
+                    📚
+                </div>
+
+                <div class="menu-info">
+
+                    <h3>
+                        Jadwal Pelajaran
+                    </h3>
+
+                    <p>
+                        Lihat jadwal pelajaran kelas.
+                    </p>
+
+                </div>
+
+                <span class="menu-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <a
+                href="https://xtkj-2.vercel.app/piket.jpg"
+                class="menu-card"
+            >
+
+                <div class="menu-icon green">
+                    🧹
+                </div>
+
+                <div class="menu-info">
+
+                    <h3>
+                        Jadwal Piket
+                    </h3>
+
+                    <p>
+                        Lihat jadwal piket kelas.
+                    </p>
+
+                </div>
+
+                <span class="menu-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <a
+                href="https://xtkj-2.vercel.app/absensi.html"
+                class="menu-card"
+            >
+
+                <div class="menu-icon orange">
+                    📝
+                </div>
+
+                <div class="menu-info">
+
+                    <h3>
+                        Absensi
+                    </h3>
+
+                    <p>
+                        Lihat halaman absensi kelas.
+                    </p>
+
+                </div>
+
+                <span class="menu-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <a
+                href="https://xtkj-2.vercel.app/comment"
+                class="menu-card"
+            >
+
+                <div class="menu-icon purple">
+                    💬
+                </div>
+
+                <div class="menu-info">
+
+                    <h3>
+                        Komentar
+                    </h3>
+
+                    <p>
+                        Ngobrol bersama teman kelas.
+                    </p>
+
+                </div>
+
+                <span class="menu-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         KOMENTAR
+    ========================== -->
+
+    <section class="comments">
+
+        <div class="section-heading">
+
+            <h2>
+                💬 Komentar Kelas
+            </h2>
+
+            <p>
+                Bagikan sesuatu kepada teman kelas.
+            </p>
+
+        </div>
+
+
+        <div
+            id="guestNotice"
+            class="guest-notice"
+        >
+            👻 Kamu masuk sebagai Guest.
+            Login sebagai siswa untuk mengirim komentar.
+        </div>
+
+
+        <textarea
+            id="message"
+            maxlength="500"
+            placeholder="Tulis komentar..."
+        ></textarea>
+
+
+        <div class="comment-form-bottom">
+
+            <span id="charCount">
+                0 / 500
+            </span>
+
+
+            <button
+                type="button"
+                id="sendCommentButton"
+            >
+                Kirim Komentar
+            </button>
+
+        </div>
+
+
+        <div class="comment-divider"></div>
+
+
+        <div class="latest-header">
+
+            <h3>
+                Komentar Terbaru
+            </h3>
+
+
+            <button
+                type="button"
+                class="refresh-button"
+                id="refreshButton"
+            >
+                ↻
+            </button>
+
+        </div>
+
+
+        <div id="commentList">
+
+            <p class="empty">
+                Memuat komentar...
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <p>
+            © 2026 TKJ 2 • Kelas Kita
+        </p>
+
+
+        <button
+            type="button"
+            onclick="logout()"
+            class="logout-button"
+        >
+            Keluar
+        </button>
+
+    </footer>
+
+
+</main>
+
+
+<!-- =========================
+     SPOTIFY POPUP
+========================= -->
+
+<div
+    id="spotifyPopup"
+    class="spotify-popup"
+>
+
+    <div class="spotify-box">
+
+        <div class="spotify-icon">
+            🎵
+        </div>
+
+        <h2>
+            Mau dengerin lagu?
+        </h2>
+
+        <p>
+            Every Breath You Take
+            <br>
+            <span>
+                The Police
+            </span>
+        </p>
+
+
+        <div class="spotify-buttons">
+
+            <button
+                type="button"
+                id="spotifyYes"
+                class="spotify-yes"
+            >
+                ▶️ Ya, putar
+            </button>
+
+
+            <button
+                type="button"
+                id="spotifyNo"
+                class="spotify-no"
+            >
+                Nanti saja
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     SPOTIFY PLAYER
+========================= -->
+
+<div
+    id="spotifyPlayer"
+    class="spotify-player"
+>
+
+    <div class="spotify-player-header">
+
+        <span>
+            🎵 Now Playing
+        </span>
+
+        <button
+            type="button"
+            id="closeSpotify"
+        >
+            ✕
+        </button>
 
     </div>
 
 
-    <main class="container">
+    <iframe
+        src="https://open.spotify.com/embed/track/1JSTJqkT5qHq8MDJnJbRE1?utm_source=generator"
+        width="100%"
+        height="152"
+        frameborder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+    ></iframe>
 
-        <!-- =========================
-             DASHBOARD
-        ========================== -->
+</div>
 
-        <header class="dashboard">
 
-            <div class="dashboard-content">
+<!-- =========================
+     SUPABASE
+========================= -->
 
-                <div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-                    <div class="badge">
-                        SMK • TKJ 2
-                    </div>
 
-                    <h1>
-                        Kelas Kita 👋
-                    </h1>
+<!-- =========================
+     SCRIPT UTAMA
+========================= -->
 
-                    <p>
-                        Dashboard informasi dan komunikasi kelas.
-                    </p>
-
-                    <div
-                        class="welcome-user"
-                        id="welcomeUser">
-                    </div>
-
-                </div>
-
-                <div class="dashboard-logo">
-                    🏫
-                </div>
-
-            </div>
-
-        </header>
-
-
-        <!-- =========================
-             MENU
-        ========================== -->
-
-        <section class="menu-section">
-
-            <div class="section-heading">
-
-                <h2>
-                    Dashboard Kelas
-                </h2>
-
-                <p>
-                    Pilih menu yang ingin kamu buka.
-                </p>
-
-            </div>
-
-
-            <div class="menu-grid">
-
-                <a
-                    href="https://xtkj-2.vercel.app/pelajaran.jpg"
-                    class="menu-card">
-
-                    <div class="menu-icon blue">
-                        📚
-                    </div>
-
-                    <div class="menu-info">
-
-                        <h3>
-                            Jadwal Pelajaran
-                        </h3>
-
-                        <p>
-                            Lihat jadwal pelajaran kelas.
-                        </p>
-
-                    </div>
-
-                    <span class="menu-arrow">
-                        →
-                    </span>
-
-                </a>
-
-
-                <a
-                    href="https://xtkj-2.vercel.app/piket.jpg"
-                    class="menu-card">
-
-                    <div class="menu-icon green">
-                        🧹
-                    </div>
-
-                    <div class="menu-info">
-
-                        <h3>
-                            Jadwal Piket
-                        </h3>
-
-                        <p>
-                            Lihat jadwal piket kelas.
-                        </p>
-
-                    </div>
-
-                    <span class="menu-arrow">
-                        →
-                    </span>
-
-                </a>
-
-
-                <a
-                    href="https://xtkj-2.vercel.app/absensi.html"
-                    class="menu-card">
-
-                    <div class="menu-icon orange">
-                        📝
-                    </div>
-
-                    <div class="menu-info">
-
-                        <h3>
-                            Absensi
-                        </h3>
-
-                        <p>
-                            Lihat halaman absensi kelas.
-                        </p>
-
-                    </div>
-
-                    <span class="menu-arrow">
-                        →
-                    </span>
-
-                </a>
-
-
-                <a
-                    href="https://xtkj-2.vercel.app/comment"
-                    class="menu-card">
-
-                    <div class="menu-icon purple">
-                        💬
-                    </div>
-
-                    <div class="menu-info">
-
-                        <h3>
-                            Komentar
-                        </h3>
-
-                        <p>
-                            Ngobrol bersama teman kelas.
-                        </p>
-
-                    </div>
-
-                    <span class="menu-arrow">
-                        →
-                    </span>
-
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             KOMENTAR
-        ========================== -->
-
-        <section class="comments">
-
-            <div class="section-heading">
-
-                <h2>
-                    💬 Komentar Kelas
-                </h2>
-
-                <p>
-                    Bagikan sesuatu kepada teman kelas.
-                </p>
-
-            </div>
-
-
-            <div
-                id="guestNotice"
-                class="guest-notice">
-
-                👻 Kamu masuk sebagai Guest.
-                Login sebagai siswa untuk mengirim komentar.
-
-            </div>
-
-
-            <!-- FORM KOMENTAR -->
-
-            <textarea
-                id="message"
-                maxlength="500"
-                placeholder="Tulis komentar...">
-            </textarea>
-
-
-            <div class="comment-form-bottom">
-
-                <span id="charCount">
-                    0 / 500
-                </span>
-
-                <button
-                    type="button"
-                    id="sendCommentButton">
-
-                    Kirim Komentar
-
-                </button>
-
-            </div>
-
-
-            <div class="comment-divider"></div>
-
-
-            <!-- HEADER -->
-
-            <div class="latest-header">
-
-                <h3>
-                    Komentar Terbaru
-                </h3>
-
-                <button
-                    type="button"
-                    class="refresh-button"
-                    id="refreshButton">
-
-                    ↻
-
-                </button>
-
-            </div>
-
-
-            <!-- KOMENTAR -->
-
-            <div id="commentList">
-
-                <p class="empty">
-                    Memuat komentar...
-                </p>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             FOOTER
-        ========================== -->
-
-        <footer>
-
-            <p>
-                © 2026 TKJ 2 • Kelas Kita
-            </p>
-
-            <button
-                type="button"
-                onclick="logout()"
-                class="logout-button">
-
-                Keluar
-
-            </button>
-
-        </footer>
-
-    </main>
-
-
-    <!-- =========================
-         SUPABASE
-    ========================== -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- =========================
-         SCRIPT
-    ========================== -->
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 
 </body>
 
