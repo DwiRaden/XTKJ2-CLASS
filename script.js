@@ -31,30 +31,12 @@ function getRole() {
     return localStorage.getItem("role");
 }
 
-function canInteract() {
-
+function canComment() {
     return (
         getLoginStatus() === "user" &&
         getUsername() &&
         getRole() !== "guest"
     );
-}
-
-
-// ========================================
-// FORMAT DATE
-// ========================================
-
-function formatDate(date) {
-
-    return new Date(date).toLocaleString(
-        "id-ID",
-        {
-            dateStyle: "medium",
-            timeStyle: "short"
-        }
-    );
-
 }
 
 
@@ -70,24 +52,20 @@ async function loadComments() {
     if (!commentList) return;
 
     commentList.innerHTML =
-        '<p class="empty">Memuat komentar...</p>';
+        `<p class="empty">Memuat komentar...</p>`;
 
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("comments")
-        .select(
-            "id, name, message, created_at, reply_to"
-        )
-        .order(
-            "created_at",
-            {
-                ascending: true
-            }
-        );
-
+    const { data, error } =
+        await supabaseClient
+            .from("comments")
+            .select(
+                "id, name, message, created_at, reply_to"
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
 
     if (error) {
 
@@ -99,12 +77,11 @@ async function loadComments() {
         commentList.innerHTML =
             `<p class="empty">
                 Gagal memuat komentar.<br>
-                ${error.message}
+                ${escapeHTML(error.message)}
             </p>`;
 
         return;
     }
-
 
     if (!data || data.length === 0) {
 
@@ -116,350 +93,102 @@ async function loadComments() {
         return;
     }
 
-
-    // ====================================
-    // PISAH KOMENTAR UTAMA & BALASAN
-    // ====================================
-
-    const mainComments =
-        data.filter(
-            comment =>
-                comment.reply_to === null ||
-                comment.reply_to === undefined
-        );
-
-
-    const replies =
-        data.filter(
-            comment =>
-                comment.reply_to !== null &&
-                comment.reply_to !== undefined
-        );
-
-
     commentList.innerHTML = "";
 
-
     // ====================================
-    // TAMPILKAN KOMENTAR TERBARU DULU
+    // BUAT TREE KOMENTAR
     // ====================================
 
-    mainComments.reverse();
+    const commentMap = new Map();
 
+    data.forEach(comment => {
 
-    mainComments.forEach(comment => {
+        comment.children = [];
 
-        const commentReplies =
-            replies.filter(
-                reply =>
-                    String(reply.reply_to) ===
-                    String(comment.id)
-            );
-
-
-        renderComment(
-            comment,
-            commentReplies,
-            commentList
+        commentMap.set(
+            String(comment.id),
+            comment
         );
 
     });
 
 
+    const roots = [];
+
+    data.forEach(comment => {
+
+        if (
+            comment.reply_to !== null &&
+            comment.reply_to !== undefined &&
+            commentMap.has(
+                String(comment.reply_to)
+            )
+        ) {
+
+            commentMap
+                .get(String(comment.reply_to))
+                .children
+                .push(comment);
+
+        } else {
+
+            roots.push(comment);
+
+        }
+
+    });
+
+
     // ====================================
-    // BALASAN YANG PARENT-NYA SUDAH DIHAPUS
+    // RENDER KOMENTAR UTAMA
     // ====================================
 
-    const orphanReplies =
-        replies.filter(reply => {
+    roots
+        .sort(sortByDate)
+        .forEach(comment => {
 
-            return !mainComments.some(
-                comment =>
-                    String(comment.id) ===
-                    String(reply.reply_to)
+            const element =
+                createCommentElement(
+                    comment,
+                    false
+                );
+
+            commentList.appendChild(
+                element
             );
 
         });
+}
 
 
-    if (orphanReplies.length > 0) {
+// ========================================
+// SORT
+// ========================================
 
-        console.warn(
-            "Ditemukan balasan tanpa komentar induk:",
-            orphanReplies
-        );
+function sortByDate(a, b) {
 
-    }
+    return new Date(a.created_at) -
+        new Date(b.created_at);
 
 }
 
 
 // ========================================
-// RENDER KOMENTAR
+// CREATE COMMENT
 // ========================================
 
-function renderComment(
+function createCommentElement(
     comment,
-    replies,
-    container
-) {
-
-    const box =
-        document.createElement("article");
-
-    box.className = "comment";
-
-
-    // ====================================
-    // NAMA
-    // ====================================
-
-    const name =
-        document.createElement("div");
-
-    name.className =
-        "comment-name";
-
-    name.textContent =
-        comment.name;
-
-
-    // ====================================
-    // PESAN
-    // ====================================
-
-    const message =
-        document.createElement("div");
-
-    message.className =
-        "comment-message";
-
-    message.textContent =
-        comment.message;
-
-
-    // ====================================
-    // WAKTU
-    // ====================================
-
-    const time =
-        document.createElement("div");
-
-    time.className =
-        "comment-time";
-
-    time.textContent =
-        formatDate(
-            comment.created_at
-        );
-
-
-    box.appendChild(name);
-    box.appendChild(message);
-    box.appendChild(time);
-
-
-    // ====================================
-    // ACTIONS
-    // ====================================
-
-    const actions =
-        document.createElement("div");
-
-    actions.className =
-        "comment-actions";
-
-
-    // ====================================
-    // TOMBOL BALAS
-    // ====================================
-
-    if (canInteract()) {
-
-        const replyButton =
-            document.createElement("button");
-
-        replyButton.type =
-            "button";
-
-        replyButton.className =
-            "reply-button";
-
-        replyButton.textContent =
-            "↩️ Balas";
-
-
-        replyButton.addEventListener(
-            "click",
-            function() {
-
-                showReplyForm(
-                    box,
-                    comment
-                );
-
-            }
-        );
-
-
-        actions.appendChild(
-            replyButton
-        );
-
-    }
-
-
-    // ====================================
-    // ADMIN DELETE
-    // ====================================
-
-    if (getRole() === "admin") {
-
-        const deleteButton =
-            document.createElement("button");
-
-        deleteButton.type =
-            "button";
-
-        deleteButton.className =
-            "delete-comment";
-
-        deleteButton.textContent =
-            "🗑️ Hapus";
-
-
-        deleteButton.addEventListener(
-            "click",
-            function() {
-
-                deleteComment(
-                    comment.id
-                );
-
-            }
-        );
-
-
-        actions.appendChild(
-            deleteButton
-        );
-
-    }
-
-
-    if (actions.children.length > 0) {
-
-        box.appendChild(actions);
-
-    }
-
-
-    // ====================================
-    // BALASAN
-    // ====================================
-
-    if (replies.length > 0) {
-
-        const replyToggle =
-            document.createElement("button");
-
-        replyToggle.type =
-            "button";
-
-        replyToggle.className =
-            "reply-toggle";
-
-        replyToggle.textContent =
-            `Lihat ${replies.length} balasan`;
-
-
-        const repliesContainer =
-            document.createElement("div");
-
-        repliesContainer.className =
-            "replies";
-
-        repliesContainer.style.display =
-            "none";
-
-
-        // =================================
-        // RENDER BALASAN
-        // =================================
-
-        replies.forEach(reply => {
-
-            renderReply(
-                reply,
-                comment,
-                repliesContainer
-            );
-
-        });
-
-
-        replyToggle.addEventListener(
-            "click",
-            function() {
-
-                const hidden =
-                    repliesContainer.style.display ===
-                    "none";
-
-
-                if (hidden) {
-
-                    repliesContainer.style.display =
-                        "flex";
-
-                    replyToggle.textContent =
-                        `Sembunyikan ${replies.length} balasan`;
-
-                } else {
-
-                    repliesContainer.style.display =
-                        "none";
-
-                    replyToggle.textContent =
-                        `Lihat ${replies.length} balasan`;
-
-                }
-
-            }
-        );
-
-
-        box.appendChild(
-            replyToggle
-        );
-
-        box.appendChild(
-            repliesContainer
-        );
-
-    }
-
-
-    container.appendChild(box);
-
-}
-
-
-// ========================================
-// RENDER BALASAN
-// ========================================
-
-function renderReply(
-    reply,
-    parentComment,
-    container
+    isReply = false
 ) {
 
     const box =
         document.createElement("article");
 
     box.className =
-        "comment reply";
+        isReply
+            ? "comment reply"
+            : "comment";
 
 
     // ====================================
@@ -474,27 +203,50 @@ function renderReply(
 
 
     const name =
-        document.createElement("span");
+        document.createElement("div");
 
     name.className =
         "comment-name";
 
     name.textContent =
-        reply.name;
-
-
-    const replyingTo =
-        document.createElement("span");
-
-    replyingTo.className =
-        "replying-to";
-
-    replyingTo.textContent =
-        `membalas @${parentComment.name}`;
+        comment.name;
 
 
     header.appendChild(name);
-    header.appendChild(replyingTo);
+
+
+    // ====================================
+    // "MEMBALAS USER"
+    // ====================================
+
+    if (
+        isReply &&
+        comment.reply_to !== null
+    ) {
+
+        const parent =
+            findParentName(
+                comment.reply_to
+            );
+
+        if (parent) {
+
+            const replyingTo =
+                document.createElement("span");
+
+            replyingTo.className =
+                "replying-to";
+
+            replyingTo.textContent =
+                `membalas ${parent}`;
+
+            header.appendChild(
+                replyingTo
+            );
+
+        }
+
+    }
 
 
     // ====================================
@@ -508,7 +260,7 @@ function renderReply(
         "comment-message";
 
     message.textContent =
-        reply.message;
+        comment.message;
 
 
     // ====================================
@@ -523,17 +275,66 @@ function renderReply(
 
     time.textContent =
         formatDate(
-            reply.created_at
+            comment.created_at
         );
 
 
-    box.appendChild(header);
-    box.appendChild(message);
-    box.appendChild(time);
+    // ====================================
+    // ACTIONS
+    // ====================================
+
+    const actions =
+        document.createElement("div");
+
+    actions.className =
+        "comment-actions";
 
 
     // ====================================
-    // ADMIN DELETE BALASAN
+    // REPLY BUTTON
+    // ====================================
+
+    const replyButton =
+        document.createElement("button");
+
+    replyButton.type =
+        "button";
+
+    replyButton.className =
+        "reply-button";
+
+    replyButton.textContent =
+        "💬 Balas";
+
+    replyButton.addEventListener(
+        "click",
+        function() {
+
+            if (!canComment()) {
+
+                alert(
+                    "Guest tidak dapat membalas komentar."
+                );
+
+                return;
+            }
+
+            toggleReplyForm(
+                box,
+                comment
+            );
+
+        }
+    );
+
+
+    actions.appendChild(
+        replyButton
+    );
+
+
+    // ====================================
+    // DELETE ADMIN
     // ====================================
 
     if (getRole() === "admin") {
@@ -550,60 +351,362 @@ function renderReply(
         deleteButton.textContent =
             "🗑️ Hapus";
 
-
         deleteButton.addEventListener(
             "click",
             function() {
 
                 deleteComment(
-                    reply.id
+                    comment.id
                 );
 
             }
         );
 
-
-        box.appendChild(
+        actions.appendChild(
             deleteButton
         );
 
     }
 
 
-    container.appendChild(box);
+    // ====================================
+    // APPEND BASIC
+    // ====================================
+
+    box.appendChild(header);
+
+    box.appendChild(message);
+
+    box.appendChild(time);
+
+    box.appendChild(actions);
+
+
+    // ====================================
+    // REPLY FORM
+    // ====================================
+
+    const replyForm =
+        document.createElement("div");
+
+    replyForm.className =
+        "reply-form-container";
+
+    replyForm.style.display =
+        "none";
+
+    box.appendChild(
+        replyForm
+    );
+
+
+    // ====================================
+    // CHILD REPLIES
+    // ====================================
+
+    if (
+        comment.children &&
+        comment.children.length > 0
+    ) {
+
+        const toggle =
+            document.createElement("button");
+
+        toggle.type =
+            "button";
+
+        toggle.className =
+            "reply-toggle";
+
+        const total =
+            comment.children.length;
+
+        toggle.textContent =
+            `▼ Lihat ${total} ${
+                total === 1
+                    ? "balasan"
+                    : "balasan"
+            }`;
+
+
+        const replies =
+            document.createElement("div");
+
+        replies.className =
+            "replies";
+
+        replies.style.display =
+            "none";
+
+
+        // =================================
+        // RENDER CHILD
+        // =================================
+
+        comment.children
+            .sort(sortByDate)
+            .forEach(child => {
+
+                const childElement =
+                    createCommentElement(
+                        child,
+                        true
+                    );
+
+                replies.appendChild(
+                    childElement
+                );
+
+            });
+
+
+        toggle.addEventListener(
+            "click",
+            function() {
+
+                const hidden =
+                    replies.style.display ===
+                    "none";
+
+                if (hidden) {
+
+                    replies.style.display =
+                        "flex";
+
+                    toggle.textContent =
+                        `▲ Sembunyikan ${total} ${
+                            total === 1
+                                ? "balasan"
+                                : "balasan"
+                        }`;
+
+                } else {
+
+                    replies.style.display =
+                        "none";
+
+                    toggle.textContent =
+                        `▼ Lihat ${total} ${
+                            total === 1
+                                ? "balasan"
+                                : "balasan"
+                        }`;
+
+                }
+
+            }
+        );
+
+
+        box.appendChild(
+            toggle
+        );
+
+        box.appendChild(
+            replies
+        );
+
+    }
+
+
+    return box;
+}
+
+
+// ========================================
+// PARENT NAME
+// ========================================
+//
+// Data sementara disimpan saat load.
+// Fungsi ini mencari nama parent dari
+// seluruh komentar yang sedang tampil.
+//
+
+let allCommentsCache = [];
+
+
+function findParentName(id) {
+
+    const parent =
+        allCommentsCache.find(
+            comment =>
+                String(comment.id) ===
+                String(id)
+        );
+
+    return parent
+        ? parent.name
+        : null;
+}
+
+
+// ========================================
+// LOAD DATA + CACHE
+// ========================================
+
+async function loadComments() {
+
+    const commentList =
+        document.getElementById(
+            "commentList"
+        );
+
+    if (!commentList) return;
+
+    commentList.innerHTML =
+        `<p class="empty">
+            Memuat komentar...
+        </p>`;
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("comments")
+            .select(
+                "id, name, message, created_at, reply_to"
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Supabase Error:",
+            error
+        );
+
+        commentList.innerHTML =
+            `<p class="empty">
+                Gagal memuat komentar.<br>
+                ${escapeHTML(error.message)}
+            </p>`;
+
+        return;
+    }
+
+
+    allCommentsCache =
+        data || [];
+
+
+    if (!data || data.length === 0) {
+
+        commentList.innerHTML =
+            `<p class="empty">
+                Belum ada komentar.
+            </p>`;
+
+        return;
+    }
+
+
+    commentList.innerHTML = "";
+
+
+    // ====================================
+    // TREE
+    // ====================================
+
+    const commentMap =
+        new Map();
+
+
+    data.forEach(comment => {
+
+        comment.children = [];
+
+        commentMap.set(
+            String(comment.id),
+            comment
+        );
+
+    });
+
+
+    const roots = [];
+
+
+    data.forEach(comment => {
+
+        if (
+            comment.reply_to !== null &&
+            comment.reply_to !== undefined &&
+            commentMap.has(
+                String(comment.reply_to)
+            )
+        ) {
+
+            commentMap
+                .get(
+                    String(comment.reply_to)
+                )
+                .children
+                .push(comment);
+
+        } else {
+
+            roots.push(comment);
+
+        }
+
+    });
+
+
+    roots
+        .sort(sortByDate)
+        .reverse()
+        .forEach(comment => {
+
+            commentList.appendChild(
+                createCommentElement(
+                    comment,
+                    false
+                )
+            );
+
+        });
 
 }
 
 
 // ========================================
-// FORM BALAS
+// REPLY FORM
 // ========================================
 
-function showReplyForm(
-    commentBox,
+function toggleReplyForm(
+    box,
     comment
 ) {
 
-    if (!canInteract()) {
-
-        alert(
-            "Guest tidak dapat membalas."
+    const container =
+        box.querySelector(
+            ".reply-form-container"
         );
 
-        return;
-    }
+    if (!container) return;
 
 
-    // Jangan buat form kedua
     if (
-        commentBox.querySelector(
-            ".reply-form"
-        )
+        container.style.display !==
+        "none"
     ) {
 
+        container.style.display =
+            "none";
+
+        container.innerHTML = "";
+
         return;
 
     }
+
+
+    container.innerHTML = "";
 
 
     const form =
@@ -613,16 +716,27 @@ function showReplyForm(
         "reply-form";
 
 
+    const label =
+        document.createElement("div");
+
+    label.className =
+        "reply-label";
+
+    label.textContent =
+        `Membalas ${comment.name}`;
+
+
     const input =
         document.createElement("textarea");
 
     input.className =
         "reply-input";
 
-    input.maxLength = 500;
+    input.maxLength =
+        500;
 
     input.placeholder =
-        `Balas @${comment.name}...`;
+        `Balas ${comment.name}...`;
 
 
     const bottom =
@@ -632,72 +746,101 @@ function showReplyForm(
         "reply-form-bottom";
 
 
-    const cancelButton =
+    const counter =
+        document.createElement("span");
+
+    counter.className =
+        "reply-counter";
+
+    counter.textContent =
+        "0 / 500";
+
+
+    const cancel =
         document.createElement("button");
 
-    cancelButton.type =
+    cancel.type =
         "button";
 
-    cancelButton.className =
+    cancel.className =
         "reply-cancel";
 
-    cancelButton.textContent =
+    cancel.textContent =
         "Batal";
 
 
-    const sendButton =
+    const send =
         document.createElement("button");
 
-    sendButton.type =
+    send.type =
         "button";
 
-    sendButton.className =
+    send.className =
         "reply-send";
 
-    sendButton.textContent =
-        "Kirim Balasan";
+    send.textContent =
+        "Balas";
 
 
-    cancelButton.addEventListener(
-        "click",
+    input.addEventListener(
+        "input",
         function() {
 
-            form.remove();
+            counter.textContent =
+                `${input.value.length} / 500`;
 
         }
     );
 
 
-    sendButton.addEventListener(
+    cancel.addEventListener(
+        "click",
+        function() {
+
+            container.style.display =
+                "none";
+
+            container.innerHTML = "";
+
+        }
+    );
+
+
+    send.addEventListener(
         "click",
         async function() {
 
-            await addReply(
+            await sendReply(
                 comment.id,
                 input,
-                sendButton,
-                form
+                send
             );
 
         }
     );
 
 
-    bottom.appendChild(
-        cancelButton
-    );
+    bottom.appendChild(counter);
 
-    bottom.appendChild(
-        sendButton
-    );
+    bottom.appendChild(cancel);
 
+    bottom.appendChild(send);
+
+
+    form.appendChild(label);
 
     form.appendChild(input);
 
     form.appendChild(bottom);
 
 
-    commentBox.appendChild(form);
+    container.appendChild(
+        form
+    );
+
+
+    container.style.display =
+        "block";
 
     input.focus();
 
@@ -705,17 +848,16 @@ function showReplyForm(
 
 
 // ========================================
-// ADD REPLY
+// SEND REPLY
 // ========================================
 
-async function addReply(
+async function sendReply(
     parentId,
     input,
-    button,
-    form
+    button
 ) {
 
-    if (!canInteract()) {
+    if (!canComment()) {
 
         alert(
             "Guest tidak dapat membalas."
@@ -729,11 +871,11 @@ async function addReply(
         getUsername();
 
 
-    const message =
+    const text =
         input.value.trim();
 
 
-    if (!message) {
+    if (!text) {
 
         alert(
             "Balasan belum diisi!"
@@ -745,7 +887,7 @@ async function addReply(
     }
 
 
-    if (message.length > 500) {
+    if (text.length > 500) {
 
         alert(
             "Balasan maksimal 500 karakter!"
@@ -755,29 +897,29 @@ async function addReply(
     }
 
 
-    button.disabled = true;
+    button.disabled =
+        true;
 
     button.textContent =
         "Mengirim...";
 
 
-    const {
-        error
-    } = await supabaseClient
-        .from("comments")
-        .insert([
-            {
-                name: username,
-                message: message,
-                reply_to: parentId
-            }
-        ]);
+    const { error } =
+        await supabaseClient
+            .from("comments")
+            .insert([
+                {
+                    name: username,
+                    message: text,
+                    reply_to: parentId
+                }
+            ]);
 
 
     if (error) {
 
         console.error(
-            "Reply Insert Error:",
+            "Reply Error:",
             error
         );
 
@@ -786,16 +928,15 @@ async function addReply(
             error.message
         );
 
-        button.disabled = false;
+        button.disabled =
+            false;
 
         button.textContent =
-            "Kirim Balasan";
+            "Balas";
 
         return;
     }
 
-
-    form.remove();
 
     await loadComments();
 
@@ -803,12 +944,12 @@ async function addReply(
 
 
 // ========================================
-// ADD COMMENT
+// ADD MAIN COMMENT
 // ========================================
 
 async function addComment() {
 
-    if (!canInteract()) {
+    if (!canComment()) {
 
         alert(
             "Guest tidak dapat mengirim komentar."
@@ -818,36 +959,31 @@ async function addComment() {
     }
 
 
-    const username =
-        getUsername();
-
-
-    const messageInput =
+    const input =
         document.getElementById(
             "message"
         );
 
-
-    if (!messageInput) return;
-
-
-    const message =
-        messageInput.value.trim();
+    if (!input) return;
 
 
-    if (!message) {
+    const text =
+        input.value.trim();
+
+
+    if (!text) {
 
         alert(
             "Komentar belum diisi!"
         );
 
-        messageInput.focus();
+        input.focus();
 
         return;
     }
 
 
-    if (message.length > 500) {
+    if (text.length > 500) {
 
         alert(
             "Komentar maksimal 500 karakter!"
@@ -865,7 +1001,8 @@ async function addComment() {
 
     if (button) {
 
-        button.disabled = true;
+        button.disabled =
+            true;
 
         button.textContent =
             "Mengirim...";
@@ -873,16 +1010,16 @@ async function addComment() {
     }
 
 
-    const {
-        error
-    } = await supabaseClient
-        .from("comments")
-        .insert([
-            {
-                name: username,
-                message: message
-            }
-        ]);
+    const { error } =
+        await supabaseClient
+            .from("comments")
+            .insert([
+                {
+                    name: getUsername(),
+                    message: text,
+                    reply_to: null
+                }
+            ]);
 
 
     if (error) {
@@ -897,10 +1034,10 @@ async function addComment() {
             error.message
         );
 
-
         if (button) {
 
-            button.disabled = false;
+            button.disabled =
+                false;
 
             button.textContent =
                 "Kirim Komentar";
@@ -911,18 +1048,17 @@ async function addComment() {
     }
 
 
-    messageInput.value = "";
+    input.value = "";
 
 
-    const charCount =
+    const counter =
         document.getElementById(
             "charCount"
         );
 
+    if (counter) {
 
-    if (charCount) {
-
-        charCount.textContent =
+        counter.textContent =
             "0 / 500";
 
     }
@@ -930,7 +1066,8 @@ async function addComment() {
 
     if (button) {
 
-        button.disabled = false;
+        button.disabled =
+            false;
 
         button.textContent =
             "Kirim Komentar";
@@ -944,7 +1081,7 @@ async function addComment() {
 
 
 // ========================================
-// DELETE
+// DELETE COMMENT / REPLY
 // ========================================
 
 async function deleteComment(id) {
@@ -961,34 +1098,106 @@ async function deleteComment(id) {
 
     const confirmed =
         confirm(
-            "Yakin ingin menghapus komentar ini?"
+            "Yakin ingin menghapus komentar ini?\n\nSemua balasan di dalamnya juga akan dihapus."
         );
 
 
     if (!confirmed) return;
 
 
-    const {
-        error
-    } = await supabaseClient
-        .from("comments")
-        .delete()
-        .eq(
-            "id",
-            id
-        );
+    // ====================================
+    // AMBIL SEMUA KOMENTAR
+    // ====================================
+
+    const { data, error } =
+        await supabaseClient
+            .from("comments")
+            .select(
+                "id, reply_to"
+            );
 
 
     if (error) {
 
+        alert(
+            "Gagal mencari balasan."
+        );
+
+        console.error(error);
+
+        return;
+    }
+
+
+    // ====================================
+    // CARI SEMUA TURUNAN
+    // ====================================
+
+    const idsToDelete =
+        [id];
+
+
+    let changed = true;
+
+
+    while (changed) {
+
+        changed = false;
+
+
+        data.forEach(comment => {
+
+            if (
+                comment.reply_to !== null &&
+                idsToDelete.some(
+                    parentId =>
+                        String(parentId) ===
+                        String(comment.reply_to)
+                ) &&
+                !idsToDelete.some(
+                    existingId =>
+                        String(existingId) ===
+                        String(comment.id)
+                )
+            ) {
+
+                idsToDelete.push(
+                    comment.id
+                );
+
+                changed = true;
+
+            }
+
+        });
+
+    }
+
+
+    // ====================================
+    // DELETE
+    // ====================================
+
+    const { error: deleteError } =
+        await supabaseClient
+            .from("comments")
+            .delete()
+            .in(
+                "id",
+                idsToDelete
+            );
+
+
+    if (deleteError) {
+
         console.error(
             "Delete Error:",
-            error
+            deleteError
         );
 
         alert(
             "Gagal menghapus komentar.\n\n" +
-            error.message
+            deleteError.message
         );
 
         return;
@@ -996,6 +1205,41 @@ async function deleteComment(id) {
 
 
     await loadComments();
+
+}
+
+
+// ========================================
+// FORMAT DATE
+// ========================================
+
+function formatDate(date) {
+
+    return new Date(date)
+        .toLocaleString(
+            "id-ID",
+            {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }
+        );
+
+}
+
+
+// ========================================
+// ESCAPE HTML
+// ========================================
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
 
 }
 
@@ -1025,35 +1269,35 @@ supabaseClient
 
 
 // ========================================
-// CHARACTER COUNTER
+// INITIALIZE
 // ========================================
 
 document.addEventListener(
     "DOMContentLoaded",
     function() {
 
-        const messageInput =
+        const input =
             document.getElementById(
                 "message"
             );
 
-        const charCount =
+        const counter =
             document.getElementById(
                 "charCount"
             );
 
 
         if (
-            messageInput &&
-            charCount
+            input &&
+            counter
         ) {
 
-            messageInput.addEventListener(
+            input.addEventListener(
                 "input",
                 function() {
 
-                    charCount.textContent =
-                        `${messageInput.value.length} / 500`;
+                    counter.textContent =
+                        `${input.value.length} / 500`;
 
                 }
             );
