@@ -8,6 +8,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_AuowlqGe8ykjqRBXlgY5EQ_M3h2DdFG";
 
+
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
@@ -16,61 +17,232 @@ const supabaseClient =
 
 
 // ========================================
-// LOGIN DATA
+// LOGIN
 // ========================================
 
 function getLoginStatus() {
-    return localStorage.getItem("loginStatus");
+
+    return localStorage.getItem(
+        "loginStatus"
+    );
+
 }
+
 
 function getUsername() {
-    return localStorage.getItem("username");
+
+    return (
+        localStorage.getItem("username") ||
+        localStorage.getItem("name") ||
+        "Guest"
+    );
+
 }
+
 
 function getRole() {
-    return localStorage.getItem("role");
+
+    return (
+        localStorage.getItem("role") ||
+        "guest"
+    );
+
 }
 
 
 // ========================================
-// SPOTIFY
+// USER INFO
 // ========================================
 
-// MASUKKAN ID TRACK SPOTIFY DI SINI
-const SPOTIFY_TRACK_ID =
-    "GANTI_DENGAN_ID_TRACK_SPOTIFY";
+const loginStatus =
+    getLoginStatus();
+
+const username =
+    getUsername();
+
+const role =
+    getRole();
 
 
-function loadSpotify() {
+const welcomeUser =
+    document.getElementById(
+        "welcomeUser"
+    );
 
-    const frame =
-        document.getElementById("spotifyFrame");
 
-    if (!frame) return;
+if (welcomeUser) {
 
-    if (
-        !SPOTIFY_TRACK_ID ||
-        SPOTIFY_TRACK_ID ===
-        "GANTI_DENGAN_ID_TRACK_SPOTIFY"
-    ) {
-        return;
-    }
+    welcomeUser.textContent =
+        `Login sebagai ${username}`;
 
-    frame.src =
-        `https://open.spotify.com/embed/track/${SPOTIFY_TRACK_ID}?utm_source=generator&theme=0`;
 }
 
 
-function closeSpotify() {
+// ========================================
+// ELEMENT
+// ========================================
 
-    const player =
-        document.getElementById("spotifyPlayer");
+const messageInput =
+    document.getElementById(
+        "message"
+    );
 
-    if (player) {
 
-        player.style.display = "none";
+const sendButton =
+    document.getElementById(
+        "sendCommentButton"
+    );
+
+
+const guestNotice =
+    document.getElementById(
+        "guestNotice"
+    );
+
+
+const charCount =
+    document.getElementById(
+        "charCount"
+    );
+
+
+// ========================================
+// CEK USER
+// ========================================
+
+const canComment =
+    loginStatus === "user" &&
+    username &&
+    role !== "guest";
+
+
+// ========================================
+// GUEST MODE
+// ========================================
+
+if (!canComment) {
+
+    if (messageInput) {
+
+        messageInput.disabled = true;
+
+        messageInput.placeholder =
+            "Guest tidak dapat mengirim komentar";
 
     }
+
+
+    if (sendButton) {
+
+        sendButton.disabled = true;
+
+        sendButton.textContent =
+            "🔒 Login untuk Berkomentar";
+
+    }
+
+
+    if (guestNotice) {
+
+        guestNotice.style.display =
+            "block";
+
+    }
+
+}
+
+
+// ========================================
+// USER / ADMIN MODE
+// ========================================
+
+else {
+
+    if (messageInput) {
+
+        messageInput.disabled = false;
+
+        messageInput.placeholder =
+            "Tulis komentar...";
+
+    }
+
+
+    if (sendButton) {
+
+        sendButton.disabled = false;
+
+        sendButton.textContent =
+            "Kirim Komentar";
+
+    }
+
+
+    if (guestNotice) {
+
+        guestNotice.style.display =
+            "none";
+
+    }
+
+}
+
+
+// ========================================
+// CHARACTER COUNTER
+// ========================================
+
+if (messageInput) {
+
+    messageInput.addEventListener(
+        "input",
+        function () {
+
+            if (charCount) {
+
+                charCount.textContent =
+                    `${messageInput.value.length} / 500`;
+
+            }
+
+        }
+    );
+
+}
+
+
+// ========================================
+// FORMAT DATE
+// ========================================
+
+function formatDate(date) {
+
+    return new Date(date)
+        .toLocaleString(
+            "id-ID",
+            {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }
+        );
+
+}
+
+
+// ========================================
+// ESCAPE HTML
+// ========================================
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text ?? "";
+
+    return div.innerHTML;
+
 }
 
 
@@ -81,19 +253,24 @@ function closeSpotify() {
 async function loadComments() {
 
     const commentList =
-        document.getElementById("commentList");
+        document.getElementById(
+            "commentList"
+        );
 
     if (!commentList) return;
 
+
     commentList.innerHTML =
-        '<p class="empty">Memuat komentar...</p>';
+        `<p class="empty">
+            Memuat komentar...
+        </p>`;
 
 
     const { data, error } =
         await supabaseClient
             .from("comments")
             .select(
-                "id, name, message, created_at, parent_id"
+                "id, name, message, created_at, reply_to"
             )
             .order(
                 "created_at",
@@ -110,13 +287,15 @@ async function loadComments() {
             error
         );
 
+
         commentList.innerHTML =
             `<p class="empty">
                 Gagal memuat komentar.<br>
-                ${error.message}
+                ${escapeHTML(error.message)}
             </p>`;
 
         return;
+
     }
 
 
@@ -128,45 +307,64 @@ async function loadComments() {
             </p>`;
 
         return;
+
     }
 
 
-    commentList.innerHTML = "";
+    // ====================================
+    // PISAHKAN KOMENTAR UTAMA & BALASAN
+    // ====================================
 
-
-    const role =
-        getRole();
-
-
-    const comments =
+    const mainComments =
         data.filter(
             comment =>
-                !comment.parent_id
+                comment.reply_to === null ||
+                comment.reply_to === undefined
         );
 
 
     const replies =
         data.filter(
             comment =>
-                comment.parent_id
+                comment.reply_to !== null &&
+                comment.reply_to !== undefined
         );
 
 
-    comments.reverse();
+    commentList.innerHTML = "";
 
 
-    comments.forEach(comment => {
+    // ====================================
+    // BUAT SETIAP KOMENTAR
+    // ====================================
 
-        const box =
-            createCommentElement(
-                comment,
-                role,
-                replies
-            );
+    mainComments
+        .slice()
+        .reverse()
+        .forEach(
+            comment => {
 
-        commentList.appendChild(box);
+                const repliesForComment =
+                    replies.filter(
+                        reply =>
+                            String(reply.reply_to) ===
+                            String(comment.id)
+                    );
 
-    });
+
+                const element =
+                    createCommentElement(
+                        comment,
+                        repliesForComment
+                    );
+
+
+                commentList.appendChild(
+                    element
+                );
+
+            }
+        );
 
 }
 
@@ -177,42 +375,83 @@ async function loadComments() {
 
 function createCommentElement(
     comment,
-    role,
     replies
 ) {
 
     const box =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
+
 
     box.className =
         "comment";
 
 
+    // ====================================
+    // HEADER
+    // ====================================
+
+    const header =
+        document.createElement(
+            "div"
+        );
+
+
+    header.className =
+        "comment-header";
+
+
     const name =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     name.className =
         "comment-name";
+
 
     name.textContent =
         comment.name;
 
 
-    const message =
-        document.createElement("div");
+    header.appendChild(
+        name
+    );
 
-    message.className =
+
+    // ====================================
+    // MESSAGE
+    // ====================================
+
+    const text =
+        document.createElement(
+            "div"
+        );
+
+
+    text.className =
         "comment-message";
 
-    message.textContent =
+
+    text.textContent =
         comment.message;
 
 
+    // ====================================
+    // TIME
+    // ====================================
+
     const time =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     time.className =
         "comment-time";
+
 
     time.textContent =
         formatDate(
@@ -220,63 +459,83 @@ function createCommentElement(
         );
 
 
-    box.appendChild(name);
-    box.appendChild(message);
-    box.appendChild(time);
-
-
     // ====================================
     // ACTIONS
     // ====================================
 
     const actions =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     actions.className =
         "comment-actions";
 
 
-    const replyButton =
-        document.createElement("button");
+    // ====================================
+    // REPLY BUTTON
+    // ====================================
 
-    replyButton.type =
-        "button";
+    if (canComment) {
 
-    replyButton.className =
-        "reply-button";
-
-    replyButton.textContent =
-        "↩ Balas";
-
-
-    replyButton.addEventListener(
-        "click",
-        function () {
-
-            showReplyForm(
-                box,
-                comment
+        const replyButton =
+            document.createElement(
+                "button"
             );
 
-        }
-    );
+
+        replyButton.type =
+            "button";
 
 
-    actions.appendChild(
-        replyButton
-    );
+        replyButton.className =
+            "reply-button";
 
+
+        replyButton.textContent =
+            "↩ Balas";
+
+
+        replyButton.addEventListener(
+            "click",
+            function () {
+
+                toggleReplyForm(
+                    box,
+                    comment
+                );
+
+            }
+        );
+
+
+        actions.appendChild(
+            replyButton
+        );
+
+    }
+
+
+    // ====================================
+    // ADMIN DELETE
+    // ====================================
 
     if (role === "admin") {
 
         const deleteButton =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
+
 
         deleteButton.type =
             "button";
 
+
         deleteButton.className =
             "delete-comment";
+
 
         deleteButton.textContent =
             "🗑️ Hapus";
@@ -301,47 +560,73 @@ function createCommentElement(
     }
 
 
-    box.appendChild(actions);
-
-
     // ====================================
-    // REPLIES
+    // REPLY LIST
     // ====================================
 
-    const commentReplies =
-        replies.filter(
-            reply =>
-                String(reply.parent_id) ===
-                String(comment.id)
-        );
+    let repliesContainer = null;
 
 
-    if (commentReplies.length > 0) {
+    if (replies.length > 0) {
 
-        const toggle =
-            document.createElement("button");
+        const replyToggle =
+            document.createElement(
+                "button"
+            );
 
-        toggle.type =
+
+        replyToggle.type =
             "button";
 
-        toggle.className =
+
+        replyToggle.className =
             "reply-toggle";
 
-        toggle.textContent =
-            `Lihat ${commentReplies.length} balasan`;
+
+        replyToggle.textContent =
+            `Lihat ${replies.length} balasan`;
 
 
-        const repliesContainer =
-            document.createElement("div");
+        repliesContainer =
+            document.createElement(
+                "div"
+            );
+
 
         repliesContainer.className =
             "replies";
+
 
         repliesContainer.style.display =
             "none";
 
 
-        toggle.addEventListener(
+        replies
+            .slice()
+            .sort(
+                (a, b) =>
+                    new Date(a.created_at) -
+                    new Date(b.created_at)
+            )
+            .forEach(
+                reply => {
+
+                    const replyElement =
+                        createReplyElement(
+                            reply,
+                            comment.name
+                        );
+
+
+                    repliesContainer.appendChild(
+                        replyElement
+                    );
+
+                }
+            );
+
+
+        replyToggle.addEventListener(
             "click",
             function () {
 
@@ -351,34 +636,49 @@ function createCommentElement(
 
 
                 repliesContainer.style.display =
-                    hidden ? "flex" : "none";
-
-
-                toggle.textContent =
                     hidden
-                        ? `Sembunyikan ${commentReplies.length} balasan`
-                        : `Lihat ${commentReplies.length} balasan`;
+                        ? "flex"
+                        : "none";
+
+
+                replyToggle.textContent =
+                    hidden
+                        ? "Sembunyikan balasan"
+                        : `Lihat ${replies.length} balasan`;
 
             }
         );
 
 
-        commentReplies.forEach(
-            reply => {
-
-                repliesContainer.appendChild(
-                    createReplyElement(
-                        reply,
-                        comment,
-                        role
-                    )
-                );
-
-            }
+        actions.appendChild(
+            replyToggle
         );
 
+    }
 
-        box.appendChild(toggle);
+
+    // ====================================
+    // APPEND
+    // ====================================
+
+    box.appendChild(
+        header
+    );
+
+    box.appendChild(
+        text
+    );
+
+    box.appendChild(
+        time
+    );
+
+    box.appendChild(
+        actions
+    );
+
+
+    if (repliesContainer) {
 
         box.appendChild(
             repliesContainer
@@ -388,6 +688,7 @@ function createCommentElement(
 
 
     return box;
+
 }
 
 
@@ -397,63 +698,102 @@ function createCommentElement(
 
 function createReplyElement(
     reply,
-    parentComment,
-    role
+    parentName
 ) {
 
     const box =
-        document.createElement("article");
+        document.createElement(
+            "div"
+        );
+
 
     box.className =
         "comment reply";
 
 
+    // ====================================
+    // HEADER
+    // ====================================
+
     const header =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     header.className =
         "reply-header";
 
 
     const name =
-        document.createElement("div");
+        document.createElement(
+            "span"
+        );
+
 
     name.className =
         "comment-name";
+
 
     name.textContent =
         reply.name;
 
 
-    const replying =
-        document.createElement("span");
+    const replyingTo =
+        document.createElement(
+            "span"
+        );
 
-    replying.className =
+
+    replyingTo.className =
         "replying-to";
 
-    replying.textContent =
-        `membalas ${parentComment.name}`;
+
+    replyingTo.textContent =
+        `membalas @${parentName}`;
 
 
-    header.appendChild(name);
-    header.appendChild(replying);
+    header.appendChild(
+        name
+    );
 
 
-    const message =
-        document.createElement("div");
+    header.appendChild(
+        replyingTo
+    );
 
-    message.className =
+
+    // ====================================
+    // MESSAGE
+    // ====================================
+
+    const text =
+        document.createElement(
+            "div"
+        );
+
+
+    text.className =
         "comment-message";
 
-    message.textContent =
+
+    text.textContent =
         reply.message;
 
 
+    // ====================================
+    // TIME
+    // ====================================
+
     const time =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     time.className =
         "comment-time";
+
 
     time.textContent =
         formatDate(
@@ -461,63 +801,48 @@ function createReplyElement(
         );
 
 
-    box.appendChild(header);
-    box.appendChild(message);
-    box.appendChild(time);
+    box.appendChild(
+        header
+    );
 
+    box.appendChild(
+        text
+    );
 
-    // ====================================
-    // REPLY KE REPLY
-    // ====================================
-
-    const actions =
-        document.createElement("div");
-
-    actions.className =
-        "comment-actions";
-
-
-    const replyButton =
-        document.createElement("button");
-
-    replyButton.type =
-        "button";
-
-    replyButton.className =
-        "reply-button";
-
-    replyButton.textContent =
-        "↩ Balas";
-
-
-    replyButton.addEventListener(
-        "click",
-        function () {
-
-            showReplyForm(
-                box,
-                reply
-            );
-
-        }
+    box.appendChild(
+        time
     );
 
 
-    actions.appendChild(
-        replyButton
-    );
-
+    // ====================================
+    // ADMIN DELETE
+    // ====================================
 
     if (role === "admin") {
 
+        const actions =
+            document.createElement(
+                "div"
+            );
+
+
+        actions.className =
+            "comment-actions";
+
+
         const deleteButton =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
+
 
         deleteButton.type =
             "button";
 
+
         deleteButton.className =
             "delete-comment";
+
 
         deleteButton.textContent =
             "🗑️ Hapus";
@@ -539,13 +864,16 @@ function createReplyElement(
             deleteButton
         );
 
+
+        box.appendChild(
+            actions
+        );
+
     }
 
 
-    box.appendChild(actions);
-
-
     return box;
+
 }
 
 
@@ -553,127 +881,145 @@ function createReplyElement(
 // REPLY FORM
 // ========================================
 
-function showReplyForm(
-    container,
-    targetComment
+function toggleReplyForm(
+    commentBox,
+    comment
 ) {
 
-    const oldForm =
-        document.querySelector(
+    const existing =
+        commentBox.querySelector(
             ".reply-form"
         );
 
-    if (oldForm) {
 
-        oldForm.remove();
+    if (existing) {
 
-    }
-
-
-    const loginStatus =
-        getLoginStatus();
-
-    const username =
-        getUsername();
-
-    const role =
-        getRole();
-
-
-    if (
-        loginStatus !== "user" ||
-        !username ||
-        role === "guest"
-    ) {
-
-        alert(
-            "Guest tidak dapat membalas komentar."
-        );
+        existing.remove();
 
         return;
+
     }
 
 
     const form =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     form.className =
         "reply-form";
 
 
     const input =
-        document.createElement("textarea");
+        document.createElement(
+            "textarea"
+        );
+
 
     input.className =
         "reply-input";
 
+
     input.maxLength =
         500;
 
+
     input.placeholder =
-        `Balas ${targetComment.name}...`;
+        `Balas @${comment.name}...`;
 
 
     const bottom =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     bottom.className =
         "reply-form-bottom";
 
 
     const cancel =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
+
 
     cancel.type =
         "button";
 
+
     cancel.className =
         "reply-cancel";
+
 
     cancel.textContent =
         "Batal";
 
 
-    cancel.onclick =
-        function () {
-
-            form.remove();
-
-        };
-
-
     const send =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
+
 
     send.type =
         "button";
 
+
     send.className =
         "reply-send";
+
 
     send.textContent =
         "Balas";
 
 
-    send.onclick =
+    cancel.addEventListener(
+        "click",
+        function () {
+
+            form.remove();
+
+        }
+    );
+
+
+    send.addEventListener(
+        "click",
         async function () {
 
-            const text =
+            const replyText =
                 input.value.trim();
 
 
-            if (!text) {
+            if (!replyText) {
 
                 alert(
                     "Balasan belum diisi!"
                 );
 
+                input.focus();
+
                 return;
+
+            }
+
+
+            if (replyText.length > 500) {
+
+                alert(
+                    "Balasan maksimal 500 karakter!"
+                );
+
+                return;
+
             }
 
 
             send.disabled =
                 true;
+
 
             send.textContent =
                 "Mengirim...";
@@ -684,10 +1030,14 @@ function showReplyForm(
                     .from("comments")
                     .insert([
                         {
-                            name: username,
-                            message: text,
-                            parent_id:
-                                targetComment.id
+                            name:
+                                username,
+
+                            message:
+                                replyText,
+
+                            reply_to:
+                                comment.id
                         }
                     ]);
 
@@ -699,57 +1049,61 @@ function showReplyForm(
                     error
                 );
 
+
                 alert(
                     "Gagal mengirim balasan.\n\n" +
                     error.message
                 );
 
+
                 send.disabled =
                     false;
+
 
                 send.textContent =
                     "Balas";
 
+
                 return;
+
             }
 
 
             form.remove();
 
+
             await loadComments();
 
-        };
+        }
+    );
 
 
-    bottom.appendChild(cancel);
-    bottom.appendChild(send);
+    bottom.appendChild(
+        cancel
+    );
 
 
-    form.appendChild(input);
-    form.appendChild(bottom);
+    bottom.appendChild(
+        send
+    );
 
 
-    container.appendChild(form);
+    form.appendChild(
+        input
+    );
+
+
+    form.appendChild(
+        bottom
+    );
+
+
+    commentBox.appendChild(
+        form
+    );
+
 
     input.focus();
-
-}
-
-
-// ========================================
-// FORMAT DATE
-// ========================================
-
-function formatDate(date) {
-
-    return new Date(date)
-        .toLocaleString(
-            "id-ID",
-            {
-                dateStyle: "medium",
-                timeStyle: "short"
-            }
-        );
 
 }
 
@@ -760,71 +1114,50 @@ function formatDate(date) {
 
 async function addComment() {
 
-    const loginStatus =
-        getLoginStatus();
-
-    const role =
-        getRole();
-
-    const username =
-        getUsername();
-
-
-    if (
-        loginStatus !== "user" ||
-        !username ||
-        role === "guest"
-    ) {
+    if (!canComment) {
 
         alert(
             "Guest tidak dapat mengirim komentar."
         );
 
         return;
+
     }
 
 
-    const messageInput =
-        document.getElementById("message");
-
-
-    if (!messageInput) return;
-
-
-    const message =
+    const text =
         messageInput.value.trim();
 
 
-    if (!message) {
+    if (!text) {
 
         alert(
             "Komentar belum diisi!"
         );
 
+        messageInput.focus();
+
         return;
+
     }
 
 
-    if (message.length > 500) {
+    if (text.length > 500) {
 
         alert(
             "Komentar maksimal 500 karakter!"
         );
 
         return;
+
     }
 
 
-    const button =
-        document.getElementById(
-            "sendCommentButton"
-        );
-
-
-    button.disabled =
+    sendButton.disabled =
         true;
 
-    button.textContent =
+
+    sendButton.textContent =
         "Mengirim...";
 
 
@@ -833,9 +1166,14 @@ async function addComment() {
             .from("comments")
             .insert([
                 {
-                    name: username,
-                    message: message,
-                    parent_id: null
+                    name:
+                        username,
+
+                    message:
+                        text,
+
+                    reply_to:
+                        null
                 }
             ]);
 
@@ -847,33 +1185,42 @@ async function addComment() {
             error
         );
 
+
         alert(
             "Gagal mengirim komentar.\n\n" +
             error.message
         );
 
-        button.disabled =
+
+        sendButton.disabled =
             false;
 
-        button.textContent =
+
+        sendButton.textContent =
             "Kirim Komentar";
 
+
         return;
+
     }
 
 
     messageInput.value = "";
 
-    document.getElementById(
-        "charCount"
-    ).textContent =
-        "0 / 500";
+
+    if (charCount) {
+
+        charCount.textContent =
+            "0 / 500";
+
+    }
 
 
-    button.disabled =
+    sendButton.disabled =
         false;
 
-    button.textContent =
+
+    sendButton.textContent =
         "Kirim Komentar";
 
 
@@ -883,31 +1230,58 @@ async function addComment() {
 
 
 // ========================================
-// DELETE COMMENT
+// DELETE COMMENT / REPLY
 // ========================================
 
 async function deleteComment(id) {
 
-    if (
-        getRole() !== "admin"
-    ) {
+    if (role !== "admin") {
 
         alert(
             "Akses ditolak. Kamu bukan admin."
         );
 
         return;
+
     }
 
 
     const confirmed =
         confirm(
-            "Yakin ingin menghapus komentar ini?"
+            "Yakin ingin menghapus pesan ini?"
         );
 
 
     if (!confirmed) return;
 
+
+    // ====================================
+    // HAPUS BALASAN YANG MENEMPEL
+    // ====================================
+
+    const { error: replyDeleteError } =
+        await supabaseClient
+            .from("comments")
+            .delete()
+            .eq(
+                "reply_to",
+                id
+            );
+
+
+    if (replyDeleteError) {
+
+        console.error(
+            "Reply Delete Error:",
+            replyDeleteError
+        );
+
+    }
+
+
+    // ====================================
+    // HAPUS PESAN
+    // ====================================
 
     const { error } =
         await supabaseClient
@@ -926,12 +1300,14 @@ async function deleteComment(id) {
             error
         );
 
+
         alert(
-            "Gagal menghapus komentar.\n\n" +
+            "Gagal menghapus pesan.\n\n" +
             error.message
         );
 
         return;
+
     }
 
 
@@ -945,7 +1321,9 @@ async function deleteComment(id) {
 // ========================================
 
 supabaseClient
-    .channel("comments-realtime")
+    .channel(
+        "comments-realtime"
+    )
     .on(
         "postgres_changes",
         {
@@ -963,43 +1341,90 @@ supabaseClient
 
 
 // ========================================
-// START
+// BUTTON EVENTS
+// ========================================
+
+if (sendButton) {
+
+    sendButton.addEventListener(
+        "click",
+        addComment
+    );
+
+}
+
+
+const refreshButton =
+    document.getElementById(
+        "refreshButton"
+    );
+
+
+if (refreshButton) {
+
+    refreshButton.addEventListener(
+        "click",
+        loadComments
+    );
+
+}
+
+
+const logoutButton =
+    document.getElementById(
+        "logoutButton"
+    );
+
+
+if (logoutButton) {
+
+    logoutButton.addEventListener(
+        "click",
+        logout
+    );
+
+}
+
+
+// ========================================
+// LOGOUT
+// ========================================
+
+function logout() {
+
+    localStorage.removeItem(
+        "loginStatus"
+    );
+
+    localStorage.removeItem(
+        "username"
+    );
+
+    localStorage.removeItem(
+        "name"
+    );
+
+    localStorage.removeItem(
+        "role"
+    );
+
+
+    sessionStorage.clear();
+
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+// ========================================
+// INITIAL LOAD
 // ========================================
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
-
-        const messageInput =
-            document.getElementById(
-                "message"
-            );
-
-        const charCount =
-            document.getElementById(
-                "charCount"
-            );
-
-
-        if (
-            messageInput &&
-            charCount
-        ) {
-
-            messageInput.addEventListener(
-                "input",
-                function () {
-
-                    charCount.textContent =
-                        `${messageInput.value.length} / 500`;
-
-                }
-            );
-
-        }
-
-
-        loadSpotify();
 
         loadComments();
 
