@@ -1,5 +1,5 @@
 // ========================================
-// SUPABASE CONFIG
+// SUPABASE
 // ========================================
 
 const SUPABASE_URL =
@@ -16,26 +16,219 @@ const supabaseClient =
 
 
 // ========================================
+// LOGIN STORAGE
+// ========================================
+
+function saveLogin(username, role, status) {
+
+    localStorage.setItem(
+        "username",
+        username
+    );
+
+    localStorage.setItem(
+        "role",
+        role
+    );
+
+    localStorage.setItem(
+        "loginStatus",
+        status
+    );
+}
+
+
+function getLogin() {
+
+    return {
+        username:
+            localStorage.getItem("username"),
+
+        role:
+            localStorage.getItem("role"),
+
+        loginStatus:
+            localStorage.getItem("loginStatus")
+    };
+}
+
+
+function logout() {
+
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    localStorage.removeItem("loginStatus");
+
+    location.reload();
+}
+
+
+// ========================================
+// USER INFO
+// ========================================
+
+function updateUserInfo() {
+
+    const loginInfo =
+        document.getElementById("loginInfo");
+
+    const commentForm =
+        document.getElementById("commentForm");
+
+    const guestMessage =
+        document.getElementById("guestMessage");
+
+    const login =
+        getLogin();
+
+
+    if (!login.loginStatus) {
+
+        if (loginInfo) {
+
+            loginInfo.innerHTML =
+                "⚠️ Belum login";
+        }
+
+        if (commentForm) {
+
+            commentForm.style.display =
+                "none";
+        }
+
+        return;
+    }
+
+
+    // GUEST
+
+    if (login.loginStatus === "guest") {
+
+        if (loginInfo) {
+
+            loginInfo.innerHTML =
+                `
+                👤 Masuk sebagai <b>Guest</b>
+
+                <button
+                    type="button"
+                    onclick="logout()"
+                >
+                    Keluar
+                </button>
+                `;
+        }
+
+
+        if (commentForm) {
+
+            commentForm.style.display =
+                "none";
+        }
+
+
+        if (guestMessage) {
+
+            guestMessage.style.display =
+                "block";
+        }
+
+        return;
+    }
+
+
+    // USER / ADMIN
+
+    const admin =
+        login.role === "admin"
+            ? " 👑 Admin"
+            : "";
+
+
+    if (loginInfo) {
+
+        loginInfo.innerHTML =
+            `
+            👤 <b>${escapeHTML(login.username)}</b>
+            ${admin}
+
+            <button
+                type="button"
+                onclick="logout()"
+            >
+                Keluar
+            </button>
+            `;
+    }
+
+
+    if (commentForm) {
+
+        commentForm.style.display =
+            "block";
+    }
+
+
+    if (guestMessage) {
+
+        guestMessage.style.display =
+            "none";
+    }
+}
+
+
+// ========================================
+// ESCAPE HTML
+// ========================================
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+}
+
+
+// ========================================
 // LOAD COMMENTS
 // ========================================
 
 async function loadComments() {
 
     const commentList =
-        document.getElementById("commentList");
+        document.getElementById(
+            "commentList"
+        );
 
     if (!commentList) return;
+
 
     commentList.innerHTML =
         '<p class="empty">Memuat komentar...</p>';
 
-    const { data, error } =
-        await supabaseClient
-            .from("comments")
-            .select("id, name, message, created_at")
-            .order("created_at", {
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("comments")
+
+        .select(
+            "id, name, message, created_at"
+        )
+
+        .order(
+            "created_at",
+            {
                 ascending: false
-            });
+            }
+        );
+
 
     if (error) {
 
@@ -45,38 +238,56 @@ async function loadComments() {
         );
 
         commentList.innerHTML =
-            '<p class="empty">Gagal memuat komentar.</p>';
+            `
+            <p class="empty">
+                Gagal memuat komentar.
+            </p>
+            `;
 
         return;
     }
 
-    if (!data || data.length === 0) {
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
         commentList.innerHTML =
-            '<p class="empty">Belum ada komentar.</p>';
+            `
+            <p class="empty">
+                Belum ada komentar.
+            </p>
+            `;
 
         return;
     }
+
 
     commentList.innerHTML = "";
 
+
     const role =
-        sessionStorage.getItem("role");
+        localStorage.getItem("role");
+
 
     data.forEach(comment => {
 
         const box =
-            document.createElement("article");
+            document.createElement(
+                "article"
+            );
 
-        box.className = "comment";
+        box.className =
+            "comment";
 
 
-        // =================================
-        // NAMA
-        // =================================
+        // NAME
 
         const name =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         name.className =
             "comment-name";
@@ -85,12 +296,12 @@ async function loadComments() {
             comment.name;
 
 
-        // =================================
-        // PESAN
-        // =================================
+        // MESSAGE
 
         const message =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         message.className =
             "comment-message";
@@ -99,12 +310,12 @@ async function loadComments() {
             comment.message;
 
 
-        // =================================
-        // WAKTU
-        // =================================
+        // TIME
 
         const time =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         time.className =
             "comment-time";
@@ -120,16 +331,17 @@ async function loadComments() {
         box.appendChild(time);
 
 
-        // =================================
-        // TOMBOL ADMIN
-        // =================================
+        // ADMIN DELETE
 
         if (role === "admin") {
 
             const deleteButton =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
-            deleteButton.type = "button";
+            deleteButton.type =
+                "button";
 
             deleteButton.className =
                 "delete-comment";
@@ -137,12 +349,16 @@ async function loadComments() {
             deleteButton.textContent =
                 "🗑️ Hapus";
 
-            deleteButton.addEventListener(
-                "click",
+
+            deleteButton.onclick =
                 () => {
-                    deleteComment(comment.id);
-                }
-            );
+
+                    deleteComment(
+                        comment.id
+                    );
+
+                };
+
 
             box.appendChild(
                 deleteButton
@@ -150,43 +366,44 @@ async function loadComments() {
         }
 
 
-        commentList.appendChild(box);
+        commentList.appendChild(
+            box
+        );
 
     });
-
 }
 
 
 // ========================================
-// FORMAT TANGGAL
+// DATE
 // ========================================
 
 function formatDate(date) {
 
-    return new Date(date).toLocaleString(
-        "id-ID",
-        {
-            dateStyle: "medium",
-            timeStyle: "short"
-        }
-    );
-
+    return new Date(date)
+        .toLocaleString(
+            "id-ID",
+            {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }
+        );
 }
 
 
 // ========================================
-// TAMBAH KOMENTAR
+// ADD COMMENT
 // ========================================
 
 async function addComment() {
 
-    const loginStatus =
-        sessionStorage.getItem(
-            "loginStatus"
-        );
+    const login =
+        getLogin();
 
-    // Guest tidak boleh komentar
-    if (loginStatus !== "user") {
+
+    if (
+        login.loginStatus !== "user"
+    ) {
 
         alert(
             "Guest tidak dapat mengirim komentar."
@@ -196,12 +413,7 @@ async function addComment() {
     }
 
 
-    const username =
-        sessionStorage.getItem(
-            "username"
-        );
-
-    if (!username) {
+    if (!login.username) {
 
         alert(
             "Sesi login tidak ditemukan."
@@ -215,8 +427,6 @@ async function addComment() {
         document.getElementById(
             "message"
         );
-
-    if (!messageInput) return;
 
 
     const message =
@@ -251,24 +461,27 @@ async function addComment() {
         );
 
 
-    if (button) {
+    button.disabled = true;
 
-        button.disabled = true;
-
-        button.textContent =
-            "Mengirim...";
-    }
+    button.textContent =
+        "Mengirim...";
 
 
-    const { error } =
-        await supabaseClient
-            .from("comments")
-            .insert([
-                {
-                    name: username,
-                    message: message
-                }
-            ]);
+    const {
+        error
+    } = await supabaseClient
+
+        .from("comments")
+
+        .insert([
+            {
+                name:
+                    login.username,
+
+                message:
+                    message
+            }
+        ]);
 
 
     if (error) {
@@ -283,27 +496,24 @@ async function addComment() {
             error.message
         );
 
-        if (button) {
 
-            button.disabled = false;
+        button.disabled = false;
 
-            button.textContent =
-                "Kirim Komentar";
-        }
+        button.textContent =
+            "Kirim Komentar";
 
         return;
     }
 
 
-    // Bersihkan textarea
     messageInput.value = "";
 
 
-    // Reset counter
     const charCount =
         document.getElementById(
             "charCount"
         );
+
 
     if (charCount) {
 
@@ -312,28 +522,24 @@ async function addComment() {
     }
 
 
-    if (button) {
+    button.disabled = false;
 
-        button.disabled = false;
-
-        button.textContent =
-            "Kirim Komentar";
-    }
+    button.textContent =
+        "Kirim Komentar";
 
 
     await loadComments();
-
 }
 
 
 // ========================================
-// HAPUS KOMENTAR - ADMIN
+// DELETE COMMENT
 // ========================================
 
 async function deleteComment(id) {
 
     const role =
-        sessionStorage.getItem(
+        localStorage.getItem(
             "role"
         );
 
@@ -357,17 +563,18 @@ async function deleteComment(id) {
     if (!confirmed) return;
 
 
-    console.log(
-        "Menghapus komentar ID:",
-        id
-    );
+    const {
+        error
+    } = await supabaseClient
 
+        .from("comments")
 
-    const { error } =
-        await supabaseClient
-            .from("comments")
-            .delete()
-            .eq("id", id);
+        .delete()
+
+        .eq(
+            "id",
+            id
+        );
 
 
     if (error) {
@@ -386,13 +593,7 @@ async function deleteComment(id) {
     }
 
 
-    alert(
-        "Komentar berhasil dihapus."
-    );
-
-
     await loadComments();
-
 }
 
 
@@ -401,7 +602,11 @@ async function deleteComment(id) {
 // ========================================
 
 supabaseClient
-    .channel("comments-realtime")
+
+    .channel(
+        "comments-realtime"
+    )
+
     .on(
         "postgres_changes",
         {
@@ -415,16 +620,22 @@ supabaseClient
 
         }
     )
+
     .subscribe();
 
 
 // ========================================
-// COUNTER KARAKTER
+// START
 // ========================================
 
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+
+        updateUserInfo();
+
+        loadComments();
+
 
         const messageInput =
             document.getElementById(
@@ -451,11 +662,7 @@ document.addEventListener(
 
                 }
             );
-
         }
-
-
-        loadComments();
 
     }
 );
