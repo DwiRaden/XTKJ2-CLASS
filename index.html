@@ -22,7 +22,10 @@
     <script>
 
         const loginStatus =
-            localStorage.getItem("loginStatus");
+            localStorage.getItem(
+                "loginStatus"
+            );
+
 
         if (
             loginStatus !== "user" &&
@@ -71,7 +74,8 @@
                     <div
                         class="welcome-user"
                         id="welcomeUser"
-                    ></div>
+                    >
+                    </div>
 
                 </div>
 
@@ -107,6 +111,8 @@
             <div class="menu-grid">
 
 
+                <!-- JADWAL PELAJARAN -->
+
                 <a
                     href="https://xtkj-2.vercel.app/pelajaran.jpg"
                     class="menu-card"
@@ -134,6 +140,8 @@
 
                 </a>
 
+
+                <!-- JADWAL PIKET -->
 
                 <a
                     href="https://xtkj-2.vercel.app/piket.jpg"
@@ -163,6 +171,8 @@
                 </a>
 
 
+                <!-- ABSENSI -->
+
                 <a
                     href="https://xtkj-2.vercel.app/absensi.html"
                     class="menu-card"
@@ -190,6 +200,8 @@
 
                 </a>
 
+
+                <!-- KOMENTAR -->
 
                 <a
                     href="https://xtkj-2.vercel.app/comment"
@@ -243,6 +255,8 @@
             </div>
 
 
+            <!-- NOTIF GUEST -->
+
             <div
                 id="guestNotice"
                 class="guest-notice"
@@ -251,6 +265,8 @@
                 Login sebagai siswa untuk mengirim komentar.
             </div>
 
+
+            <!-- INPUT KOMENTAR -->
 
             <textarea
                 id="message"
@@ -264,6 +280,7 @@
                 <span id="charCount">
                     0 / 500
                 </span>
+
 
                 <button
                     type="button"
@@ -279,11 +296,14 @@
             <div class="comment-divider"></div>
 
 
+            <!-- HEADER KOMENTAR -->
+
             <div class="latest-header">
 
                 <h3>
                     Komentar Terbaru
                 </h3>
+
 
                 <button
                     type="button"
@@ -295,6 +315,8 @@
 
             </div>
 
+
+            <!-- LIST KOMENTAR -->
 
             <div id="commentList">
 
@@ -317,6 +339,7 @@
                 © 2026 TKJ 2 • Kelas Kita
             </p>
 
+
             <button
                 type="button"
                 onclick="logout()"
@@ -331,31 +354,49 @@
     </main>
 
 
-    <!-- SUPABASE -->
+    <!-- =========================
+         SUPABASE
+    ========================== -->
 
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
 
 
+    <!-- =========================
+         SCRIPT UTAMA
+    ========================== -->
+
     <script src="script.js"></script>
 
 
     <!-- =========================
-         USER SESSION
+         LOGIN UI
     ========================== -->
 
     <script>
 
         const currentUsername =
-            localStorage.getItem("username") ||
-            "Guest";
+            localStorage.getItem(
+                "username"
+            ) || "Guest";
 
 
         const currentRole =
-            localStorage.getItem("role") ||
-            "guest";
+            localStorage.getItem(
+                "role"
+            ) || "guest";
 
+
+        const currentLoginStatus =
+            localStorage.getItem(
+                "loginStatus"
+            );
+
+
+        // =========================
+        // WELCOME
+        // =========================
 
         const welcomeUser =
             document.getElementById(
@@ -370,6 +411,10 @@
 
         }
 
+
+        // =========================
+        // ELEMENT KOMENTAR
+        // =========================
 
         const message =
             document.getElementById(
@@ -389,7 +434,14 @@
             );
 
 
-        if (currentRole === "guest") {
+        // =========================
+        // GUEST MODE
+        // =========================
+
+        if (
+            currentLoginStatus === "guest" ||
+            currentRole === "guest"
+        ) {
 
             message.disabled = true;
 
@@ -404,7 +456,24 @@
             guestNotice.style.display =
                 "block";
 
-        } else {
+        }
+
+
+        // =========================
+        // USER / ADMIN MODE
+        // =========================
+
+        else {
+
+            message.disabled = false;
+
+            sendButton.disabled = false;
+
+            message.placeholder =
+                "Tulis komentar...";
+
+            sendButton.textContent =
+                "Kirim Komentar";
 
             guestNotice.style.display =
                 "none";
@@ -412,9 +481,13 @@
         }
 
 
+        // =========================
+        // CHARACTER COUNTER
+        // =========================
+
         message.addEventListener(
             "input",
-            function () {
+            function() {
 
                 document.getElementById(
                     "charCount"
@@ -424,6 +497,10 @@
             }
         );
 
+
+        // =========================
+        // LOGOUT
+        // =========================
 
         function logout() {
 
@@ -442,6 +519,10 @@
             localStorage.removeItem(
                 "role"
             );
+
+
+            // Bersihkan sesi lama juga
+            sessionStorage.clear();
 
 
             window.location.href =
