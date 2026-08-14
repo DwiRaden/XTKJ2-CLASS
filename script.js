@@ -19,7 +19,41 @@ const supabaseClient =
 // STATE
 // ========================================
 
-let commentsCache = [];
+let openReplies = new Set();
+
+
+// ========================================
+// GET LOGIN INFO
+// ========================================
+
+function getLoginStatus() {
+    return sessionStorage.getItem("loginStatus");
+}
+
+function getUsername() {
+    return sessionStorage.getItem("username");
+}
+
+function getRole() {
+    return sessionStorage.getItem("role");
+}
+
+
+// ========================================
+// FORMAT DATE
+// ========================================
+
+function formatDate(date) {
+
+    return new Date(date).toLocaleString(
+        "id-ID",
+        {
+            dateStyle: "medium",
+            timeStyle: "short"
+        }
+    );
+
+}
 
 
 // ========================================
@@ -36,15 +70,20 @@ async function loadComments() {
     commentList.innerHTML =
         '<p class="empty">Memuat komentar...</p>';
 
+
     const { data, error } =
         await supabaseClient
             .from("comments")
             .select(
                 "id, name, message, created_at, parent_id"
             )
-            .order("created_at", {
-                ascending: true
-            });
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
 
     if (error) {
 
@@ -54,36 +93,17 @@ async function loadComments() {
         );
 
         commentList.innerHTML =
-            '<p class="empty">Gagal memuat komentar.</p>';
+            `<p class="empty">
+                Gagal memuat komentar.
+                <br>
+                <small>${escapeHTML(error.message)}</small>
+            </p>`;
 
         return;
     }
 
-    commentsCache = data || [];
 
-    renderComments();
-
-}
-
-
-// ========================================
-// RENDER COMMENTS
-// ========================================
-
-function renderComments() {
-
-    const commentList =
-        document.getElementById("commentList");
-
-    if (!commentList) return;
-
-    const comments =
-        commentsCache;
-
-    if (
-        !comments ||
-        comments.length === 0
-    ) {
+    if (!data || data.length === 0) {
 
         commentList.innerHTML =
             '<p class="empty">Belum ada komentar.</p>';
@@ -91,31 +111,41 @@ function renderComments() {
         return;
     }
 
+
     commentList.innerHTML = "";
 
-    // Komentar utama saja
+
+    // Komentar utama
     const mainComments =
-        comments.filter(
+        data.filter(
             comment =>
-                comment.parent_id === null ||
-                comment.parent_id === undefined
+                comment.parent_id === null
         );
 
-    // Terbaru di atas
-    mainComments.sort(
-        (a, b) =>
-            new Date(b.created_at) -
-            new Date(a.created_at)
-    );
+
+    mainComments
+        .sort(
+            (a, b) =>
+                new Date(b.created_at) -
+                new Date(a.created_at)
+        );
+
 
     mainComments.forEach(comment => {
 
-        const box =
-            createCommentElement(
-                comment
+        const replies =
+            data.filter(
+                reply =>
+                    String(reply.parent_id) ===
+                    String(comment.id)
             );
 
-        commentList.appendChild(box);
+
+        renderComment(
+            comment,
+            replies,
+            commentList
+        );
 
     });
 
@@ -123,30 +153,46 @@ function renderComments() {
 
 
 // ========================================
-// CREATE COMMENT ELEMENT
+// RENDER COMMENT
 // ========================================
 
-function createCommentElement(comment) {
+function renderComment(
+    comment,
+    replies,
+    container
+) {
 
-    const box =
+    const article =
         document.createElement("article");
 
-    box.className = "comment";
+    article.className = "comment";
 
 
-    // NAME
+    // ====================================
+    // HEADER
+    // ====================================
+
+    const header =
+        document.createElement("div");
+
+    header.className = "comment-header";
+
 
     const name =
         document.createElement("div");
 
-    name.className =
-        "comment-name";
+    name.className = "comment-name";
 
     name.textContent =
         comment.name;
 
 
+    header.appendChild(name);
+
+
+    // ====================================
     // MESSAGE
+    // ====================================
 
     const message =
         document.createElement("div");
@@ -158,7 +204,9 @@ function createCommentElement(comment) {
         comment.message;
 
 
+    // ====================================
     // TIME
+    // ====================================
 
     const time =
         document.createElement("div");
@@ -172,26 +220,23 @@ function createCommentElement(comment) {
         );
 
 
-    box.appendChild(name);
-    box.appendChild(message);
-    box.appendChild(time);
+    article.appendChild(header);
+    article.appendChild(message);
+    article.appendChild(time);
 
 
     // ====================================
-    // REPLY COUNT
+    // ACTIONS
     // ====================================
 
-    const replies =
-        commentsCache.filter(
-            reply =>
-                Number(reply.parent_id) ===
-                Number(comment.id)
-        );
+    const actions =
+        document.createElement("div");
 
-    const replyCount =
-        replies.length;
+    actions.className =
+        "comment-actions";
 
 
+    // BALAS
     const replyButton =
         document.createElement("button");
 
@@ -199,40 +244,26 @@ function createCommentElement(comment) {
         "button";
 
     replyButton.className =
-        "reply-toggle";
+        "reply-button";
 
     replyButton.textContent =
-        replyCount > 0
-            ? `↩️ Lihat ${replyCount} balasan`
-            : "↩️ Balas";
+        "↩️ Balas";
 
 
     replyButton.addEventListener(
         "click",
         () => {
 
-            if (replyCount > 0) {
-
-                toggleReplies(
-                    comment.id,
-                    replyButton
-                );
-
-            } else {
-
-                showReplyForm(
-                    comment.id,
-                    comment.name,
-                    box
-                );
-
-            }
+            showReplyBox(
+                comment,
+                article
+            );
 
         }
     );
 
 
-    box.appendChild(
+    actions.appendChild(
         replyButton
     );
 
@@ -241,10 +272,7 @@ function createCommentElement(comment) {
     // ADMIN DELETE
     // ====================================
 
-    const role =
-        sessionStorage.getItem("role");
-
-    if (role === "admin") {
+    if (getRole() === "admin") {
 
         const deleteButton =
             document.createElement("button");
@@ -258,176 +286,204 @@ function createCommentElement(comment) {
         deleteButton.textContent =
             "🗑️ Hapus";
 
+
         deleteButton.addEventListener(
             "click",
             () => {
+
                 deleteComment(
                     comment.id
                 );
+
             }
         );
 
-        box.appendChild(
+
+        actions.appendChild(
             deleteButton
         );
+
     }
 
 
-    return box;
-
-}
+    article.appendChild(actions);
 
 
-// ========================================
-// SHOW / HIDE REPLIES
-// ========================================
+    // ====================================
+    // REPLIES
+    // ====================================
 
-function toggleReplies(
-    commentId,
-    button
-) {
+    if (replies.length > 0) {
 
-    const existing =
-        document.querySelector(
-            `.replies[data-parent-id="${commentId}"]`
-        );
+        const replyToggle =
+            document.createElement("button");
 
-    if (existing) {
+        replyToggle.type =
+            "button";
 
-        existing.remove();
-
-        button.textContent =
-            `↩️ Lihat ${
-                getReplyCount(commentId)
-            } balasan`;
-
-        return;
-    }
+        replyToggle.className =
+            "reply-toggle";
 
 
-    const replies =
-        commentsCache.filter(
-            reply =>
-                Number(reply.parent_id) ===
-                Number(commentId)
-        );
-
-
-    const container =
-        document.createElement("div");
-
-    container.className =
-        "replies";
-
-    container.dataset.parentId =
-        commentId;
-
-
-    replies.sort(
-        (a, b) =>
-            new Date(a.created_at) -
-            new Date(b.created_at)
-    );
-
-
-    replies.forEach(reply => {
-
-        const replyBox =
-            createReplyElement(
-                reply
+        const isOpen =
+            openReplies.has(
+                String(comment.id)
             );
 
-        container.appendChild(
-            replyBox
+
+        replyToggle.textContent =
+            isOpen
+                ? "Sembunyikan balasan"
+                : `Lihat ${replies.length} balasan`;
+
+
+        replyToggle.addEventListener(
+            "click",
+            () => {
+
+                const key =
+                    String(comment.id);
+
+
+                if (openReplies.has(key)) {
+
+                    openReplies.delete(key);
+
+                } else {
+
+                    openReplies.add(key);
+
+                }
+
+
+                loadComments();
+
+            }
         );
 
-    });
 
-
-    // Cari komentar utama
-    const allComments =
-        document.querySelectorAll(
-            ".comment"
+        article.appendChild(
+            replyToggle
         );
 
-    for (const commentBox of allComments) {
 
-        const buttons =
-            commentBox.querySelectorAll(
-                ".reply-toggle"
+        if (isOpen) {
+
+            const repliesContainer =
+                document.createElement("div");
+
+            repliesContainer.className =
+                "replies";
+
+
+            replies
+                .sort(
+                    (a, b) =>
+                        new Date(a.created_at) -
+                        new Date(b.created_at)
+                )
+                .forEach(
+                    reply => {
+
+                        renderReply(
+                            reply,
+                            comment,
+                            repliesContainer
+                        );
+
+                    }
+                );
+
+
+            article.appendChild(
+                repliesContainer
             );
 
-        if (
-            buttons.length &&
-            buttons[0] === button
-        ) {
-
-            commentBox.appendChild(
-                container
-            );
-
-            break;
         }
 
     }
 
 
-    button.textContent =
-        "↩️ Sembunyikan balasan";
+    container.appendChild(article);
 
 }
 
 
 // ========================================
-// CREATE REPLY
+// RENDER REPLY
 // ========================================
 
-function createReplyElement(reply) {
+function renderReply(
+    reply,
+    parentComment,
+    container
+) {
 
-    const box =
+    const replyBox =
         document.createElement("div");
 
-    box.className =
-        "reply";
+    replyBox.className =
+        "comment reply";
 
 
-    const replyingTo =
+    // ====================================
+    // REPLY HEADER
+    // ====================================
+
+    const header =
         document.createElement("div");
 
-    replyingTo.className =
-        "reply-to";
-
-    replyingTo.textContent =
-        `Membalas ${getUserDisplayName(
-            reply.parent_id
-        )}`;
+    header.className =
+        "reply-header";
 
 
     const name =
         document.createElement("div");
 
     name.className =
-        "reply-name";
+        "comment-name";
 
     name.textContent =
         reply.name;
 
 
+    const replyingTo =
+        document.createElement("span");
+
+    replyingTo.className =
+        "replying-to";
+
+    replyingTo.textContent =
+        `Membalas @${parentComment.name}`;
+
+
+    header.appendChild(name);
+    header.appendChild(replyingTo);
+
+
+    // ====================================
+    // MESSAGE
+    // ====================================
+
     const message =
         document.createElement("div");
 
     message.className =
-        "reply-message";
+        "comment-message";
 
     message.textContent =
         reply.message;
 
 
+    // ====================================
+    // TIME
+    // ====================================
+
     const time =
         document.createElement("div");
 
     time.className =
-        "reply-time";
+        "comment-time";
 
     time.textContent =
         formatDate(
@@ -435,28 +491,23 @@ function createReplyElement(reply) {
         );
 
 
-    box.appendChild(
-        replyingTo
-    );
-
-    box.appendChild(
-        name
-    );
-
-    box.appendChild(
-        message
-    );
-
-    box.appendChild(
-        time
-    );
+    replyBox.appendChild(header);
+    replyBox.appendChild(message);
+    replyBox.appendChild(time);
 
 
-    // Admin delete
-    const role =
-        sessionStorage.getItem("role");
+    // ====================================
+    // REPLY ACTIONS
+    // ====================================
 
-    if (role === "admin") {
+    const actions =
+        document.createElement("div");
+
+    actions.className =
+        "comment-actions";
+
+
+    if (getRole() === "admin") {
 
         const deleteButton =
             document.createElement("button");
@@ -470,60 +521,67 @@ function createReplyElement(reply) {
         deleteButton.textContent =
             "🗑️ Hapus";
 
+
         deleteButton.addEventListener(
             "click",
             () => {
+
                 deleteComment(
                     reply.id
                 );
+
             }
         );
 
-        box.appendChild(
+
+        actions.appendChild(
             deleteButton
         );
+
     }
 
 
-    return box;
+    replyBox.appendChild(
+        actions
+    );
+
+
+    container.appendChild(
+        replyBox
+    );
 
 }
 
 
 // ========================================
-// REPLY FORM
+// REPLY BOX
 // ========================================
 
-function showReplyForm(
-    parentId,
-    parentName,
-    parentBox
+function showReplyBox(
+    comment,
+    article
 ) {
 
-    // Guest tidak bisa membalas
+    // Jangan bikin dua reply box
     if (
-        sessionStorage.getItem(
-            "loginStatus"
-        ) !== "user"
+        article.querySelector(
+            ".reply-form"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    // Guest
+    if (
+        getLoginStatus() !== "user"
     ) {
 
         alert(
             "Guest tidak dapat membalas komentar."
         );
-
-        return;
-    }
-
-
-    // Jangan buat form dua kali
-    const existing =
-        parentBox.querySelector(
-            ".reply-form"
-        );
-
-    if (existing) {
-
-        existing.remove();
 
         return;
     }
@@ -536,24 +594,17 @@ function showReplyForm(
         "reply-form";
 
 
-    const info =
-        document.createElement("div");
-
-    info.className =
-        "reply-form-info";
-
-    info.textContent =
-        `Membalas ${parentName}`;
-
-
     const textarea =
         document.createElement("textarea");
+
+    textarea.className =
+        "reply-input";
 
     textarea.maxLength =
         500;
 
     textarea.placeholder =
-        `Balas ${parentName}...`;
+        `Membalas @${comment.name}...`;
 
 
     const bottom =
@@ -576,10 +627,14 @@ function showReplyForm(
         "Batal";
 
 
-    cancel.onclick =
+    cancel.addEventListener(
+        "click",
         () => {
+
             form.remove();
-        };
+
+        }
+    );
 
 
     const send =
@@ -592,47 +647,32 @@ function showReplyForm(
         "reply-send";
 
     send.textContent =
-        "Kirim Balasan";
+        "Balas";
 
 
-    send.onclick =
+    send.addEventListener(
+        "click",
         async () => {
 
             await addReply(
-                parentId,
+                comment.id,
                 textarea,
-                send,
-                form
+                send
             );
 
-        };
-
-
-    bottom.appendChild(
-        cancel
-    );
-
-    bottom.appendChild(
-        send
+        }
     );
 
 
-    form.appendChild(
-        info
-    );
-
-    form.appendChild(
-        textarea
-    );
-
-    form.appendChild(
-        bottom
-    );
+    bottom.appendChild(cancel);
+    bottom.appendChild(send);
 
 
-    parentBox.appendChild(
-        form
-    );
+    form.appendChild(textarea);
+    form.appendChild(bottom);
+
+
+    article.appendChild(form);
 
 
     textarea.focus();
@@ -647,17 +687,12 @@ function showReplyForm(
 async function addReply(
     parentId,
     textarea,
-    button,
-    form
+    button
 ) {
 
-    const loginStatus =
-        sessionStorage.getItem(
-            "loginStatus"
-        );
-
-
-    if (loginStatus !== "user") {
+    if (
+        getLoginStatus() !== "user"
+    ) {
 
         alert(
             "Guest tidak dapat membalas komentar."
@@ -668,13 +703,7 @@ async function addReply(
 
 
     const username =
-        sessionStorage.getItem(
-            "username"
-        );
-
-
-    const message =
-        textarea.value.trim();
+        getUsername();
 
 
     if (!username) {
@@ -685,6 +714,10 @@ async function addReply(
 
         return;
     }
+
+
+    const message =
+        textarea.value.trim();
 
 
     if (!message) {
@@ -740,17 +773,21 @@ async function addReply(
             error.message
         );
 
+
         button.disabled =
             false;
 
         button.textContent =
-            "Kirim Balasan";
+            "Balas";
 
         return;
     }
 
 
-    form.remove();
+    openReplies.add(
+        String(parentId)
+    );
+
 
     await loadComments();
 
@@ -758,79 +795,19 @@ async function addReply(
 
 
 // ========================================
-// GET REPLY COUNT
-// ========================================
-
-function getReplyCount(
-    commentId
-) {
-
-    return commentsCache.filter(
-        reply =>
-            Number(reply.parent_id) ===
-            Number(commentId)
-    ).length;
-
-}
-
-
-// ========================================
-// GET USER NAME
-// ========================================
-
-function getUserDisplayName(
-    parentId
-) {
-
-    const parent =
-        commentsCache.find(
-            comment =>
-                Number(comment.id) ===
-                Number(parentId)
-        );
-
-
-    if (parent) {
-        return parent.name;
-    }
-
-
-    return "pengguna";
-
-}
-
-
-// ========================================
-// FORMAT DATE
-// ========================================
-
-function formatDate(date) {
-
-    return new Date(date)
-        .toLocaleString(
-            "id-ID",
-            {
-                dateStyle: "medium",
-                timeStyle: "short"
-            }
-        );
-
-}
-
-
-// ========================================
-// ADD MAIN COMMENT
+// ADD COMMENT
 // ========================================
 
 async function addComment() {
 
     const loginStatus =
-        sessionStorage.getItem(
-            "loginStatus"
-        );
+        getLoginStatus();
 
 
-    if (loginStatus !== "user") {
+    // Guest tidak boleh komentar
+    if (
+        loginStatus !== "user"
+    ) {
 
         alert(
             "Guest tidak dapat mengirim komentar."
@@ -840,10 +817,11 @@ async function addComment() {
     }
 
 
+    // ADMIN TETAP BOLEH
+    // karena admin memiliki loginStatus = user
+
     const username =
-        sessionStorage.getItem(
-            "username"
-        );
+        getUsername();
 
 
     if (!username) {
@@ -904,6 +882,7 @@ async function addComment() {
 
         button.textContent =
             "Mengirim...";
+
     }
 
 
@@ -939,13 +918,15 @@ async function addComment() {
 
             button.textContent =
                 "Kirim Komentar";
+
         }
 
         return;
     }
 
 
-    messageInput.value = "";
+    messageInput.value =
+        "";
 
 
     const charCount =
@@ -958,6 +939,7 @@ async function addComment() {
 
         charCount.textContent =
             "0 / 500";
+
     }
 
 
@@ -968,6 +950,7 @@ async function addComment() {
 
         button.textContent =
             "Kirim Komentar";
+
     }
 
 
@@ -982,13 +965,10 @@ async function addComment() {
 
 async function deleteComment(id) {
 
-    const role =
-        sessionStorage.getItem(
-            "role"
-        );
-
-
-    if (role !== "admin") {
+    // HANYA ADMIN
+    if (
+        getRole() !== "admin"
+    ) {
 
         alert(
             "Akses ditolak."
@@ -1005,33 +985,6 @@ async function deleteComment(id) {
 
 
     if (!confirmed) return;
-
-
-    // Hapus balasan terlebih dahulu
-    const { error: replyError } =
-        await supabaseClient
-            .from("comments")
-            .delete()
-            .eq(
-                "parent_id",
-                id
-            );
-
-
-    if (replyError) {
-
-        console.error(
-            "Reply Delete Error:",
-            replyError
-        );
-
-        alert(
-            "Gagal menghapus balasan.\n\n" +
-            replyError.message
-        );
-
-        return;
-    }
 
 
     const { error } =
@@ -1066,6 +1019,23 @@ async function deleteComment(id) {
 
 
 // ========================================
+// ESCAPE HTML
+// ========================================
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        text;
+
+    return div.innerHTML;
+
+}
+
+
+// ========================================
 // REALTIME
 // ========================================
 
@@ -1090,7 +1060,7 @@ supabaseClient
 
 
 // ========================================
-// COUNTER
+// CHARACTER COUNTER
 // ========================================
 
 document.addEventListener(
