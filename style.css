@@ -966,3 +966,228 @@ footer {
     }
 
 }
+
+/* ============================= */
+/* DASHBOARD MENU */
+/* ============================= */
+
+.dashboard {
+    margin-bottom: 24px;
+}
+
+.dashboard > p {
+    margin-top: -8px;
+    margin-bottom: 20px;
+    color: #6b7280;
+}
+
+
+.menu-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 16px;
+
+    margin-bottom: 12px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    text-decoration: none;
+    color: #111827;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+.menu-card:last-child {
+    margin-bottom: 0;
+}
+
+
+.menu-card:active {
+    transform: scale(0.98);
+}
+
+
+.menu-icon {
+    width: 56px;
+    height: 56px;
+
+    min-width: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background: #eef2ff;
+
+    font-size: 28px;
+}
+
+
+.menu-text {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.menu-text strong {
+    font-size: 17px;
+    color: #111827;
+}
+
+
+.menu-text span {
+    font-size: 14px;
+    color: #6b7280;
+
+    line-height: 1.4;
+}
+
+
+.menu-arrow {
+    font-size: 22px;
+    color: #9ca3af;
+
+    padding-left: 5px;
+}
+
+
+/* ============================= */
+/* LOGIN INFO */
+/* ============================= */
+
+#loginInfo {
+    margin-top: 8px;
+
+    font-size: 14px;
+    color: #6b7280;
+}
+
+
+#loginInfo button {
+    margin-left: 8px;
+
+    border: none;
+
+    padding: 5px 10px;
+
+    border-radius: 8px;
+
+    background: #ef4444;
+    color: white;
+
+    cursor: pointer;
+}
+
+
+/* ============================= */
+/* GUEST */
+/* ============================= */
+
+.guest-message {
+    margin: 15px 0;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    background: #f3f4f6;
+
+    color: #6b7280;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* ============================= */
+/* COMMENT FORM */
+/* ============================= */
+
+.comment-form textarea {
+    width: 100%;
+
+    min-height: 140px;
+
+    box-sizing: border-box;
+
+    resize: vertical;
+
+    padding: 16px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 14px;
+
+    font-family: inherit;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+
+.comment-form textarea:focus {
+    border-color: #2563eb;
+}
+
+
+.comment-bottom {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+
+#charCount {
+    color: #9ca3af;
+
+    font-size: 13px;
+}
+
+
+#sendCommentButton {
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 12px 18px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+#sendCommentButton:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
