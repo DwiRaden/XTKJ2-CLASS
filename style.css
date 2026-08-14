@@ -1,10 +1,16 @@
+/* ========================================
+   RESET
+======================================== */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+
 :root {
+
     font-family:
         Inter,
         system-ui,
@@ -14,10 +20,13 @@
         sans-serif;
 
     color: #0f172a;
+
     background: #f8fafc;
 }
 
+
 body {
+
     min-height: 100vh;
 
     background:
@@ -29,11 +38,13 @@ body {
         #f8fafc;
 }
 
+
 button,
 input,
 textarea {
     font: inherit;
 }
+
 
 button,
 a {
@@ -41,114 +52,134 @@ a {
 }
 
 
-/* =========================
+/* ========================================
    SPOTIFY MINI PLAYER
-========================= */
+======================================== */
 
 .spotify-mini {
+
     position: fixed;
 
-    top: 10px;
-    right: 10px;
+    top: 8px;
+    right: 8px;
 
-    z-index: 9999;
+    z-index: 99999;
 
-    width: 280px;
+    width: 300px;
     height: 80px;
 
     overflow: hidden;
 
-    border-radius: 14px;
+    border-radius: 12px;
 
-    background: white;
-
-    border: 1px solid #e2e8f0;
+    background: #191414;
 
     box-shadow:
         0 8px 25px
         rgba(
-            15,
-            23,
-            42,
-            .15
+            0,
+            0,
+            0,
+            .20
         );
 }
 
+
 .spotify-mini iframe {
+
+    display: block;
+
     width: 100%;
-    height: 100%;
+    height: 80px;
 
     border: 0;
 }
 
 
-/* =========================
+/* ========================================
    CONTAINER
-========================= */
+======================================== */
 
 .container {
-    width: min(
-        100% - 28px,
-        1050px
-    );
 
-    margin: 0 auto;
+    width:
+        min(
+            100% - 28px,
+            1050px
+        );
 
-    padding: 25px 0 35px;
+    margin:
+        0 auto;
+
+    padding:
+        25px 0 35px;
 }
 
 
-/* =========================
+/* ========================================
    BADGE
-========================= */
+======================================== */
 
 .badge {
+
     display: inline-flex;
 
     align-items: center;
 
-    padding: 6px 11px;
+    padding:
+        6px 11px;
 
-    border-radius: 999px;
+    border-radius:
+        999px;
 
-    background: rgba(
-        255,
-        255,
-        255,
-        .18
-    );
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .18
+        );
 
-    border: 1px solid rgba(
-        255,
-        255,
-        255,
-        .25
-    );
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            .25
+        );
 
     color: inherit;
 
-    font-size: 11px;
+    font-size:
+        11px;
 
-    font-weight: 700;
+    font-weight:
+        700;
 
-    letter-spacing: .5px;
+    letter-spacing:
+        .5px;
 
-    text-transform: uppercase;
+    text-transform:
+        uppercase;
 }
 
 
-/* =========================
+/* ========================================
    DASHBOARD
-========================= */
+======================================== */
 
 .dashboard {
+
     position: relative;
 
     overflow: hidden;
 
-    padding: 35px;
+    padding:
+        35px;
 
-    border-radius: 28px;
+    border-radius:
+        28px;
 
     color: white;
 
@@ -169,7 +200,9 @@ a {
         );
 }
 
+
 .dashboard::after {
+
     content: "";
 
     position: absolute;
@@ -191,7 +224,9 @@ a {
         );
 }
 
+
 .dashboard-content {
+
     position: relative;
 
     z-index: 2;
@@ -200,32 +235,43 @@ a {
 
     align-items: center;
 
-    justify-content: space-between;
+    justify-content:
+        space-between;
 
     gap: 25px;
 }
 
+
 .dashboard h1 {
+
     margin-top: 14px;
 
-    font-size: clamp(
-        30px,
-        6vw,
-        48px
-    );
+    font-size:
+        clamp(
+            30px,
+            6vw,
+            48px
+        );
 
-    line-height: 1.05;
+    line-height:
+        1.05;
 }
+
 
 .dashboard p {
+
     margin-top: 10px;
 
-    color: #cbd5e1;
+    color:
+        #cbd5e1;
 
-    line-height: 1.6;
+    line-height:
+        1.6;
 }
 
+
 .dashboard-logo {
+
     width: 95px;
     height: 95px;
 
@@ -250,30 +296,42 @@ a {
     font-size: 48px;
 }
 
+
 .welcome-user {
-    margin-top: 15px !important;
 
-    color: white !important;
+    margin-top:
+        15px !important;
 
-    font-size: 13px;
+    color:
+        white !important;
+
+    font-size:
+        13px;
 }
 
 
-/* =========================
+/* ========================================
    SECTIONS
-========================= */
+======================================== */
 
 .menu-section,
 .comments {
-    margin-top: 28px;
 
-    padding: 28px;
+    margin-top:
+        28px;
 
-    background: white;
+    padding:
+        28px;
 
-    border: 1px solid #e2e8f0;
+    background:
+        white;
 
-    border-radius: 24px;
+    border:
+        1px solid
+        #e2e8f0;
+
+    border-radius:
+        24px;
 
     box-shadow:
         0 8px 30px
@@ -285,61 +343,88 @@ a {
         );
 }
 
+
 .section-heading {
-    margin-bottom: 20px;
+
+    margin-bottom:
+        20px;
 }
+
 
 .section-heading h2 {
-    font-size: 22px;
+
+    font-size:
+        22px;
 }
+
 
 .section-heading p {
-    margin-top: 5px;
 
-    color: #64748b;
+    margin-top:
+        5px;
 
-    font-size: 14px;
+    color:
+        #64748b;
+
+    font-size:
+        14px;
 }
 
 
-/* =========================
+/* ========================================
    MENU
-========================= */
+======================================== */
 
 .menu-grid {
+
     display: grid;
 
     grid-template-columns:
         repeat(
             2,
-            minmax(0, 1fr)
+            minmax(
+                0,
+                1fr
+            )
         );
 
-    gap: 14px;
+    gap:
+        14px;
 }
 
+
 .menu-card {
+
     position: relative;
 
     display: flex;
 
     align-items: center;
 
-    gap: 14px;
+    gap:
+        14px;
 
-    min-width: 0;
+    min-width:
+        0;
 
-    padding: 18px;
+    padding:
+        18px;
 
-    color: inherit;
+    color:
+        inherit;
 
-    text-decoration: none;
+    text-decoration:
+        none;
 
-    border: 1px solid #e2e8f0;
+    border:
+        1px solid
+        #e2e8f0;
 
-    border-radius: 18px;
+    border-radius:
+        18px;
 
-    background: white;
+    background:
+        white;
 
     transition:
         transform .2s ease,
@@ -347,10 +432,14 @@ a {
         border-color .2s ease;
 }
 
-.menu-card:hover {
-    transform: translateY(-3px);
 
-    border-color: #cbd5e1;
+.menu-card:hover {
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        #cbd5e1;
 
     box-shadow:
         0 12px 25px
@@ -362,7 +451,9 @@ a {
         );
 }
 
+
 .menu-icon {
+
     width: 52px;
     height: 52px;
 
@@ -374,82 +465,124 @@ a {
 
     justify-content: center;
 
-    border-radius: 15px;
+    border-radius:
+        15px;
 
-    font-size: 25px;
+    font-size:
+        25px;
 }
+
 
 .menu-icon.blue {
-    background: #dbeafe;
+    background:
+        #dbeafe;
 }
+
 
 .menu-icon.green {
-    background: #dcfce7;
+    background:
+        #dcfce7;
 }
+
 
 .menu-icon.orange {
-    background: #ffedd5;
+    background:
+        #ffedd5;
 }
+
 
 .menu-icon.purple {
-    background: #f3e8ff;
+    background:
+        #f3e8ff;
 }
+
 
 .menu-info {
-    min-width: 0;
+
+    min-width:
+        0;
 }
+
 
 .menu-info h3 {
-    font-size: 15px;
+
+    font-size:
+        15px;
 }
+
 
 .menu-info p {
-    margin-top: 4px;
 
-    color: #64748b;
+    margin-top:
+        4px;
 
-    font-size: 12px;
+    color:
+        #64748b;
 
-    line-height: 1.4;
+    font-size:
+        12px;
+
+    line-height:
+        1.4;
 }
+
 
 .menu-arrow {
-    margin-left: auto;
 
-    color: #94a3b8;
+    margin-left:
+        auto;
 
-    font-size: 20px;
+    color:
+        #94a3b8;
+
+    font-size:
+        20px;
 }
 
 
-/* =========================
+/* ========================================
    COMMENT FORM
-========================= */
+======================================== */
 
 .comments textarea {
-    width: 100%;
 
-    min-height: 125px;
+    width:
+        100%;
 
-    resize: vertical;
+    min-height:
+        125px;
 
-    padding: 15px;
+    resize:
+        vertical;
 
-    border: 1px solid #cbd5e1;
+    padding:
+        15px;
 
-    border-radius: 15px;
+    border:
+        1px solid
+        #cbd5e1;
 
-    outline: none;
+    border-radius:
+        15px;
 
-    color: #0f172a;
+    outline:
+        none;
 
-    background: #f8fafc;
+    color:
+        #0f172a;
+
+    background:
+        #f8fafc;
 }
 
-.comments textarea:focus {
-    border-color: #2563eb;
 
-    background: white;
+.comments textarea:focus {
+
+    border-color:
+        #2563eb;
+
+    background:
+        white;
 
     box-shadow:
         0 0 0 3px
@@ -461,336 +594,524 @@ a {
         );
 }
 
+
 .comments textarea:disabled {
-    cursor: not-allowed;
 
-    opacity: .65;
+    cursor:
+        not-allowed;
 
-    background: #f1f5f9;
+    opacity:
+        .65;
+
+    background:
+        #f1f5f9;
 }
+
 
 .comment-form-bottom {
-    display: flex;
 
-    align-items: center;
+    display:
+        flex;
 
-    justify-content: space-between;
+    align-items:
+        center;
 
-    gap: 15px;
+    justify-content:
+        space-between;
 
-    margin-top: 10px;
+    gap:
+        15px;
+
+    margin-top:
+        10px;
 }
+
 
 #charCount {
-    color: #94a3b8;
 
-    font-size: 12px;
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
 }
 
+
 #sendCommentButton {
-    border: 0;
 
-    border-radius: 12px;
+    border:
+        0;
 
-    padding: 12px 18px;
+    border-radius:
+        12px;
 
-    cursor: pointer;
+    padding:
+        12px 18px;
 
-    color: white;
+    cursor:
+        pointer;
 
-    background: #2563eb;
+    color:
+        white;
 
-    font-weight: 700;
+    background:
+        #2563eb;
+
+    font-weight:
+        700;
 
     transition:
         transform .15s ease,
         opacity .15s ease;
 }
 
+
 #sendCommentButton:hover {
-    transform: translateY(-1px);
+
+    transform:
+        translateY(-1px);
 }
+
 
 button:disabled {
-    cursor: not-allowed;
 
-    opacity: .55;
+    cursor:
+        not-allowed;
 
-    transform: none !important;
+    opacity:
+        .55;
+
+    transform:
+        none !important;
 }
 
 
-/* =========================
+/* ========================================
    DIVIDER
-========================= */
+======================================== */
 
 .comment-divider {
-    height: 1px;
 
-    margin: 25px 0;
+    height:
+        1px;
 
-    background: #e2e8f0;
+    margin:
+        25px 0;
+
+    background:
+        #e2e8f0;
 }
+
 
 .latest-header {
-    display: flex;
 
-    align-items: center;
+    display:
+        flex;
 
-    justify-content: space-between;
+    align-items:
+        center;
 
-    margin-bottom: 15px;
+    justify-content:
+        space-between;
+
+    margin-bottom:
+        15px;
 }
+
 
 .latest-header h3 {
-    font-size: 16px;
+
+    font-size:
+        16px;
 }
+
 
 .refresh-button {
-    width: 35px;
-    height: 35px;
 
-    border: 1px solid #e2e8f0;
+    width:
+        35px;
 
-    border-radius: 10px;
+    height:
+        35px;
 
-    background: white;
+    border:
+        1px solid
+        #e2e8f0;
 
-    cursor: pointer;
+    border-radius:
+        10px;
 
-    font-size: 18px;
+    background:
+        white;
+
+    cursor:
+        pointer;
+
+    font-size:
+        18px;
 }
 
 
-/* =========================
+/* ========================================
    COMMENT
-========================= */
+======================================== */
 
 .comment {
-    padding: 16px;
 
-    margin-bottom: 12px;
+    padding:
+        16px;
 
-    border: 1px solid #e2e8f0;
+    margin-bottom:
+        12px;
 
-    border-radius: 16px;
+    border:
+        1px solid
+        #e2e8f0;
 
-    background: #f8fafc;
+    border-radius:
+        16px;
+
+    background:
+        #f8fafc;
 }
+
+
+.comment-header {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+}
+
 
 .comment-name {
-    font-size: 14px;
 
-    font-weight: 800;
+    font-size:
+        14px;
+
+    font-weight:
+        800;
 }
+
 
 .comment-message {
-    margin-top: 6px;
 
-    color: #334155;
+    margin-top:
+        6px;
 
-    white-space: pre-wrap;
+    color:
+        #334155;
 
-    overflow-wrap: anywhere;
+    white-space:
+        pre-wrap;
 
-    line-height: 1.55;
+    overflow-wrap:
+        anywhere;
+
+    line-height:
+        1.55;
 }
+
 
 .comment-time {
-    margin-top: 9px;
 
-    color: #94a3b8;
+    margin-top:
+        9px;
 
-    font-size: 11px;
+    color:
+        #94a3b8;
+
+    font-size:
+        11px;
 }
 
 
-/* =========================
+/* ========================================
    COMMENT ACTIONS
-========================= */
+======================================== */
 
 .comment-actions {
-    display: flex;
 
-    align-items: center;
+    display:
+        flex;
 
-    flex-wrap: wrap;
+    align-items:
+        center;
 
-    gap: 8px;
+    flex-wrap:
+        wrap;
 
-    margin-top: 11px;
+    gap:
+        8px;
+
+    margin-top:
+        11px;
 }
+
 
 .reply-button,
 .delete-comment {
-    padding: 7px 11px;
 
-    border: 0;
+    padding:
+        7px 11px;
 
-    border-radius: 9px;
+    border:
+        0;
 
-    cursor: pointer;
+    border-radius:
+        9px;
 
-    font-size: 12px;
+    cursor:
+        pointer;
 
-    font-weight: 700;
+    font-size:
+        12px;
+
+    font-weight:
+        700;
 }
+
 
 .reply-button {
-    color: #1d4ed8;
 
-    background: #dbeafe;
+    color:
+        #1d4ed8;
+
+    background:
+        #dbeafe;
 }
+
 
 .reply-button:hover {
-    background: #bfdbfe;
+
+    background:
+        #bfdbfe;
 }
+
 
 .delete-comment {
-    color: #b91c1c;
 
-    background: #fee2e2;
+    color:
+        #b91c1c;
+
+    background:
+        #fee2e2;
 }
+
 
 .delete-comment:hover {
-    background: #fecaca;
+
+    background:
+        #fecaca;
 }
 
 
-/* =========================
+/* ========================================
    REPLY TOGGLE
-========================= */
+======================================== */
 
 .reply-toggle {
-    margin-top: 12px;
 
-    padding: 7px 11px;
+    margin-top:
+        12px;
 
-    border: 0;
+    padding:
+        7px 11px;
 
-    border-radius: 9px;
+    border:
+        0;
 
-    cursor: pointer;
+    border-radius:
+        9px;
 
-    color: #475569;
+    cursor:
+        pointer;
 
-    background: #e2e8f0;
+    color:
+        #475569;
 
-    font-size: 12px;
+    background:
+        #e2e8f0;
 
-    font-weight: 700;
+    font-size:
+        12px;
+
+    font-weight:
+        700;
 }
+
 
 .reply-toggle:hover {
-    background: #cbd5e1;
+
+    background:
+        #cbd5e1;
 }
 
 
-/* =========================
+/* ========================================
    REPLIES
-========================= */
+======================================== */
 
 .replies {
-    display: flex;
 
-    flex-direction: column;
+    display:
+        flex;
 
-    gap: 9px;
+    flex-direction:
+        column;
 
-    margin-top: 10px;
+    gap:
+        9px;
 
-    margin-left: 24px;
+    margin-top:
+        10px;
 
-    padding-left: 13px;
+    margin-left:
+        24px;
 
-    border-left: 2px solid #dbeafe;
+    padding-left:
+        13px;
+
+    border-left:
+        2px solid
+        #dbeafe;
 }
+
 
 .comment.reply {
-    margin-bottom: 0;
 
-    padding: 11px 13px;
+    margin-bottom:
+        0;
 
-    border-radius: 13px;
+    padding:
+        12px 14px;
 
-    background: white;
+    border-radius:
+        13px;
 
-    width: calc(100% - 20px);
+    background:
+        white;
 }
+
 
 .reply-header {
-    display: flex;
 
-    flex-wrap: wrap;
+    display:
+        flex;
 
-    align-items: baseline;
+    flex-wrap:
+        wrap;
 
-    gap: 7px;
+    align-items:
+        baseline;
+
+    gap:
+        7px;
 }
+
 
 .replying-to {
-    color: #64748b;
 
-    font-size: 11px;
+    color:
+        #64748b;
 
-    font-weight: 500;
+    font-size:
+        11px;
+
+    font-weight:
+        500;
 }
+
 
 .comment.reply .comment-name {
-    font-size: 13px;
+
+    font-size:
+        13px;
 }
+
 
 .comment.reply .comment-message {
-    font-size: 13px;
 
-    line-height: 1.5;
+    font-size:
+        13px;
+
+    line-height:
+        1.5;
 }
+
 
 .comment.reply .comment-time {
-    font-size: 10px;
+
+    font-size:
+        10px;
 }
 
 
-/* =========================
+/* ========================================
    REPLY FORM
-========================= */
+======================================== */
 
 .reply-form {
-    margin-top: 13px;
 
-    padding: 12px;
+    margin-top:
+        13px;
 
-    border: 1px solid #dbeafe;
+    padding:
+        12px;
 
-    border-radius: 13px;
+    border:
+        1px solid
+        #dbeafe;
 
-    background: #eff6ff;
+    border-radius:
+        13px;
+
+    background:
+        #eff6ff;
 }
+
 
 .reply-input {
-    width: 100%;
 
-    min-height: 80px;
+    width:
+        100%;
 
-    resize: vertical;
+    min-height:
+        80px;
 
-    padding: 11px;
+    resize:
+        vertical;
 
-    border: 1px solid #bfdbfe;
+    padding:
+        11px;
 
-    border-radius: 10px;
+    border:
+        1px solid
+        #bfdbfe;
 
-    outline: none;
+    border-radius:
+        10px;
 
-    color: #0f172a;
+    outline:
+        none;
 
-    background: white;
+    color:
+        #0f172a;
 
-    font-size: 13px;
+    background:
+        white;
+
+    font-size:
+        13px;
 }
 
+
 .reply-input:focus {
-    border-color: #2563eb;
+
+    border-color:
+        #2563eb;
 
     box-shadow:
         0 0 0 3px
@@ -802,155 +1123,229 @@ button:disabled {
         );
 }
 
+
 .reply-form-bottom {
-    display: flex;
 
-    align-items: center;
+    display:
+        flex;
 
-    justify-content: flex-end;
+    align-items:
+        center;
 
-    gap: 8px;
+    justify-content:
+        flex-end;
 
-    margin-top: 9px;
+    gap:
+        8px;
+
+    margin-top:
+        9px;
 }
+
 
 .reply-cancel,
 .reply-send {
-    padding: 8px 12px;
 
-    border: 0;
+    padding:
+        8px 12px;
 
-    border-radius: 9px;
+    border:
+        0;
 
-    cursor: pointer;
+    border-radius:
+        9px;
 
-    font-size: 12px;
+    cursor:
+        pointer;
 
-    font-weight: 700;
+    font-size:
+        12px;
+
+    font-weight:
+        700;
 }
+
 
 .reply-cancel {
-    color: #475569;
 
-    background: #e2e8f0;
+    color:
+        #475569;
+
+    background:
+        #e2e8f0;
 }
+
 
 .reply-send {
-    color: white;
 
-    background: #2563eb;
+    color:
+        white;
+
+    background:
+        #2563eb;
 }
 
 
-/* =========================
+/* ========================================
    EMPTY
-========================= */
+======================================== */
 
 .empty {
-    padding: 30px;
 
-    color: #94a3b8;
+    padding:
+        30px;
 
-    text-align: center;
+    color:
+        #94a3b8;
 
-    font-size: 13px;
+    text-align:
+        center;
 
-    line-height: 1.6;
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
 }
 
 
-/* =========================
+/* ========================================
    GUEST
-========================= */
+======================================== */
 
 .guest-notice {
-    display: none;
 
-    margin-bottom: 12px;
+    display:
+        none;
 
-    padding: 12px 14px;
+    margin-bottom:
+        12px;
 
-    border-radius: 12px;
+    padding:
+        12px 14px;
 
-    color: #92400e;
+    border-radius:
+        12px;
 
-    background: #fef3c7;
+    color:
+        #92400e;
 
-    font-size: 13px;
+    background:
+        #fef3c7;
+
+    font-size:
+        13px;
 }
 
 
-/* =========================
+/* ========================================
    FOOTER
-========================= */
+======================================== */
 
 footer {
-    display: flex;
 
-    align-items: center;
+    display:
+        flex;
 
-    justify-content: space-between;
+    align-items:
+        center;
 
-    gap: 15px;
+    justify-content:
+        space-between;
 
-    margin-top: 25px;
+    gap:
+        15px;
 
-    padding: 10px 4px;
+    margin-top:
+        25px;
 
-    color: #94a3b8;
+    padding:
+        10px 4px;
 
-    font-size: 12px;
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
 }
+
 
 .logout-button {
-    padding: 8px 12px;
 
-    border: 1px solid #e2e8f0;
+    padding:
+        8px 12px;
 
-    border-radius: 9px;
+    border:
+        1px solid
+        #e2e8f0;
 
-    color: #475569;
+    border-radius:
+        9px;
 
-    background: white;
+    color:
+        #475569;
 
-    cursor: pointer;
+    background:
+        white;
 
-    font-size: 12px;
+    cursor:
+        pointer;
+
+    font-size:
+        12px;
 }
 
 
-/* =========================
+/* ========================================
    LOGIN PAGE
-========================= */
+======================================== */
 
 .login-page {
-    display: flex;
 
-    align-items: center;
+    display:
+        flex;
 
-    justify-content: center;
+    align-items:
+        center;
 
-    min-height: 100vh;
+    justify-content:
+        center;
 
-    padding: 20px;
+    min-height:
+        100vh;
+
+    padding:
+        20px;
 }
+
 
 .login-container {
-    width: 100%;
 
-    max-width: 430px;
+    width:
+        100%;
+
+    max-width:
+        430px;
 }
 
+
 .login-card {
-    padding: 32px;
 
-    text-align: center;
+    padding:
+        32px;
 
-    border: 1px solid #e2e8f0;
+    text-align:
+        center;
 
-    border-radius: 26px;
+    border:
+        1px solid
+        #e2e8f0;
 
-    background: white;
+    border-radius:
+        26px;
+
+    background:
+        white;
 
     box-shadow:
         0 20px 50px
@@ -962,79 +1357,126 @@ footer {
         );
 }
 
+
 .login-logo {
-    width: 70px;
-    height: 70px;
 
-    margin: 0 auto 15px;
+    width:
+        70px;
 
-    display: flex;
+    height:
+        70px;
 
-    align-items: center;
+    margin:
+        0 auto 15px;
 
-    justify-content: center;
+    display:
+        flex;
 
-    border-radius: 20px;
+    align-items:
+        center;
 
-    background: #eff6ff;
+    justify-content:
+        center;
 
-    font-size: 34px;
+    border-radius:
+        20px;
+
+    background:
+        #eff6ff;
+
+    font-size:
+        34px;
 }
+
 
 .login-card .badge {
-    color: #1d4ed8;
 
-    background: #dbeafe;
+    color:
+        #1d4ed8;
 
-    border: 0;
+    background:
+        #dbeafe;
+
+    border:
+        0;
 }
+
 
 .login-card h1 {
-    margin-top: 14px;
 
-    font-size: 30px;
+    margin-top:
+        14px;
+
+    font-size:
+        30px;
 }
+
 
 .login-subtitle {
-    margin: 7px 0 25px;
 
-    color: #64748b;
+    margin:
+        7px 0 25px;
 
-    font-size: 13px;
+    color:
+        #64748b;
+
+    font-size:
+        13px;
 }
+
 
 .login-card label {
-    display: block;
 
-    margin: 12px 0 6px;
+    display:
+        block;
 
-    text-align: left;
+    margin:
+        12px 0 6px;
 
-    color: #334155;
+    text-align:
+        left;
 
-    font-size: 13px;
+    color:
+        #334155;
 
-    font-weight: 700;
+    font-size:
+        13px;
+
+    font-weight:
+        700;
 }
+
 
 .login-card input {
-    width: 100%;
 
-    padding: 13px 14px;
+    width:
+        100%;
 
-    border: 1px solid #cbd5e1;
+    padding:
+        13px 14px;
 
-    border-radius: 12px;
+    border:
+        1px solid
+        #cbd5e1;
 
-    outline: none;
+    border-radius:
+        12px;
 
-    background: #f8fafc;
+    outline:
+        none;
+
+    background:
+        #f8fafc;
 }
 
-.login-card input:focus {
-    border-color: #2563eb;
 
-    background: white;
+.login-card input:focus {
+
+    border-color:
+        #2563eb;
+
+    background:
+        white;
 
     box-shadow:
         0 0 0 3px
@@ -1046,192 +1488,302 @@ footer {
         );
 }
 
+
 .login-card #loginButton {
-    width: 100%;
 
-    margin-top: 18px;
+    width:
+        100%;
 
-    border: 0;
+    margin-top:
+        18px;
 
-    border-radius: 12px;
+    border:
+        0;
 
-    padding: 12px 18px;
+    border-radius:
+        12px;
 
-    cursor: pointer;
+    padding:
+        12px 18px;
 
-    color: white;
+    cursor:
+        pointer;
 
-    background: #2563eb;
+    color:
+        white;
 
-    font-weight: 700;
+    background:
+        #2563eb;
+
+    font-weight:
+        700;
 }
+
 
 .login-divider {
-    display: flex;
 
-    align-items: center;
+    display:
+        flex;
 
-    gap: 10px;
+    align-items:
+        center;
 
-    margin: 18px 0;
+    gap:
+        10px;
 
-    color: #94a3b8;
+    margin:
+        18px 0;
 
-    font-size: 12px;
+    color:
+        #94a3b8;
+
+    font-size:
+        12px;
 }
+
 
 .login-divider::before,
 .login-divider::after {
-    content: "";
 
-    height: 1px;
+    content:
+        "";
 
-    flex: 1;
+    height:
+        1px;
 
-    background: #e2e8f0;
+    flex:
+        1;
+
+    background:
+        #e2e8f0;
 }
+
 
 .guest-button {
-    width: 100%;
 
-    border: 0;
+    width:
+        100%;
 
-    border-radius: 12px;
+    border:
+        0;
 
-    padding: 12px 18px;
+    border-radius:
+        12px;
 
-    cursor: pointer;
+    padding:
+        12px 18px;
 
-    color: #334155 !important;
+    cursor:
+        pointer;
 
-    background: #f1f5f9 !important;
+    color:
+        #334155 !important;
 
-    font-weight: 700;
+    background:
+        #f1f5f9 !important;
+
+    font-weight:
+        700;
 }
+
 
 .guest-button:hover {
-    background: #e2e8f0 !important;
+
+    background:
+        #e2e8f0 !important;
 }
+
 
 .login-message {
-    min-height: 20px;
 
-    margin-top: 12px;
+    min-height:
+        20px;
 
-    font-size: 13px;
+    margin-top:
+        12px;
+
+    font-size:
+        13px;
 }
+
 
 .login-message.error {
-    color: #dc2626;
+
+    color:
+        #dc2626;
 }
 
 
-/* =========================
+/* ========================================
    MOBILE
-========================= */
+======================================== */
 
 @media (max-width: 700px) {
 
     .container {
-        width: min(
-            100% - 18px,
-            1050px
-        );
 
-        padding-top: 9px;
+        width:
+            min(
+                100% - 18px,
+                1050px
+            );
+
+        padding-top:
+            9px;
     }
+
 
     .dashboard {
-        padding: 25px;
 
-        border-radius: 22px;
+        padding:
+            25px;
+
+        border-radius:
+            22px;
     }
+
 
     .dashboard-logo {
-        width: 65px;
-        height: 65px;
 
-        border-radius: 18px;
+        width:
+            65px;
 
-        font-size: 32px;
+        height:
+            65px;
+
+        border-radius:
+            18px;
+
+        font-size:
+            32px;
     }
+
 
     .menu-section,
     .comments {
-        padding: 20px;
 
-        border-radius: 20px;
+        padding:
+            20px;
+
+        border-radius:
+            20px;
     }
+
 
     .menu-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+            1fr;
     }
+
 
     .comment-form-bottom {
-        align-items: stretch;
 
-        flex-direction: column;
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
     }
+
 
     #sendCommentButton {
-        width: 100%;
+
+        width:
+            100%;
     }
+
 
     .replies {
-        margin-left: 8px;
 
-        padding-left: 9px;
+        margin-left:
+            8px;
+
+        padding-left:
+            9px;
     }
 
-    .comment.reply {
-        width: calc(100% - 8px);
-    }
 
     footer {
-        flex-direction: column;
 
-        align-items: stretch;
+        flex-direction:
+            column;
 
-        text-align: center;
+        align-items:
+            stretch;
+
+        text-align:
+            center;
     }
+
 
     .logout-button {
-        width: 100%;
+
+        width:
+            100%;
     }
 
-    /* Spotify di HP tetap kecil */
+
+    /* SPOTIFY */
 
     .spotify-mini {
-        top: 8px;
-        right: 8px;
 
-        width: 235px;
-        height: 70px;
+        width:
+            250px;
 
-        border-radius: 12px;
+        height:
+            80px;
+
+        top:
+            6px;
+
+        right:
+            6px;
+
+        border-radius:
+            11px;
     }
+
+
+    .spotify-mini iframe {
+
+        width:
+            100%;
+
+        height:
+            80px;
+    }
+
 }
 
 
 @media (max-width: 450px) {
 
     .dashboard-content {
-        align-items: flex-start;
+
+        align-items:
+            flex-start;
     }
+
 
     .dashboard-logo {
-        display: none;
+
+        display:
+            none;
     }
+
 
     .login-card {
-        padding: 25px 20px;
+
+        padding:
+            25px 20px;
     }
+
 
     .spotify-mini {
-        width: 210px;
-        height: 65px;
 
-        top: 7px;
-        right: 7px;
+        width:
+            230px;
     }
+
 }
