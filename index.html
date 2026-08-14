@@ -2,60 +2,35 @@
 <html lang="id">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Kelas Kita • TKJ 2</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
-    <!-- =========================
-         CEK LOGIN
-    ========================== -->
+    <link rel="stylesheet" href="style.css">
 
     <script>
-
-        const loginStatus =
-            localStorage.getItem("loginStatus");
+        const loginStatus = localStorage.getItem("loginStatus");
 
         if (
             loginStatus !== "user" &&
             loginStatus !== "guest"
         ) {
-
-            window.location.replace(
-                "login.html"
-            );
-
+            window.location.replace("login.html");
         }
-
     </script>
-
 </head>
 
-
 <body>
-
 
     <!-- =========================
          SPOTIFY
     ========================== -->
 
-    <div class="spotify-mini">
+    <div class="music-player">
 
         <iframe
-            src="https://open.spotify.com/embed/track/1JSTJqkT5qHq8MDJnJbRE1?utm_source=generator"
-            width="100%"
-            height="80"
-            frameborder="0"
+            src="https://open.spotify.com/embed/track/0wz1LjDb9ZNEu8v0Z3bN0Z?utm_source=generator"
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             loading="lazy">
         </iframe>
@@ -64,7 +39,6 @@
 
 
     <main class="container">
-
 
         <!-- =========================
              DASHBOARD
@@ -85,17 +59,15 @@
                     </h1>
 
                     <p>
-                        Dashboard informasi dan
-                        komunikasi kelas.
+                        Dashboard informasi dan komunikasi kelas.
                     </p>
 
                     <div
                         class="welcome-user"
-                        id="welcomeUser"
-                    ></div>
+                        id="welcomeUser">
+                    </div>
 
                 </div>
-
 
                 <div class="dashboard-logo">
                     🏫
@@ -127,11 +99,9 @@
 
             <div class="menu-grid">
 
-
                 <a
                     href="https://xtkj-2.vercel.app/pelajaran.jpg"
-                    class="menu-card"
-                >
+                    class="menu-card">
 
                     <div class="menu-icon blue">
                         📚
@@ -158,8 +128,7 @@
 
                 <a
                     href="https://xtkj-2.vercel.app/piket.jpg"
-                    class="menu-card"
-                >
+                    class="menu-card">
 
                     <div class="menu-icon green">
                         🧹
@@ -186,8 +155,7 @@
 
                 <a
                     href="https://xtkj-2.vercel.app/absensi.html"
-                    class="menu-card"
-                >
+                    class="menu-card">
 
                     <div class="menu-icon orange">
                         📝
@@ -214,8 +182,7 @@
 
                 <a
                     href="https://xtkj-2.vercel.app/comment"
-                    class="menu-card"
-                >
+                    class="menu-card">
 
                     <div class="menu-icon purple">
                         💬
@@ -238,7 +205,6 @@
                     </span>
 
                 </a>
-
 
             </div>
 
@@ -264,24 +230,23 @@
             </div>
 
 
-            <!-- GUEST NOTICE -->
-
             <div
                 id="guestNotice"
-                class="guest-notice"
-            >
+                class="guest-notice">
+
                 👻 Kamu masuk sebagai Guest.
                 Login sebagai siswa untuk mengirim komentar.
+
             </div>
 
 
-            <!-- INPUT -->
+            <!-- FORM KOMENTAR -->
 
             <textarea
                 id="message"
                 maxlength="500"
-                placeholder="Tulis komentar..."
-            ></textarea>
+                placeholder="Tulis komentar...">
+            </textarea>
 
 
             <div class="comment-form-bottom">
@@ -290,12 +255,12 @@
                     0 / 500
                 </span>
 
-
                 <button
                     type="button"
-                    id="sendCommentButton"
-                >
+                    id="sendCommentButton">
+
                     Kirim Komentar
+
                 </button>
 
             </div>
@@ -312,19 +277,19 @@
                     Komentar Terbaru
                 </h3>
 
-
                 <button
                     type="button"
                     class="refresh-button"
-                    id="refreshButton"
-                >
+                    id="refreshButton">
+
                     ↻
+
                 </button>
 
             </div>
 
 
-            <!-- LIST -->
+            <!-- KOMENTAR -->
 
             <div id="commentList">
 
@@ -347,17 +312,16 @@
                 © 2026 TKJ 2 • Kelas Kita
             </p>
 
-
             <button
                 type="button"
-                id="logoutButton"
-                class="logout-button"
-            >
+                onclick="logout()"
+                class="logout-button">
+
                 Keluar
+
             </button>
 
         </footer>
-
 
     </main>
 
@@ -366,17 +330,13 @@
          SUPABASE
     ========================== -->
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-    ></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- =========================
          SCRIPT
     ========================== -->
 
     <script src="script.js"></script>
-
 
 </body>
 
