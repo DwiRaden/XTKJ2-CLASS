@@ -1,441 +1,525 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html>  <html lang="id">  <head>  <meta charset="UTF-8">  
 
-<head>
+<meta  
+    name="viewport"  
+    content="width=device-width, initial-scale=1.0"  
+>  
 
-    <meta charset="UTF-8">
+<title>Kelas Kita • TKJ 2</title>  
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<link rel="stylesheet" href="style.css">  
 
-    <title>Kelas Kita • TKJ 2</title>
 
-    <link rel="stylesheet" href="style.css">
+<!-- =========================  
+     CEK LOGIN  
+========================== -->  
 
+<script>  
 
-    <!-- =========================
-         CEK LOGIN
-    ========================== -->
+    const loginStatus =  
+        localStorage.getItem(  
+            "loginStatus"  
+        );  
 
-    <script>
 
-        const loginStatus =
-            localStorage.getItem("loginStatus");
+    if (  
+        loginStatus !== "user" &&  
+        loginStatus !== "guest"  
+    ) {  
 
-        if (
-            loginStatus !== "user" &&
-            loginStatus !== "guest"
-        ) {
+        window.location.replace(  
+            "login.html"  
+        );  
 
-            window.location.replace("login.html");
+    }  
 
-        }
+</script>
 
-    </script>
+</head>  <body>  <main class="container">  
 
-</head>
 
+    <!-- =========================  
+         DASHBOARD  
+    ========================== -->  
 
-<body>
+    <header class="dashboard">  
 
-<main class="container">
+        <div class="dashboard-content">  
 
+            <div>  
 
-    <!-- =========================
-         DASHBOARD
-    ========================== -->
+                <div class="badge">  
+                    SMK • TKJ 2  
+                </div>  
 
-    <header class="dashboard">
+                <h1>  
+                    Kelas Kita 👋  
+                </h1>  
 
-        <div class="dashboard-content">
+                <p>  
+                    Dashboard informasi dan  
+                    komunikasi kelas.  
+                </p>  
 
-            <div>
+                <div  
+                    class="welcome-user"  
+                    id="welcomeUser"  
+                >  
+                </div>  
 
-                <div class="badge">
-                    SMK • TKJ 2
-                </div>
+            </div>  
 
-                <h1>
-                    Kelas Kita 👋
-                </h1>
 
-                <p>
-                    Dashboard informasi dan
-                    komunikasi kelas.
-                </p>
+            <div class="dashboard-logo">  
+                🏫  
+            </div>  
 
-                <div
-                    class="welcome-user"
-                    id="welcomeUser"
-                ></div>
+        </div>  
 
-            </div>
+    </header>  
 
 
-            <div class="dashboard-logo">
-                🏫
-            </div>
+    <!-- =========================  
+         MENU  
+    ========================== -->  
 
-        </div>
+    <section class="menu-section">  
 
-    </header>
+        <div class="section-heading">  
 
+            <h2>  
+                Dashboard Kelas  
+            </h2>  
 
-    <!-- =========================
-         MENU
-    ========================== -->
+            <p>  
+                Pilih menu yang ingin kamu buka.  
+            </p>  
 
-    <section class="menu-section">
+        </div>  
 
-        <div class="section-heading">
 
-            <h2>
-                Dashboard Kelas
-            </h2>
+        <div class="menu-grid">  
 
-            <p>
-                Pilih menu yang ingin kamu buka.
-            </p>
 
-        </div>
+            <!-- JADWAL PELAJARAN -->  
 
+            <a  
+                href="https://xtkj-2.vercel.app/pelajaran.jpg"  
+                class="menu-card"  
+            >  
 
-        <div class="menu-grid">
+                <div class="menu-icon blue">  
+                    📚  
+                </div>  
 
+                <div class="menu-info">  
 
-            <a
-                href="https://xtkj-2.vercel.app/pelajaran.jpg"
-                class="menu-card"
-            >
+                    <h3>  
+                        Jadwal Pelajaran  
+                    </h3>  
 
-                <div class="menu-icon blue">
-                    📚
-                </div>
+                    <p>  
+                        Lihat jadwal pelajaran kelas.  
+                    </p>  
 
-                <div class="menu-info">
+                </div>  
 
-                    <h3>
-                        Jadwal Pelajaran
-                    </h3>
+                <span class="menu-arrow">  
+                    →  
+                </span>  
 
-                    <p>
-                        Lihat jadwal pelajaran kelas.
-                    </p>
+            </a>  
 
-                </div>
 
-                <span class="menu-arrow">
-                    →
-                </span>
+            <!-- JADWAL PIKET -->  
 
-            </a>
+            <a  
+                href="https://xtkj-2.vercel.app/piket.jpg"  
+                class="menu-card"  
+            >  
 
+                <div class="menu-icon green">  
+                    🧹  
+                </div>  
 
-            <a
-                href="https://xtkj-2.vercel.app/piket.jpg"
-                class="menu-card"
-            >
+                <div class="menu-info">  
 
-                <div class="menu-icon green">
-                    🧹
-                </div>
+                    <h3>  
+                        Jadwal Piket  
+                    </h3>  
 
-                <div class="menu-info">
+                    <p>  
+                        Lihat jadwal piket kelas.  
+                    </p>  
 
-                    <h3>
-                        Jadwal Piket
-                    </h3>
+                </div>  
 
-                    <p>
-                        Lihat jadwal piket kelas.
-                    </p>
+                <span class="menu-arrow">  
+                    →  
+                </span>  
 
-                </div>
+            </a>  
 
-                <span class="menu-arrow">
-                    →
-                </span>
 
-            </a>
+            <!-- ABSENSI -->  
 
+            <a  
+                href="https://xtkj-2.vercel.app/absensi.html"  
+                class="menu-card"  
+            >  
 
-            <a
-                href="https://xtkj-2.vercel.app/absensi.html"
-                class="menu-card"
-            >
+                <div class="menu-icon orange">  
+                    📝  
+                </div>  
 
-                <div class="menu-icon orange">
-                    📝
-                </div>
+                <div class="menu-info">  
 
-                <div class="menu-info">
+                    <h3>  
+                        Absensi  
+                    </h3>  
 
-                    <h3>
-                        Absensi
-                    </h3>
+                    <p>  
+                        Lihat halaman absensi kelas.  
+                    </p>  
 
-                    <p>
-                        Lihat halaman absensi kelas.
-                    </p>
+                </div>  
 
-                </div>
+                <span class="menu-arrow">  
+                    →  
+                </span>  
 
-                <span class="menu-arrow">
-                    →
-                </span>
+            </a>  
 
-            </a>
 
+            <!-- KOMENTAR -->  
 
-            <a
-                href="https://xtkj-2.vercel.app/comment"
-                class="menu-card"
-            >
+            <a  
+                href="https://xtkj-2.vercel.app/comment"  
+                class="menu-card"  
+            >  
 
-                <div class="menu-icon purple">
-                    💬
-                </div>
+                <div class="menu-icon purple">  
+                    💬  
+                </div>  
 
-                <div class="menu-info">
+                <div class="menu-info">  
 
-                    <h3>
-                        Komentar
-                    </h3>
+                    <h3>  
+                        Komentar  
+                    </h3>  
 
-                    <p>
-                        Ngobrol bersama teman kelas.
-                    </p>
+                    <p>  
+                        Ngobrol bersama teman kelas.  
+                    </p>  
 
-                </div>
+                </div>  
 
-                <span class="menu-arrow">
-                    →
-                </span>
+                <span class="menu-arrow">  
+                    →  
+                </span>  
 
-            </a>
+            </a>  
 
 
-        </div>
+        </div>  
 
-    </section>
+    </section>  
 
 
-    <!-- =========================
-         KOMENTAR
-    ========================== -->
+    <!-- =========================  
+         KOMENTAR  
+    ========================== -->  
 
-    <section class="comments">
+    <section class="comments">  
 
-        <div class="section-heading">
+        <div class="section-heading">  
 
-            <h2>
-                💬 Komentar Kelas
-            </h2>
+            <h2>  
+                💬 Komentar Kelas  
+            </h2>  
 
-            <p>
-                Bagikan sesuatu kepada teman kelas.
-            </p>
+            <p>  
+                Bagikan sesuatu kepada teman kelas.  
+            </p>  
 
-        </div>
+        </div>  
 
 
-        <div
-            id="guestNotice"
-            class="guest-notice"
-        >
-            👻 Kamu masuk sebagai Guest.
-            Login sebagai siswa untuk mengirim komentar.
-        </div>
+        <!-- NOTIF GUEST -->  
 
+        <div  
+            id="guestNotice"  
+            class="guest-notice"  
+        >  
+            👻 Kamu masuk sebagai Guest.  
+            Login sebagai siswa untuk mengirim komentar.  
+        </div>  
 
-        <textarea
-            id="message"
-            maxlength="500"
-            placeholder="Tulis komentar..."
-        ></textarea>
 
+        <!-- INPUT KOMENTAR -->  
 
-        <div class="comment-form-bottom">
+        <textarea  
+            id="message"  
+            maxlength="500"  
+            placeholder="Tulis komentar..."  
+        ></textarea>  
 
-            <span id="charCount">
-                0 / 500
-            </span>
 
+        <div class="comment-form-bottom">  
 
-            <button
-                type="button"
-                id="sendCommentButton"
-            >
-                Kirim Komentar
-            </button>
+            <span id="charCount">  
+                0 / 500  
+            </span>  
 
-        </div>
 
+            <button  
+                type="button"  
+                id="sendCommentButton"  
+                onclick="addComment()"  
+            >  
+                Kirim Komentar  
+            </button>  
 
-        <div class="comment-divider"></div>
+        </div>  
 
 
-        <div class="latest-header">
+        <div class="comment-divider"></div>  
 
-            <h3>
-                Komentar Terbaru
-            </h3>
 
+        <!-- HEADER KOMENTAR -->  
 
-            <button
-                type="button"
-                class="refresh-button"
-                id="refreshButton"
-            >
-                ↻
-            </button>
+        <div class="latest-header">  
 
-        </div>
+            <h3>  
+                Komentar Terbaru  
+            </h3>  
 
 
-        <div id="commentList">
+            <button  
+                type="button"  
+                class="refresh-button"  
+                onclick="loadComments()"  
+            >  
+                ↻  
+            </button>  
 
-            <p class="empty">
-                Memuat komentar...
-            </p>
+        </div>  
 
-        </div>
 
-    </section>
+        <!-- LIST KOMENTAR -->  
 
+        <div id="commentList">  
 
-    <!-- =========================
-         FOOTER
-    ========================== -->
+            <p class="empty">  
+                Memuat komentar...  
+            </p>  
 
-    <footer>
+        </div>  
 
-        <p>
-            © 2026 TKJ 2 • Kelas Kita
-        </p>
+    </section>  
 
 
-        <button
-            type="button"
-            onclick="logout()"
-            class="logout-button"
-        >
-            Keluar
-        </button>
+    <!-- =========================  
+         FOOTER  
+    ========================== -->  
 
-    </footer>
+    <footer>  
 
+        <p>  
+            © 2026 TKJ 2 • Kelas Kita  
+        </p>  
 
-</main>
 
+        <button  
+            type="button"  
+            onclick="logout()"  
+            class="logout-button"  
+        >  
+            Keluar  
+        </button>  
 
-<!-- =========================
-     SPOTIFY POPUP
-========================= -->
+    </footer>  
 
-<div
-    id="spotifyPopup"
-    class="spotify-popup"
->
 
-    <div class="spotify-box">
+</main>  
 
-        <div class="spotify-icon">
-            🎵
-        </div>
 
-        <h2>
-            Mau dengerin lagu?
-        </h2>
+<!-- =========================  
+     SUPABASE  
+========================== -->  
 
-        <p>
-            Every Breath You Take
-            <br>
-            <span>
-                The Police
-            </span>
-        </p>
+<script  
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"  
+></script>  
 
 
-        <div class="spotify-buttons">
+<!-- =========================  
+     SCRIPT UTAMA  
+========================== -->  
 
-            <button
-                type="button"
-                id="spotifyYes"
-                class="spotify-yes"
-            >
-                ▶️ Ya, putar
-            </button>
+<script src="script.js"></script>  
 
 
-            <button
-                type="button"
-                id="spotifyNo"
-                class="spotify-no"
-            >
-                Nanti saja
-            </button>
+<!-- =========================  
+     LOGIN UI  
+========================== -->  
 
-        </div>
+<script>  
 
-    </div>
+    const currentUsername =  
+        localStorage.getItem(  
+            "username"  
+        ) || "Guest";  
 
-</div>
 
+    const currentRole =  
+        localStorage.getItem(  
+            "role"  
+        ) || "guest";  
 
-<!-- =========================
-     SPOTIFY PLAYER
-========================= -->
 
-<div
-    id="spotifyPlayer"
-    class="spotify-player"
->
+    const currentLoginStatus =  
+        localStorage.getItem(  
+            "loginStatus"  
+        );  
 
-    <div class="spotify-player-header">
 
-        <span>
-            🎵 Now Playing
-        </span>
+    // =========================  
+    // WELCOME  
+    // =========================  
 
-        <button
-            type="button"
-            id="closeSpotify"
-        >
-            ✕
-        </button>
+    const welcomeUser =  
+        document.getElementById(  
+            "welcomeUser"  
+        );  
 
-    </div>
 
+    if (welcomeUser) {  
 
-    <iframe
-        src="https://open.spotify.com/embed/track/1JSTJqkT5qHq8MDJnJbRE1?utm_source=generator"
-        width="100%"
-        height="152"
-        frameborder="0"
-        allowfullscreen=""
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"
-    ></iframe>
+        welcomeUser.textContent =  
+            `Login sebagai ${currentUsername}`;  
 
-</div>
+    }  
 
 
-<!-- =========================
-     SUPABASE
-========================= -->
+    // =========================  
+    // ELEMENT KOMENTAR  
+    // =========================  
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    const message =  
+        document.getElementById(  
+            "message"  
+        );  
 
 
-<!-- =========================
-     SCRIPT UTAMA
-========================= -->
+    const sendButton =  
+        document.getElementById(  
+            "sendCommentButton"  
+        );  
 
-<script src="script.js"></script>
 
-</body>
+    const guestNotice =  
+        document.getElementById(  
+            "guestNotice"  
+        );  
 
-</html>
+
+    // =========================  
+    // GUEST MODE  
+    // =========================  
+
+    if (  
+        currentLoginStatus === "guest" ||  
+        currentRole === "guest"  
+    ) {  
+
+        message.disabled = true;  
+
+        sendButton.disabled = true;  
+
+        message.placeholder =  
+            "Guest tidak dapat mengirim komentar";  
+
+        sendButton.textContent =  
+            "🔒 Login untuk Berkomentar";  
+
+        guestNotice.style.display =  
+            "block";  
+
+    }  
+
+
+    // =========================  
+    // USER / ADMIN MODE  
+    // =========================  
+
+    else {  
+
+        message.disabled = false;  
+
+        sendButton.disabled = false;  
+
+        message.placeholder =  
+            "Tulis komentar...";  
+
+        sendButton.textContent =  
+            "Kirim Komentar";  
+
+        guestNotice.style.display =  
+            "none";  
+
+    }  
+
+
+    // =========================  
+    // CHARACTER COUNTER  
+    // =========================  
+
+    message.addEventListener(  
+        "input",  
+        function() {  
+
+            document.getElementById(  
+                "charCount"  
+            ).textContent =  
+                `${message.value.length} / 500`;  
+
+        }  
+    );  
+
+
+    // =========================  
+    // LOGOUT  
+    // =========================  
+
+    function logout() {  
+
+        localStorage.removeItem(  
+            "loginStatus"  
+        );  
+
+        localStorage.removeItem(  
+            "username"  
+        );  
+
+        localStorage.removeItem(  
+            "name"  
+        );  
+
+        localStorage.removeItem(  
+            "role"  
+        );  
+
+
+        // Bersihkan sesi lama juga  
+        sessionStorage.clear();  
+
+
+        window.location.href =  
+            "login.html";  
+
+    }  
+
+</script>
+
+</body>  </html>
