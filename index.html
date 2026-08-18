@@ -1,537 +1,586 @@
-<!DOCTYPE html>  <html lang="id">  <head>  <meta charset="UTF-8">  
+<!DOCTYPE html>
+<html lang="id">
 
-<meta  
-    name="viewport"  
-    content="width=device-width, initial-scale=1.0">  
+<head>
 
- <!-- ========== WHATSAPP LINK PREVIEW ========== -->
-  <title>X TKJ 2 WEBSITE CLASS</title>
-  <meta name="description" content="UNITED WE STAND, TOGETHER WE GROW !!!">
-  
-  <!-- Open Graph (WhatsApp, Facebook, Telegram) -->
-  <meta property="og:title" content="X TKJ 2 WEBSITE CLASS">
-  <meta property="og:description" content="UNITED WE STAND, TOGETHER WE GROW🤝.
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<title>X TKJ 2 WEBSITE CLASS</title>
+
+<meta
+    name="description"
+    content="UNITED WE STAND, TOGETHER WE GROW !!!">
+
+<meta
+    property="og:title"
+    content="X TKJ 2 WEBSITE CLASS">
+
+<meta
+    property="og:description"
+    content="UNITED WE STAND, TOGETHER WE GROW🤝.
 
 IF THEY CAN DO IT, WE CAN TOO🔥.">
-  <meta property="og:image" content="https://XTKJ-2-CLASS.vercel.app/thumb.jpg">
-  <meta property="og:url" content="https://xtkj-2-class.vercel.app/">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="X TKJ 2 WEBSITE CLASS">
-  
 
-<link rel="stylesheet" href="style.css">  
+<meta
+    property="og:image"
+    content="https://XTKJ-2-CLASS.vercel.app/thumb.jpg">
+
+<meta
+    property="og:url"
+    content="https://xtkj-2-class.vercel.app/">
+
+<meta
+    property="og:type"
+    content="website">
+
+<meta
+    property="og:site_name"
+    content="X TKJ 2 WEBSITE CLASS">
+
+<link rel="stylesheet" href="style.css">
 
 
-<!-- =========================  
-     CEK LOGIN  
-========================== -->  
+<!-- =========================
+     CEK LOGIN
+========================= -->
 
-<script>  
+<script>
 
-    const loginStatus =  
-        localStorage.getItem(  
-            "loginStatus"  
-        );  
+const loginStatus =
+    localStorage.getItem("loginStatus");
 
+if (
+    loginStatus !== "user" &&
+    loginStatus !== "guest"
+) {
 
-    if (  
-        loginStatus !== "user" &&  
-        loginStatus !== "guest"  
-    ) {  
+    window.location.replace(
+        "login.html"
+    );
 
-        window.location.replace(  
-            "login.html"  
-        );  
-
-    }  
+}
 
 </script>
 
-</head>  <body>  <main class="container">  
+</head>
 
 
-    <!-- =========================  
-         DASHBOARD  
-    ========================== -->  
+<body>
 
-    <header class="dashboard">  
+<main class="container">
 
-        <div class="dashboard-content">  
 
-            <div>  
+<!-- =========================
+     DASHBOARD
+========================= -->
 
-                <div class="badge">  
-                    SMK • TKJ 2  
-                </div>  
+<header class="dashboard">
 
-                <h1>  
-                    Kelas Kita 👋  
-                </h1>  
+    <div class="dashboard-content">
 
-                <p>  
-                    Dashboard informasi dan  
-                    komunikasi kelas.  
-                </p>  
+        <div>
 
-                <div  
-                    class="welcome-user"  
-                    id="welcomeUser"  
-                >  
-                </div>  
+            <div class="badge">
+                SMK • TKJ 2
+            </div>
 
-            </div>  
+            <h1>
+                Kelas Kita 👋
+            </h1>
 
+            <p>
+                Dashboard informasi dan
+                komunikasi kelas.
+            </p>
 
-            <div class="dashboard-logo">  
-                🏫  
-            </div>  
+            <div
+                class="welcome-user"
+                id="welcomeUser">
+            </div>
 
-        </div>  
+        </div>
 
-    </header>  
 
+        <div class="dashboard-logo">
+            🏫
+        </div>
 
-    <!-- =========================  
-         MENU  
-    ========================== -->  
+    </div>
 
-    <section class="menu-section">  
+</header>
 
-        <div class="section-heading">  
 
-            <h2>  
-                Dashboard Kelas  
-            </h2>  
+<!-- =========================
+     MENU
+========================= -->
 
-            <p>  
-                Pilih menu yang ingin kamu buka.  
-            </p>  
+<section class="menu-section">
 
-        </div>  
+    <div class="section-heading">
 
+        <h2>
+            Dashboard Kelas
+        </h2>
 
-        <div class="menu-grid">  
+        <p>
+            Pilih menu yang ingin kamu buka.
+        </p>
 
+    </div>
 
-            <!-- JADWAL PELAJARAN -->  
 
-            <a  
-                href="https://xtkj-2.vercel.app/pelajaran.jpg"  
-                class="menu-card"  
-            >  
+    <div class="menu-grid">
 
-                <div class="menu-icon blue">  
-                    📚  
-                </div>  
 
-                <div class="menu-info">  
+        <!-- JADWAL PELAJARAN -->
 
-                    <h3>  
-                        Jadwal Pelajaran  
-                    </h3>  
+        <a
+            href="https://xtkj-2.vercel.app/pelajaran.jpg"
+            class="menu-card">
 
-                    <p>  
-                        Lihat jadwal pelajaran kelas.  
-                    </p>  
+            <div class="menu-icon blue">
+                📚
+            </div>
 
-                </div>  
+            <div class="menu-info">
 
-                <span class="menu-arrow">  
-                    →  
-                </span>  
+                <h3>
+                    Jadwal Pelajaran
+                </h3>
 
-            </a>  
+                <p>
+                    Lihat jadwal pelajaran kelas.
+                </p>
 
+            </div>
 
-            <!-- JADWAL PIKET -->  
+            <span class="menu-arrow">
+                →
+            </span>
 
-            <a  
-                href="https://xtkj-2.vercel.app/piket.jpg"  
-                class="menu-card"  
-            >  
+        </a>
 
-                <div class="menu-icon green">  
-                    🧹  
-                </div>  
 
-                <div class="menu-info">  
+        <!-- JADWAL PIKET -->
 
-                    <h3>  
-                        Jadwal Piket  
-                    </h3>  
+        <a
+            href="https://xtkj-2.vercel.app/piket.jpg"
+            class="menu-card">
 
-                    <p>  
-                        Lihat jadwal piket kelas.  
-                    </p>  
+            <div class="menu-icon green">
+                🧹
+            </div>
 
-                </div>  
+            <div class="menu-info">
 
-                <span class="menu-arrow">  
-                    →  
-                </span>  
+                <h3>
+                    Jadwal Piket
+                </h3>
 
-            </a>  
+                <p>
+                    Lihat jadwal piket kelas.
+                </p>
 
+            </div>
 
-            <!-- ABSENSI -->  
+            <span class="menu-arrow">
+                →
+            </span>
 
-            <a  
-                href="https://xtkj-2.vercel.app/absensi.html"  
-                class="menu-card"  
-            >  
+        </a>
 
-                <div class="menu-icon orange">  
-                    📝  
-                </div>  
 
-                <div class="menu-info">  
+        <!-- ABSENSI -->
 
-                    <h3>  
-                        Absensi  
-                    </h3>  
+        <a
+            href="https://xtkj-2.vercel.app/absensi.html"
+            class="menu-card">
 
-                    <p>  
-                        Lihat halaman absensi kelas.  
-                    </p>  
+            <div class="menu-icon orange">
+                📝
+            </div>
 
-                </div>  
+            <div class="menu-info">
 
-                <span class="menu-arrow">  
-                    →  
-                </span>  
+                <h3>
+                    Absensi
+                </h3>
 
-            </a>  
+                <p>
+                    Lihat halaman absensi kelas.
+                </p>
 
+            </div>
 
-            <!-- KOMENTAR -->  
+            <span class="menu-arrow">
+                →
+            </span>
 
-            <a  
-                href="https://xtkj-2.vercel.app/comment"  
-                class="menu-card"  
-            >  
+        </a>
 
-                <div class="menu-icon purple">  
-                    💬  
-                </div>  
 
-                <div class="menu-info">  
+        <!-- KOMENTAR -->
 
-                    <h3>  
-                        Komentar  
-                    </h3>  
+        <a
+            href="https://xtkj-2.vercel.app/comment"
+            class="menu-card">
 
-                    <p>  
-                        Ngobrol bersama teman kelas.  
-                    </p>  
+            <div class="menu-icon purple">
+                💬
+            </div>
 
-                </div>  
+            <div class="menu-info">
 
-                <span class="menu-arrow">  
-                    →  
-                </span>  
+                <h3>
+                    Komentar
+                </h3>
 
-            </a>  
+                <p>
+                    Ngobrol bersama teman kelas.
+                </p>
 
+            </div>
 
-        </div>  
+            <span class="menu-arrow">
+                →
+            </span>
 
-    </section>  
+        </a>
 
 
-    <!-- =========================  
-         KOMENTAR  
-    ========================== -->  
+        <!-- PLAYLIST SPOTIFY -->
 
-    <section class="comments">  
+        <a
+            href="https://open.spotify.com/playlist/03lhRImPrX0OZlKvjfKIfW?si=pWOEZpXcQESYM4arsqJxtA&utm_source=copy-link&pi=Qk1S6Q2PStif-&sci=spotify%3Acard-config%3A2CS6OD76dbyHbQrLJVY9nO"
+            class="menu-card"
+            target="_blank"
+            rel="noopener noreferrer">
 
-        <div class="section-heading">  
+            <div class="menu-icon spotify">
+                🎵
+            </div>
 
-            <h2>  
-                💬 Komentar Kelas  
-            </h2>  
+            <div class="menu-info">
 
-            <p>  
-                Bagikan sesuatu kepada teman kelas.  
-            </p>  
+                <h3>
+                    Playlist Kelas
+                </h3>
 
-        </div>  
+                <p>
+                    Dengarkan playlist Spotify kelas.
+                </p>
 
+            </div>
 
-        <!-- NOTIF GUEST -->  
+            <span class="menu-arrow">
+                →
+            </span>
 
-        <div  
-            id="guestNotice"  
-            class="guest-notice"  
-        >  
-            👻 Kamu masuk sebagai Guest.  
-            Login sebagai siswa untuk mengirim komentar.  
-        </div>  
+        </a>
 
 
-        <!-- INPUT KOMENTAR -->  
+    </div>
 
-        <textarea  
-            id="message"  
-            maxlength="500"  
-            placeholder="Tulis komentar..."  
-        ></textarea>  
+</section>
 
 
-        <div class="comment-form-bottom">  
+<!-- =========================
+     KOMENTAR
+========================= -->
 
-            <span id="charCount">  
-                0 / 500  
-            </span>  
+<section class="comments">
 
+    <div class="section-heading">
 
-            <button  
-                type="button"  
-                id="sendCommentButton"  
-                onclick="addComment()"  
-            >  
-                Kirim Komentar  
-            </button>  
+        <h2>
+            💬 Komentar Kelas
+        </h2>
 
-        </div>  
+        <p>
+            Bagikan sesuatu kepada teman kelas.
+        </p>
 
+    </div>
 
-        <div class="comment-divider"></div>  
 
+    <!-- NOTIF GUEST -->
 
-        <!-- HEADER KOMENTAR -->  
+    <div
+        id="guestNotice"
+        class="guest-notice">
 
-        <div class="latest-header">  
+        👻 Kamu masuk sebagai Guest.
+        Login sebagai siswa untuk mengirim komentar.
 
-            <h3>  
-                Komentar Terbaru  
-            </h3>  
+    </div>
 
 
-            <button  
-                type="button"  
-                class="refresh-button"  
-                onclick="loadComments()"  
-            >  
-                ↻  
-            </button>  
+    <!-- INPUT KOMENTAR -->
 
-        </div>  
+    <textarea
+        id="message"
+        maxlength="500"
+        placeholder="Tulis komentar..."
+    ></textarea>
 
 
-        <!-- LIST KOMENTAR -->  
+    <div class="comment-form-bottom">
 
-        <div id="commentList">  
+        <span id="charCount">
+            0 / 500
+        </span>
 
-            <p class="empty">  
-                Memuat komentar...  
-            </p>  
 
-        </div>  
+        <button
+            type="button"
+            id="sendCommentButton"
+            onclick="addComment()">
 
-    </section>  
+            Kirim Komentar
 
+        </button>
 
-    <!-- =========================  
-         FOOTER  
-    ========================== -->  
+    </div>
 
-    <footer>  
 
-        <p>  
-            © 2026 TKJ 2 • Kelas Kita  
-        </p>  
+    <div class="comment-divider"></div>
 
 
-        <button  
-            type="button"  
-            onclick="logout()"  
-            class="logout-button"  
-        >  
-            Keluar  
-        </button>  
+    <!-- HEADER KOMENTAR -->
 
-    </footer>  
+    <div class="latest-header">
 
+        <h3>
+            Komentar Terbaru
+        </h3>
 
-</main>  
 
+        <button
+            type="button"
+            class="refresh-button"
+            onclick="loadComments()">
 
-<!-- =========================  
-     SUPABASE  
-========================== -->  
+            ↻
 
-<script  
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"  
-></script>  
+        </button>
 
+    </div>
 
-<!-- =========================  
-     SCRIPT UTAMA  
-========================== -->  
 
-<script src="script.js"></script>  
+    <!-- LIST KOMENTAR -->
 
+    <div id="commentList">
 
-<!-- =========================  
-     LOGIN UI  
-========================== -->  
+        <p class="empty">
+            Memuat komentar...
+        </p>
 
-<script>  
+    </div>
 
-    const currentUsername =  
-        localStorage.getItem(  
-            "username"  
-        ) || "Guest";  
+</section>
 
 
-    const currentRole =  
-        localStorage.getItem(  
-            "role"  
-        ) || "guest";  
+<!-- =========================
+     FOOTER
+========================= -->
 
+<footer>
 
-    const currentLoginStatus =  
-        localStorage.getItem(  
-            "loginStatus"  
-        );  
+    <p>
+        © 2026 TKJ 2 • Kelas Kita
+    </p>
 
 
-    // =========================  
-    // WELCOME  
-    // =========================  
+    <button
+        type="button"
+        onclick="logout()"
+        class="logout-button">
 
-    const welcomeUser =  
-        document.getElementById(  
-            "welcomeUser"  
-        );  
+        Keluar
 
+    </button>
 
-    if (welcomeUser) {  
+</footer>
 
-        welcomeUser.textContent =  
-            `Login sebagai ${currentUsername}`;  
 
-    }  
+</main>
 
 
-    // =========================  
-    // ELEMENT KOMENTAR  
-    // =========================  
+<!-- =========================
+     SUPABASE
+========================= -->
 
-    const message =  
-        document.getElementById(  
-            "message"  
-        );  
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
 
 
-    const sendButton =  
-        document.getElementById(  
-            "sendCommentButton"  
-        );  
+<!-- =========================
+     SCRIPT UTAMA
+========================= -->
 
+<script src="script.js"></script>
 
-    const guestNotice =  
-        document.getElementById(  
-            "guestNotice"  
-        );  
 
+<!-- =========================
+     LOGIN UI
+========================= -->
 
-    // =========================  
-    // GUEST MODE  
-    // =========================  
+<script>
 
-    if (  
-        currentLoginStatus === "guest" ||  
-        currentRole === "guest"  
-    ) {  
+const currentUsername =
+    localStorage.getItem("username") ||
+    "Guest";
 
-        message.disabled = true;  
 
-        sendButton.disabled = true;  
+const currentRole =
+    localStorage.getItem("role") ||
+    "guest";
 
-        message.placeholder =  
-            "Guest tidak dapat mengirim komentar";  
 
-        sendButton.textContent =  
-            "🔒 Login untuk Berkomentar";  
+const currentLoginStatus =
+    localStorage.getItem("loginStatus");
 
-        guestNotice.style.display =  
-            "block";  
 
-    }  
+// =========================
+// WELCOME
+// =========================
 
+const welcomeUser =
+    document.getElementById(
+        "welcomeUser"
+    );
 
-    // =========================  
-    // USER / ADMIN MODE  
-    // =========================  
 
-    else {  
+if (welcomeUser) {
 
-        message.disabled = false;  
+    welcomeUser.textContent =
+        `Login sebagai ${currentUsername}`;
 
-        sendButton.disabled = false;  
+}
 
-        message.placeholder =  
-            "Tulis komentar...";  
 
-        sendButton.textContent =  
-            "Kirim Komentar";  
+// =========================
+// ELEMENT KOMENTAR
+// =========================
 
-        guestNotice.style.display =  
-            "none";  
+const message =
+    document.getElementById(
+        "message"
+    );
 
-    }  
 
+const sendButton =
+    document.getElementById(
+        "sendCommentButton"
+    );
 
-    // =========================  
-    // CHARACTER COUNTER  
-    // =========================  
 
-    message.addEventListener(  
-        "input",  
-        function() {  
+const guestNotice =
+    document.getElementById(
+        "guestNotice"
+    );
 
-            document.getElementById(  
-                "charCount"  
-            ).textContent =  
-                `${message.value.length} / 500`;  
 
-        }  
-    );  
+// =========================
+// GUEST MODE
+// =========================
 
+if (
+    currentLoginStatus === "guest" ||
+    currentRole === "guest"
+) {
 
-    // =========================  
-    // LOGOUT  
-    // =========================  
+    message.disabled = true;
 
-    function logout() {  
+    sendButton.disabled = true;
 
-        localStorage.removeItem(  
-            "loginStatus"  
-        );  
+    message.placeholder =
+        "Guest tidak dapat mengirim komentar";
 
-        localStorage.removeItem(  
-            "username"  
-        );  
+    sendButton.textContent =
+        "🔒 Login untuk Berkomentar";
 
-        localStorage.removeItem(  
-            "name"  
-        );  
+    guestNotice.style.display =
+        "block";
 
-        localStorage.removeItem(  
-            "role"  
-        );  
+}
 
 
-        // Bersihkan sesi lama juga  
-        sessionStorage.clear();  
+// =========================
+// USER / ADMIN MODE
+// =========================
 
+else {
 
-        window.location.href =  
-            "login.html";  
+    message.disabled = false;
 
-    }  
+    sendButton.disabled = false;
+
+    message.placeholder =
+        "Tulis komentar...";
+
+    sendButton.textContent =
+        "Kirim Komentar";
+
+    guestNotice.style.display =
+        "none";
+
+}
+
+
+// =========================
+// CHARACTER COUNTER
+// =========================
+
+message.addEventListener(
+    "input",
+    function() {
+
+        document.getElementById(
+            "charCount"
+        ).textContent =
+            `${message.value.length} / 500`;
+
+    }
+);
+
+
+// =========================
+// LOGOUT
+// =========================
+
+function logout() {
+
+    localStorage.removeItem(
+        "loginStatus"
+    );
+
+    localStorage.removeItem(
+        "username"
+    );
+
+    localStorage.removeItem(
+        "name"
+    );
+
+    localStorage.removeItem(
+        "role"
+    );
+
+    sessionStorage.clear();
+
+    window.location.href =
+        "login.html";
+
+}
 
 </script>
 
-</body>  </html>
+</body>
+
+</html>
