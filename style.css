@@ -46,8 +46,13 @@ a {
 ========================= */
 
 .container {
-    width: min(100% - 28px, 1050px);
+    width: min(
+        100% - 28px,
+        1050px
+    );
+
     margin: 0 auto;
+
     padding: 25px 0 35px;
 }
 
@@ -58,20 +63,35 @@ a {
 
 .badge {
     display: inline-flex;
+
     align-items: center;
 
     padding: 6px 11px;
 
     border-radius: 999px;
 
-    background: rgba(255, 255, 255, .18);
-    border: 1px solid rgba(255, 255, 255, .25);
+    background: rgba(
+        255,
+        255,
+        255,
+        .18
+    );
+
+    border: 1px solid rgba(
+        255,
+        255,
+        255,
+        .25
+    );
 
     color: inherit;
 
     font-size: 11px;
+
     font-weight: 700;
+
     letter-spacing: .5px;
+
     text-transform: uppercase;
 }
 
@@ -82,6 +102,7 @@ a {
 
 .dashboard {
     position: relative;
+
     overflow: hidden;
 
     padding: 35px;
@@ -98,7 +119,13 @@ a {
         );
 
     box-shadow:
-        0 20px 50px rgba(15, 23, 42, .15);
+        0 20px 50px
+        rgba(
+            15,
+            23,
+            42,
+            .15
+        );
 }
 
 .dashboard::after {
@@ -114,16 +141,24 @@ a {
 
     border-radius: 50%;
 
-    background: rgba(255, 255, 255, .08);
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
 }
 
 .dashboard-content {
     position: relative;
+
     z-index: 2;
 
     display: flex;
 
     align-items: center;
+
     justify-content: space-between;
 
     gap: 25px;
@@ -132,7 +167,11 @@ a {
 .dashboard h1 {
     margin-top: 14px;
 
-    font-size: clamp(30px, 6vw, 48px);
+    font-size: clamp(
+        30px,
+        6vw,
+        48px
+    );
 
     line-height: 1.05;
 }
@@ -154,11 +193,18 @@ a {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 25px;
 
-    background: rgba(255, 255, 255, .12);
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .12
+        );
 
     font-size: 48px;
 }
@@ -189,7 +235,13 @@ a {
     border-radius: 24px;
 
     box-shadow:
-        0 8px 30px rgba(15, 23, 42, .05);
+        0 8px 30px
+        rgba(
+            15,
+            23,
+            42,
+            .05
+        );
 }
 
 .section-heading {
@@ -217,7 +269,10 @@ a {
     display: grid;
 
     grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
     gap: 14px;
 }
@@ -257,7 +312,13 @@ a {
     border-color: #cbd5e1;
 
     box-shadow:
-        0 12px 25px rgba(15, 23, 42, .08);
+        0 12px 25px
+        rgba(
+            15,
+            23,
+            42,
+            .08
+        );
 }
 
 .menu-icon {
@@ -269,6 +330,7 @@ a {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 15px;
@@ -290,6 +352,43 @@ a {
 
 .menu-icon.purple {
     background: #f3e8ff;
+}
+
+
+/* =========================
+   SPOTIFY
+========================= */
+
+.spotify-card {
+    border-color: #d1d5db;
+}
+
+.spotify-card:hover {
+    border-color: #b7bbc2;
+}
+
+.spotify-icon {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #111827;
+}
+
+.spotify-icon svg {
+    width: 31px;
+    height: 31px;
+
+    display: block;
 }
 
 .menu-info {
@@ -316,97 +415,6 @@ a {
     color: #94a3b8;
 
     font-size: 20px;
-}
-
-
-/* =========================
-   SPOTIFY PLAYLIST BUTTON
-========================= */
-
-.spotify-card {
-    display: flex;
-
-    align-items: center;
-
-    gap: 14px;
-
-    width: 100%;
-
-    margin-top: 14px;
-
-    padding: 15px 17px;
-
-    color: inherit;
-
-    text-decoration: none;
-
-    border: 1px solid #e2e8f0;
-
-    border-radius: 16px;
-
-    background: #f8fafc;
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        border-color .2s ease;
-}
-
-.spotify-card:hover {
-    transform: translateY(-2px);
-
-    border-color: #cbd5e1;
-
-    box-shadow:
-        0 8px 20px rgba(15, 23, 42, .07);
-}
-
-.spotify-icon {
-    width: 44px;
-    height: 44px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 12px;
-
-    background: #000;
-
-    color: white;
-
-    font-size: 22px;
-}
-
-.spotify-info {
-    min-width: 0;
-}
-
-.spotify-info strong {
-    display: block;
-
-    font-size: 14px;
-}
-
-.spotify-info span {
-    display: block;
-
-    margin-top: 3px;
-
-    color: #64748b;
-
-    font-size: 11px;
-}
-
-.spotify-arrow {
-    margin-left: auto;
-
-    color: #94a3b8;
-
-    font-size: 18px;
 }
 
 
@@ -440,7 +448,13 @@ a {
     background: white;
 
     box-shadow:
-        0 0 0 3px rgba(37, 99, 235, .1);
+        0 0 0 3px
+        rgba(
+            37,
+            99,
+            235,
+            .1
+        );
 }
 
 .comments textarea:disabled {
@@ -455,6 +469,7 @@ a {
     display: flex;
 
     align-items: center;
+
     justify-content: space-between;
 
     gap: 15px;
@@ -517,6 +532,7 @@ button:disabled {
     display: flex;
 
     align-items: center;
+
     justify-content: space-between;
 
     margin-bottom: 15px;
@@ -543,7 +559,7 @@ button:disabled {
 
 
 /* =========================
-   COMMENT UTAMA
+   COMMENT
 ========================= */
 
 .comment {
@@ -609,7 +625,7 @@ button:disabled {
 
 
 /* =========================
-   COMMENT ACTIONS
+   ACTIONS
 ========================= */
 
 .comment-actions {
@@ -743,7 +759,13 @@ button:disabled {
     border-color: #2563eb;
 
     box-shadow:
-        0 0 0 3px rgba(37, 99, 235, .1);
+        0 0 0 3px
+        rgba(
+            37,
+            99,
+            235,
+            .1
+        );
 }
 
 .reply-form-bottom {
@@ -905,6 +927,7 @@ footer {
     display: flex;
 
     align-items: center;
+
     justify-content: space-between;
 
     gap: 15px;
@@ -943,6 +966,7 @@ footer {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     min-height: 100vh;
@@ -968,7 +992,13 @@ footer {
     background: white;
 
     box-shadow:
-        0 20px 50px rgba(15, 23, 42, .08);
+        0 20px 50px
+        rgba(
+            15,
+            23,
+            42,
+            .08
+        );
 }
 
 .login-logo {
@@ -980,6 +1010,7 @@ footer {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 20px;
@@ -1045,7 +1076,13 @@ footer {
     background: white;
 
     box-shadow:
-        0 0 0 3px rgba(37, 99, 235, .1);
+        0 0 0 3px
+        rgba(
+            37,
+            99,
+            235,
+            .1
+        );
 }
 
 .login-card #loginButton {
@@ -1135,7 +1172,10 @@ footer {
 @media (max-width: 700px) {
 
     .container {
-        width: min(100% - 18px, 1050px);
+        width: min(
+            100% - 18px,
+            1050px
+        );
 
         padding-top: 9px;
     }
@@ -1213,14 +1253,6 @@ footer {
 
     .logout-button {
         width: 100%;
-    }
-
-    .spotify-card {
-        padding: 13px 14px;
-    }
-
-    .spotify-info strong {
-        font-size: 13px;
     }
 }
 
