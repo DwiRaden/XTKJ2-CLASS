@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -8,83 +10,321 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Login • Kelas Kita</title>
+    <title>SECURITY CHECKPOINT • X TKJ 2</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
 
-<body class="login-page">
 
-    <main class="login-container">
+<body class="login-body">
+
+
+<div class="login-page">
+
+
+    <div class="login-container">
+
+
+        <!-- =========================
+             SECURITY HEADER
+        ========================== -->
+
+        <div class="login-case-top">
+
+            <span>
+                CASE FILE XTKJ-2
+            </span>
+
+            <span>
+                SYSTEM SECURE
+            </span>
+
+        </div>
+
+
+        <!-- =========================
+             LOGIN CARD
+        ========================== -->
 
         <div class="login-card">
 
+
+            <div class="login-warning">
+                AUTHORIZED PERSONNEL ONLY
+            </div>
+
+
             <div class="login-logo">
-                🏫
+                🕵️
             </div>
 
-            <div class="badge">
-                SMK • TKJ 2
+
+            <span class="badge">
+                SECURITY CHECKPOINT
+            </span>
+
+
+            <div class="login-case">
+                CASE NO. XTKJ-2-2026
             </div>
 
-            <h1>Kelas Kita</h1>
+
+            <h1>
+                Akses Berkas
+            </h1>
+
 
             <p class="login-subtitle">
-                Masuk untuk mengakses dashboard kelas
+                Masukkan identitas untuk mengakses
+                sistem kelas X TKJ 2.
             </p>
 
-            <label for="username">
-                Username
-            </label>
 
-            <input
-                type="text"
-                id="username"
-                placeholder="Masukkan username"
-                autocomplete="username"
+            <!-- FORM -->
+
+            <form
+                id="loginForm"
+                onsubmit="return loginUser(event)"
             >
 
-            <label for="password">
-                Password
-            </label>
 
-            <input
-                type="password"
-                id="password"
-                placeholder="Masukkan password"
-                autocomplete="current-password"
-            >
+                <label for="username">
+                    IDENTITAS
+                </label>
 
-            <button
-                type="button"
-                id="loginButton"
-                onclick="login()"
-            >
-                Masuk
-            </button>
+                <input
+                    type="text"
+                    id="username"
+                    maxlength="30"
+                    autocomplete="off"
+                    placeholder="Masukkan nama kamu"
+                    required
+                >
+
+
+                <label for="password">
+                    KODE AKSES
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Masukkan kode akses"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    id="loginButton"
+                >
+                    🔐 MASUK KE SISTEM
+                </button>
+
+
+            </form>
+
 
             <div class="login-divider">
-                <span>atau</span>
+                <span>ATAU</span>
             </div>
+
 
             <button
                 type="button"
                 class="guest-button"
-                onclick="guestLogin()"
+                onclick="loginGuest()"
             >
                 👻 Masuk sebagai Guest
             </button>
 
-            <p
+
+            <div
                 id="loginMessage"
                 class="login-message"
-            ></p>
+            ></div>
+
+
+            <!-- CLASSIFIED -->
+
+            <div class="login-classified">
+                CLASSIFIED
+            </div>
+
 
         </div>
 
-    </main>
 
-    <script src="login.js"></script>
+        <!-- FOOTER -->
+
+        <div class="login-footer">
+
+            <span>
+                X TKJ 2 • CLASS DATABASE
+            </span>
+
+            <span>
+                © 2026
+            </span>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+function loginUser(event) {
+
+    event.preventDefault();
+
+
+    const username =
+        document
+            .getElementById("username")
+            .value
+            .trim();
+
+
+    const password =
+        document
+            .getElementById("password")
+            .value;
+
+
+    const message =
+        document.getElementById(
+            "loginMessage"
+        );
+
+
+    if (!username) {
+
+        message.textContent =
+            "⚠️ Identitas belum diisi.";
+
+        message.className =
+            "login-message error";
+
+        return false;
+
+    }
+
+
+    /*
+        ===================================
+        KODE LOGIN
+        ===================================
+
+        Kalau login.html kamu sebelumnya
+        punya sistem password khusus,
+        bagian ini tinggal disesuaikan
+        dengan kode lama kamu.
+
+        Untuk sekarang:
+        password = 12345
+    */
+
+
+    if (password !== "12345") {
+
+        message.textContent =
+            "❌ Kode akses salah.";
+
+        message.className =
+            "login-message error";
+
+        return false;
+
+    }
+
+
+    localStorage.setItem(
+        "loginStatus",
+        "user"
+    );
+
+
+    localStorage.setItem(
+        "username",
+        username
+    );
+
+
+    localStorage.setItem(
+        "name",
+        username
+    );
+
+
+    localStorage.setItem(
+        "role",
+        "user"
+    );
+
+
+    message.textContent =
+        "✓ Akses diterima. Membuka berkas...";
+
+    message.className =
+        "login-message success";
+
+
+    setTimeout(
+        function () {
+
+            window.location.href =
+                "index.html";
+
+        },
+        600
+    );
+
+
+    return false;
+
+}
+
+
+function loginGuest() {
+
+    localStorage.setItem(
+        "loginStatus",
+        "guest"
+    );
+
+
+    localStorage.setItem(
+        "username",
+        "Guest"
+    );
+
+
+    localStorage.setItem(
+        "name",
+        "Guest"
+    );
+
+
+    localStorage.setItem(
+        "role",
+        "guest"
+    );
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+</script>
 
 </body>
-  </html>
+</html>
