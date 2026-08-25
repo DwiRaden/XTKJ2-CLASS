@@ -191,9 +191,7 @@
       "name": "Zia",
       "password": "ziaxtkj2",
       "role": "user"
-    }
-  ]
-    }
+    }    
 
 {
   "users": [
@@ -203,3 +201,6 @@
       "password": "mralditkj2//",
       "role": "admin"
     },
+
+    
+  ]
