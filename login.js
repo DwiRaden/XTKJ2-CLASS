@@ -1,3 +1,4 @@
+```javascript
 async function login() {
     const usernameInput = document.getElementById("username");
     const passwordInput = document.getElementById("password");
@@ -17,46 +18,111 @@ async function login() {
     loginButton.textContent = "Memeriksa...";
 
     try {
+        // ===============================
+        // AMBIL DATABASE
+        // ===============================
+
         const response = await fetch("./users.json", {
             cache: "no-store"
         });
 
         if (!response.ok) {
-            throw new Error("users.json tidak ditemukan.");
+            throw new Error(
+                `users.json gagal dimuat. HTTP ${response.status}`
+            );
         }
+
+        // ===============================
+        // BACA JSON
+        // ===============================
 
         const database = await response.json();
 
+        // Pastikan format database benar
+        if (
+            !database ||
+            !Array.isArray(database.users)
+        ) {
+            throw new Error(
+                "Format users.json tidak valid. Harus memiliki array 'users'."
+            );
+        }
+
+        // ===============================
+        // CARI USER
+        // ===============================
+
         const user = database.users.find(account =>
-            account.username === username &&
-            account.password === password
+            String(account.username).trim() === username &&
+            String(account.password) === password
         );
 
+        // ===============================
+        // LOGIN GAGAL
+        // ===============================
+
         if (!user) {
-            message.textContent = "Username atau password salah.";
-            message.className = "login-message error";
+            message.textContent =
+                "Username atau password salah.";
+
+            message.className =
+                "login-message error";
 
             loginButton.disabled = false;
             loginButton.textContent = "Masuk";
+
             return;
         }
 
-        // HAPUS SESSION LAMA
+        // ===============================
+        // BERSIHKAN SESSION
+        // ===============================
+
         sessionStorage.clear();
 
-        // SIMPAN LOGIN SECARA PERMANEN
-        localStorage.setItem("loginStatus", "user");
-        localStorage.setItem("username", user.username);
-        localStorage.setItem("name", user.name);
-        localStorage.setItem("role", user.role || "user");
+        // ===============================
+        // SIMPAN LOGIN
+        // ===============================
+
+        localStorage.setItem(
+            "loginStatus",
+            "user"
+        );
+
+        localStorage.setItem(
+            "username",
+            user.username
+        );
+
+        localStorage.setItem(
+            "name",
+            user.name || user.username
+        );
+
+        localStorage.setItem(
+            "role",
+            user.role || "user"
+        );
+
+        // ===============================
+        // MASUK DASHBOARD
+        // ===============================
 
         window.location.href = "index.html";
 
     } catch (error) {
-        console.error(error);
 
-        message.textContent = "Gagal membaca database akun.";
-        message.className = "login-message error";
+        console.error(
+            "LOGIN ERROR:",
+            error
+        );
+
+        message.textContent =
+            "Database akun bermasalah: " +
+            error.message;
+
+        message.className =
+            "login-message error";
 
         loginButton.disabled = false;
         loginButton.textContent = "Masuk";
@@ -72,12 +138,28 @@ function guestLogin() {
 
     sessionStorage.clear();
 
-    localStorage.setItem("loginStatus", "guest");
-    localStorage.setItem("username", "Guest");
-    localStorage.setItem("name", "Guest");
-    localStorage.setItem("role", "guest");
+    localStorage.setItem(
+        "loginStatus",
+        "guest"
+    );
 
-    window.location.href = "index.html";
+    localStorage.setItem(
+        "username",
+        "Guest"
+    );
+
+    localStorage.setItem(
+        "name",
+        "Guest"
+    );
+
+    localStorage.setItem(
+        "role",
+        "guest"
+    );
+
+    window.location.href =
+        "index.html";
 }
 
 
@@ -85,13 +167,17 @@ function guestLogin() {
 // ENTER
 // ===============================
 
-document.addEventListener("keydown", function(event) {
+document.addEventListener(
+    "keydown",
+    function(event) {
 
-    if (
-        event.key === "Enter" &&
-        document.activeElement.tagName !== "TEXTAREA"
-    ) {
-        login();
+        if (
+            event.key === "Enter" &&
+            document.activeElement.tagName !== "TEXTAREA"
+        ) {
+            login();
+        }
+
     }
-
-});
+);
+```
