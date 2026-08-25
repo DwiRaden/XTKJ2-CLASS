@@ -194,3 +194,12 @@
     }
   ]
     }
+
+{
+  "users": [
+    {
+      "username": "mr. aldi",
+      "name": "Mr. Aldi",
+      "password": "mralditkj2//",
+      "role": "admin"
+    }
