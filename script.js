@@ -1,102 +1,100 @@
-// ========================================
-// SUPABASE CONFIG
-// ========================================
+async function login() {
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("loginMessage");
 
-const SUPABASE_URL =
-    "https://xzgcspmwkxnimtczdopq.supabase.co";
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
 
-const SUPABASE_KEY =
-    "sb_publishable_AuowlqGe8ykjqRBXlgY5EQ_M3h2DdFG";
+    if (!username || !password) {
+        message.textContent = "Username dan password wajib diisi.";
+        message.className = "login-message error";
+        return;
+    }
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+    loginButton.disabled = true;
+    loginButton.textContent = "Memeriksa...";
 
+    try {
+        const response = await fetch("./users.json", {
+            cache: "no-store"
+        });
 
-// ========================================
-// LOGIN
-// ========================================
+        if (!response.ok) {
+            throw new Error("users.json tidak ditemukan.");
+        }
 
-function getLoginStatus() {
-    return localStorage.getItem("loginStatus");
-}
+        const database = await response.json();
 
-function getUsername() {
-    return localStorage.getItem("username");
-}
-
-function getRole() {
-    return localStorage.getItem("role");
-}
-
-function canComment() {
-    return (
-        getLoginStatus() === "user" &&
-        getUsername() &&
-        getRole() !== "guest"
-    );
-}
-
-
-// ========================================
-// LOAD COMMENTS
-// ========================================
-
-async function loadComments() {
-
-    const commentList =
-        document.getElementById("commentList");
-
-    if (!commentList) return;
-
-    commentList.innerHTML =
-        `<p class="empty">Memuat komentar...</p>`;
-
-    const { data, error } =
-        await supabaseClient
-            .from("comments")
-            .select(
-                "id, name, message, created_at, reply_to"
-            )
-            .order(
-                "created_at",
-                {
-                    ascending: true
-                }
-            );
-
-    if (error) {
-
-        console.error(
-            "Supabase Error:",
-            error
+        const user = database.users.find(account =>
+            account.username === username &&
+            account.password === password
         );
 
-        commentList.innerHTML =
-            `<p class="empty">
-                Gagal memuat komentar.<br>
-                ${escapeHTML(error.message)}
-            </p>`;
+        if (!user) {
+            message.textContent = "Username atau password salah.";
+            message.className = "login-message error";
 
-        return;
+            loginButton.disabled = false;
+            loginButton.textContent = "Masuk";
+            return;
+        }
+
+        // HAPUS SESSION LAMA
+        sessionStorage.clear();
+
+        // SIMPAN LOGIN SECARA PERMANEN
+        localStorage.setItem("loginStatus", "user");
+        localStorage.setItem("username", user.username);
+        localStorage.setItem("name", user.name);
+        localStorage.setItem("role", user.role || "user");
+
+        window.location.href = "index.html";
+
+    } catch (error) {
+        console.error(error);
+
+        message.textContent = "Gagal membaca database akun.";
+        message.className = "login-message error";
+
+        loginButton.disabled = false;
+        loginButton.textContent = "Masuk";
+    }
+}
+
+
+// ===============================
+// GUEST
+// ===============================
+
+function guestLogin() {
+
+    sessionStorage.clear();
+
+    localStorage.setItem("loginStatus", "guest");
+    localStorage.setItem("username", "Guest");
+    localStorage.setItem("name", "Guest");
+    localStorage.setItem("role", "guest");
+
+    window.location.href = "index.html";
+}
+
+
+// ===============================
+// ENTER
+// ===============================
+
+document.addEventListener("keydown", function(event) {
+
+    if (
+        event.key === "Enter" &&
+        document.activeElement.tagName !== "TEXTAREA"
+    ) {
+        login();
     }
 
-    if (!data || data.length === 0) {
-
-        commentList.innerHTML =
-            `<p class="empty">
-                Belum ada komentar.
-            </p>`;
-
-        return;
-    }
-
-    commentList.innerHTML = "";
-
-    // ====================================
-    // BUAT TREE KOMENTAR
+});    // BUAT TREE KOMENTAR
     // ====================================
 
     const commentMap = new Map();
