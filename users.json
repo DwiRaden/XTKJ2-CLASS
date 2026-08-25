@@ -1,3 +1,4 @@
+```json
 {
   "users": [
     {
@@ -34,6 +35,173 @@
       "username": "Aura",
       "name": "Aura",
       "password": "auraxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Aqmar",
+      "name": "Aqmar",
+      "password": "aqmarxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Dea",
+      "name": "Dea",
+      "password": "deaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Dwijendra",
+      "name": "Dwijendra",
+      "password": "dwijendraxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Evelyn",
+      "name": "Evelyn",
+      "password": "evelynxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Faisal",
+      "name": "Faisal",
+      "password": "faisalxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Firda",
+      "name": "Firda",
+      "password": "firdaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Galuh",
+      "name": "Galuh",
+      "password": "galuhxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Hana",
+      "name": "Hana",
+      "password": "hanaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Hanif",
+      "name": "Hanif",
+      "password": "hanifxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Keisya",
+      "name": "Keisya (aca)",
+      "password": "keisyaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Amelia",
+      "name": "Amel",
+      "password": "ameliaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "faqih",
+      "name": "faqih",
+      "password": "faqihxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Kianu",
+      "name": "Kianu",
+      "password": "kianuxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Mazaya",
+      "name": "Mazaya",
+      "password": "mazayaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Nizar",
+      "name": "Nizar",
+      "password": "nizarxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Fahma",
+      "name": "Fahma",
+      "password": "fahmaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Kenzie",
+      "name": "Kenzie",
+      "password": "kenziextkj2",
+      "role": "user"
+    },
+    {
+      "username": "Mutia",
+      "name": "Mutia",
+      "password": "mutiaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Naila",
+      "name": "Naila",
+      "password": "nailaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Narendra",
+      "name": "Narendra",
+      "password": "narendraxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Nicky",
+      "name": "Nicky",
+      "password": "nickyxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Radhival",
+      "name": "Radhival",
+      "password": "radhivalxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Raka",
+      "name": "Raka",
+      "password": "rakaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Dwi",
+      "name": "Dwi",
+      "password": "dwixtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Steven",
+      "name": "Steven",
+      "password": "stevenxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "Zia",
+      "name": "Zia",
+      "password": "ziaxtkj2",
+      "role": "user"
+    },
+    {
+      "username": "MrAldi",
+      "name": "Mr. Aldi",
+      "password": "aldixtkj2",
+      "role": "admin"
+    }
+  ]
+}
+```
       "role": "user"
     },
     {
