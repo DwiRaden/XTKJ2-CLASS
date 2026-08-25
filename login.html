@@ -1,5 +1,7 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
 
@@ -12,6 +14,7 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
+
 
 <body class="login-page">
 
@@ -33,6 +36,9 @@
                 Masuk untuk mengakses dashboard kelas
             </p>
 
+
+            <!-- USERNAME -->
+
             <label for="username">
                 Username
             </label>
@@ -43,6 +49,9 @@
                 placeholder="Masukkan username"
                 autocomplete="username"
             >
+
+
+            <!-- PASSWORD -->
 
             <label for="password">
                 Password
@@ -55,25 +64,35 @@
                 autocomplete="current-password"
             >
 
+
+            <!-- LOGIN -->
+
             <button
                 type="button"
                 id="loginButton"
-                onclick="login()"
             >
                 Masuk
             </button>
+
+
+            <!-- DIVIDER -->
 
             <div class="login-divider">
                 <span>atau</span>
             </div>
 
+
+            <!-- GUEST -->
+
             <button
                 type="button"
                 class="guest-button"
-                onclick="guestLogin()"
             >
                 👻 Masuk sebagai Guest
             </button>
+
+
+            <!-- MESSAGE -->
 
             <p
                 id="loginMessage"
@@ -84,7 +103,12 @@
 
     </main>
 
+
+    <!-- LOGIN SCRIPT -->
+
     <script src="login.js"></script>
 
 </body>
+
 </html>
+```
