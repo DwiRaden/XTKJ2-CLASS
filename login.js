@@ -1,67 +1,73 @@
-```javascript
 async function login() {
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const loginButton = document.getElementById("loginButton");
-    const message = document.getElementById("loginMessage");
 
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value;
+    const usernameInput =
+        document.getElementById("username");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const message =
+        document.getElementById("loginMessage");
+
+
+    const username =
+        usernameInput.value.trim();
+
+    const password =
+        passwordInput.value;
+
 
     if (!username || !password) {
-        message.textContent = "Username dan password wajib diisi.";
-        message.className = "login-message error";
+
+        message.textContent =
+            "Username dan password wajib diisi.";
+
+        message.className =
+            "login-message error";
+
         return;
     }
 
+
     loginButton.disabled = true;
-    loginButton.textContent = "Memeriksa...";
+
+    loginButton.textContent =
+        "Memeriksa...";
+
 
     try {
-        // ===============================
-        // AMBIL DATABASE
-        // ===============================
 
-        const response = await fetch("./users.json", {
-            cache: "no-store"
-        });
+        const response =
+            await fetch("./users.json");
+
 
         if (!response.ok) {
             throw new Error(
-                `users.json gagal dimuat. HTTP ${response.status}`
+                "users.json tidak ditemukan."
             );
         }
 
-        // ===============================
-        // BACA JSON
-        // ===============================
 
-        const database = await response.json();
+        const database =
+            await response.json();
 
-        // Pastikan format database benar
-        if (
-            !database ||
-            !Array.isArray(database.users)
-        ) {
-            throw new Error(
-                "Format users.json tidak valid. Harus memiliki array 'users'."
-            );
-        }
 
-        // ===============================
-        // CARI USER
-        // ===============================
+        const user =
+            database.users.find(account => {
 
-        const user = database.users.find(account =>
-            String(account.username).trim() === username &&
-            String(account.password) === password
-        );
+                return (
+                    account.username === username &&
+                    account.password === password
+                );
 
-        // ===============================
-        // LOGIN GAGAL
-        // ===============================
+            });
+
 
         if (!user) {
+
             message.textContent =
                 "Username atau password salah.";
 
@@ -69,63 +75,53 @@ async function login() {
                 "login-message error";
 
             loginButton.disabled = false;
-            loginButton.textContent = "Masuk";
+
+            loginButton.textContent =
+                "Masuk";
 
             return;
         }
 
-        // ===============================
-        // BERSIHKAN SESSION
-        // ===============================
 
-        sessionStorage.clear();
-
-        // ===============================
-        // SIMPAN LOGIN
-        // ===============================
-
-        localStorage.setItem(
+        sessionStorage.setItem(
             "loginStatus",
             "user"
         );
 
-        localStorage.setItem(
+        sessionStorage.setItem(
             "username",
             user.username
         );
 
-        localStorage.setItem(
+        sessionStorage.setItem(
             "name",
-            user.name || user.username
+            user.name
         );
 
-        localStorage.setItem(
+        sessionStorage.setItem(
             "role",
             user.role || "user"
         );
 
-        // ===============================
-        // MASUK DASHBOARD
-        // ===============================
 
-        window.location.href = "index.html";
+        window.location.href =
+            "index.html";
+
 
     } catch (error) {
 
-        console.error(
-            "LOGIN ERROR:",
-            error
-        );
+        console.error(error);
 
         message.textContent =
-            "Database akun bermasalah: " +
-            error.message;
+            "Gagal membaca database akun.";
 
         message.className =
             "login-message error";
 
         loginButton.disabled = false;
-        loginButton.textContent = "Masuk";
+
+        loginButton.textContent =
+            "Masuk";
     }
 }
 
@@ -136,27 +132,26 @@ async function login() {
 
 function guestLogin() {
 
-    sessionStorage.clear();
-
-    localStorage.setItem(
+    sessionStorage.setItem(
         "loginStatus",
         "guest"
     );
 
-    localStorage.setItem(
+    sessionStorage.setItem(
         "username",
         "Guest"
     );
 
-    localStorage.setItem(
+    sessionStorage.setItem(
         "name",
         "Guest"
     );
 
-    localStorage.setItem(
+    sessionStorage.setItem(
         "role",
         "guest"
     );
+
 
     window.location.href =
         "index.html";
@@ -164,20 +159,16 @@ function guestLogin() {
 
 
 // ===============================
-// ENTER
+// ENTER = LOGIN
 // ===============================
 
 document.addEventListener(
     "keydown",
     function(event) {
 
-        if (
-            event.key === "Enter" &&
-            document.activeElement.tagName !== "TEXTAREA"
-        ) {
+        if (event.key === "Enter") {
             login();
         }
 
     }
 );
-```
