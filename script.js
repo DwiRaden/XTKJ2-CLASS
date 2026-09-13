@@ -1,575 +1,41 @@
-async function login() {
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const loginButton = document.getElementById("loginButton");
-    const message = document.getElementById("loginMessage");
-
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value;
-
-    if (!username || !password) {
-        message.textContent = "Username dan password wajib diisi.";
-        message.className = "login-message error";
-        return;
-    }
-
-    loginButton.disabled = true;
-    loginButton.textContent = "Memeriksa...";
-
-    try {
-        const response = await fetch("./users.json", {
-            cache: "no-store"
-        });
-
-        if (!response.ok) {
-            throw new Error("users.json tidak ditemukan.");
-        }
-
-        const database = await response.json();
-
-        const user = database.users.find(account =>
-            account.username === username &&
-            account.password === password
-        );
-
-        if (!user) {
-            message.textContent = "Username atau password salah.";
-            message.className = "login-message error";
-
-            loginButton.disabled = false;
-            loginButton.textContent = "Masuk";
-            return;
-        }
-
-        // HAPUS SESSION LAMA
-        sessionStorage.clear();
-
-        // SIMPAN LOGIN SECARA PERMANEN
-        localStorage.setItem("loginStatus", "user");
-        localStorage.setItem("username", user.username);
-        localStorage.setItem("name", user.name);
-        localStorage.setItem("role", user.role || "user");
-
-        window.location.href = "index.html";
-
-    } catch (error) {
-        console.error(error);
-
-        message.textContent = "Gagal membaca database akun.";
-        message.className = "login-message error";
-
-        loginButton.disabled = false;
-        loginButton.textContent = "Masuk";
-    }
-}
-
-
-// ===============================
-// GUEST
-// ===============================
-
-function guestLogin() {
-
-    sessionStorage.clear();
-
-    localStorage.setItem("loginStatus", "guest");
-    localStorage.setItem("username", "Guest");
-    localStorage.setItem("name", "Guest");
-    localStorage.setItem("role", "guest");
-
-    window.location.href = "index.html";
-}
-
-
-// ===============================
-// ENTER
-// ===============================
-
-document.addEventListener("keydown", function(event) {
-
-    if (
-        event.key === "Enter" &&
-        document.activeElement.tagName !== "TEXTAREA"
-    ) {
-        login();
-    }
-
-});    // BUAT TREE KOMENTAR
-    // ====================================
-
-    const commentMap = new Map();
-
-    data.forEach(comment => {
-
-        comment.children = [];
-
-        commentMap.set(
-            String(comment.id),
-            comment
-        );
-
-    });
-
-
-    const roots = [];
-
-    data.forEach(comment => {
-
-        if (
-            comment.reply_to !== null &&
-            comment.reply_to !== undefined &&
-            commentMap.has(
-                String(comment.reply_to)
-            )
-        ) {
-
-            commentMap
-                .get(String(comment.reply_to))
-                .children
-                .push(comment);
-
-        } else {
-
-            roots.push(comment);
-
-        }
-
-    });
-
-
-    // ====================================
-    // RENDER KOMENTAR UTAMA
-    // ====================================
-
-    roots
-        .sort(sortByDate)
-        .forEach(comment => {
-
-            const element =
-                createCommentElement(
-                    comment,
-                    false
-                );
-
-            commentList.appendChild(
-                element
-            );
-
-        });
-}
-
-
 // ========================================
-// SORT
+// SUPABASE CONFIG
 // ========================================
 
-function sortByDate(a, b) {
+const SUPABASE_URL =
+    "https://xzgcspmwkxnimtczdopq.supabase.co";
 
-    return new Date(a.created_at) -
-        new Date(b.created_at);
+const SUPABASE_KEY =
+    "sb_publishable_AuowlqGe8ykjqRBXlgY5EQ_M3h2DdFG";
 
-}
-
-
-// ========================================
-// CREATE COMMENT
-// ========================================
-
-function createCommentElement(
-    comment,
-    isReply = false
-) {
-
-    const box =
-        document.createElement("article");
-
-    box.className =
-        isReply
-            ? "comment reply"
-            : "comment";
-
-
-    // ====================================
-    // HEADER
-    // ====================================
-
-    const header =
-        document.createElement("div");
-
-    header.className =
-        "reply-header";
-
-
-    const name =
-        document.createElement("div");
-
-    name.className =
-        "comment-name";
-
-    name.textContent =
-        comment.name;
-
-
-    header.appendChild(name);
-
-
-    // ====================================
-    // "MEMBALAS USER"
-    // ====================================
-
-    if (
-        isReply &&
-        comment.reply_to !== null
-    ) {
-
-        const parent =
-            findParentName(
-                comment.reply_to
-            );
-
-        if (parent) {
-
-            const replyingTo =
-                document.createElement("span");
-
-            replyingTo.className =
-                "replying-to";
-
-            replyingTo.textContent =
-                `membalas ${parent}`;
-
-            header.appendChild(
-                replyingTo
-            );
-
-        }
-
-    }
-
-
-    // ====================================
-    // MESSAGE
-    // ====================================
-
-    const message =
-        document.createElement("div");
-
-    message.className =
-        "comment-message";
-
-    message.textContent =
-        comment.message;
-
-
-    // ====================================
-    // TIME
-    // ====================================
-
-    const time =
-        document.createElement("div");
-
-    time.className =
-        "comment-time";
-
-    time.textContent =
-        formatDate(
-            comment.created_at
-        );
-
-
-    // ====================================
-    // ACTIONS
-    // ====================================
-
-    const actions =
-        document.createElement("div");
-
-    actions.className =
-        "comment-actions";
-
-
-    // ====================================
-    // REPLY BUTTON
-    // ====================================
-
-    const replyButton =
-        document.createElement("button");
-
-    replyButton.type =
-        "button";
-
-    replyButton.className =
-        "reply-button";
-
-    replyButton.textContent =
-        "💬 Balas";
-
-    replyButton.addEventListener(
-        "click",
-        function() {
-
-            if (!canComment()) {
-
-                alert(
-                    "Guest tidak dapat membalas komentar."
-                );
-
-                return;
-            }
-
-            toggleReplyForm(
-                box,
-                comment
-            );
-
-        }
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
     );
 
 
-    actions.appendChild(
-        replyButton
-    );
-
-
-    // ====================================
-    // DELETE ADMIN
-    // ====================================
-
-    if (getRole() === "admin") {
-
-        const deleteButton =
-            document.createElement("button");
-
-        deleteButton.type =
-            "button";
-
-        deleteButton.className =
-            "delete-comment";
-
-        deleteButton.textContent =
-            "🗑️ Hapus";
-
-        deleteButton.addEventListener(
-            "click",
-            function() {
-
-                deleteComment(
-                    comment.id
-                );
-
-            }
-        );
-
-        actions.appendChild(
-            deleteButton
-        );
-
-    }
-
-
-    // ====================================
-    // APPEND BASIC
-    // ====================================
-
-    box.appendChild(header);
-
-    box.appendChild(message);
-
-    box.appendChild(time);
-
-    box.appendChild(actions);
-
-
-    // ====================================
-    // REPLY FORM
-    // ====================================
-
-    const replyForm =
-        document.createElement("div");
-
-    replyForm.className =
-        "reply-form-container";
-
-    replyForm.style.display =
-        "none";
-
-    box.appendChild(
-        replyForm
-    );
-
-
-    // ====================================
-    // CHILD REPLIES
-    // ====================================
-
-    if (
-        comment.children &&
-        comment.children.length > 0
-    ) {
-
-        const toggle =
-            document.createElement("button");
-
-        toggle.type =
-            "button";
-
-        toggle.className =
-            "reply-toggle";
-
-        const total =
-            comment.children.length;
-
-        toggle.textContent =
-            `▼ Lihat ${total} ${
-                total === 1
-                    ? "balasan"
-                    : "balasan"
-            }`;
-
-
-        const replies =
-            document.createElement("div");
-
-        replies.className =
-            "replies";
-
-        replies.style.display =
-            "none";
-
-
-        // =================================
-        // RENDER CHILD
-        // =================================
-
-        comment.children
-            .sort(sortByDate)
-            .forEach(child => {
-
-                const childElement =
-                    createCommentElement(
-                        child,
-                        true
-                    );
-
-                replies.appendChild(
-                    childElement
-                );
-
-            });
-
-
-        toggle.addEventListener(
-            "click",
-            function() {
-
-                const hidden =
-                    replies.style.display ===
-                    "none";
-
-                if (hidden) {
-
-                    replies.style.display =
-                        "flex";
-
-                    toggle.textContent =
-                        `▲ Sembunyikan ${total} ${
-                            total === 1
-                                ? "balasan"
-                                : "balasan"
-                        }`;
-
-                } else {
-
-                    replies.style.display =
-                        "none";
-
-                    toggle.textContent =
-                        `▼ Lihat ${total} ${
-                            total === 1
-                                ? "balasan"
-                                : "balasan"
-                        }`;
-
-                }
-
-            }
-        );
-
-
-        box.appendChild(
-            toggle
-        );
-
-        box.appendChild(
-            replies
-        );
-
-    }
-
-
-    return box;
-}
-
-
 // ========================================
-// PARENT NAME
-// ========================================
-//
-// Data sementara disimpan saat load.
-// Fungsi ini mencari nama parent dari
-// seluruh komentar yang sedang tampil.
-//
-
-let allCommentsCache = [];
-
-
-function findParentName(id) {
-
-    const parent =
-        allCommentsCache.find(
-            comment =>
-                String(comment.id) ===
-                String(id)
-        );
-
-    return parent
-        ? parent.name
-        : null;
-}
-
-
-// ========================================
-// LOAD DATA + CACHE
+// LOAD COMMENTS
 // ========================================
 
 async function loadComments() {
 
     const commentList =
-        document.getElementById(
-            "commentList"
-        );
+        document.getElementById("commentList");
 
     if (!commentList) return;
 
     commentList.innerHTML =
-        `<p class="empty">
-            Memuat komentar...
-        </p>`;
-
+        '<p class="empty">Memuat komentar...</p>';
 
     const { data, error } =
         await supabaseClient
             .from("comments")
-            .select(
-                "id, name, message, created_at, reply_to"
-            )
-            .order(
-                "created_at",
-                {
-                    ascending: true
-                }
-            );
-
+            .select("id, name, message, created_at")
+            .order("created_at", {
+                ascending: false
+            });
 
     if (error) {
 
@@ -579,375 +45,148 @@ async function loadComments() {
         );
 
         commentList.innerHTML =
-            `<p class="empty">
-                Gagal memuat komentar.<br>
-                ${escapeHTML(error.message)}
-            </p>`;
+            '<p class="empty">Gagal memuat komentar.</p>';
 
         return;
     }
-
-
-    allCommentsCache =
-        data || [];
-
 
     if (!data || data.length === 0) {
 
         commentList.innerHTML =
-            `<p class="empty">
-                Belum ada komentar.
-            </p>`;
+            '<p class="empty">Belum ada komentar.</p>';
 
         return;
     }
-
 
     commentList.innerHTML = "";
 
-
-    // ====================================
-    // TREE
-    // ====================================
-
-    const commentMap =
-        new Map();
-
+    const role =
+        sessionStorage.getItem("role");
 
     data.forEach(comment => {
 
-        comment.children = [];
+        const box =
+            document.createElement("article");
 
-        commentMap.set(
-            String(comment.id),
-            comment
-        );
-
-    });
+        box.className = "comment";
 
 
-    const roots = [];
+        // =================================
+        // NAMA
+        // =================================
+
+        const name =
+            document.createElement("div");
+
+        name.className =
+            "comment-name";
+
+        name.textContent =
+            comment.name;
 
 
-    data.forEach(comment => {
+        // =================================
+        // PESAN
+        // =================================
 
-        if (
-            comment.reply_to !== null &&
-            comment.reply_to !== undefined &&
-            commentMap.has(
-                String(comment.reply_to)
-            )
-        ) {
+        const message =
+            document.createElement("div");
 
-            commentMap
-                .get(
-                    String(comment.reply_to)
-                )
-                .children
-                .push(comment);
+        message.className =
+            "comment-message";
 
-        } else {
-
-            roots.push(comment);
-
-        }
-
-    });
+        message.textContent =
+            comment.message;
 
 
-    roots
-        .sort(sortByDate)
-        .reverse()
-        .forEach(comment => {
+        // =================================
+        // WAKTU
+        // =================================
 
-            commentList.appendChild(
-                createCommentElement(
-                    comment,
-                    false
-                )
+        const time =
+            document.createElement("div");
+
+        time.className =
+            "comment-time";
+
+        time.textContent =
+            formatDate(
+                comment.created_at
             );
 
-        });
 
-}
+        box.appendChild(name);
+        box.appendChild(message);
+        box.appendChild(time);
 
 
-// ========================================
-// REPLY FORM
-// ========================================
+        // =================================
+        // TOMBOL ADMIN
+        // =================================
 
-function toggleReplyForm(
-    box,
-    comment
-) {
+        if (role === "admin") {
 
-    const container =
-        box.querySelector(
-            ".reply-form-container"
-        );
+            const deleteButton =
+                document.createElement("button");
 
-    if (!container) return;
+            deleteButton.type = "button";
 
+            deleteButton.className =
+                "delete-comment";
 
-    if (
-        container.style.display !==
-        "none"
-    ) {
+            deleteButton.textContent =
+                "🗑️ Hapus";
 
-        container.style.display =
-            "none";
-
-        container.innerHTML = "";
-
-        return;
-
-    }
-
-
-    container.innerHTML = "";
-
-
-    const form =
-        document.createElement("div");
-
-    form.className =
-        "reply-form";
-
-
-    const label =
-        document.createElement("div");
-
-    label.className =
-        "reply-label";
-
-    label.textContent =
-        `Membalas ${comment.name}`;
-
-
-    const input =
-        document.createElement("textarea");
-
-    input.className =
-        "reply-input";
-
-    input.maxLength =
-        500;
-
-    input.placeholder =
-        `Balas ${comment.name}...`;
-
-
-    const bottom =
-        document.createElement("div");
-
-    bottom.className =
-        "reply-form-bottom";
-
-
-    const counter =
-        document.createElement("span");
-
-    counter.className =
-        "reply-counter";
-
-    counter.textContent =
-        "0 / 500";
-
-
-    const cancel =
-        document.createElement("button");
-
-    cancel.type =
-        "button";
-
-    cancel.className =
-        "reply-cancel";
-
-    cancel.textContent =
-        "Batal";
-
-
-    const send =
-        document.createElement("button");
-
-    send.type =
-        "button";
-
-    send.className =
-        "reply-send";
-
-    send.textContent =
-        "Balas";
-
-
-    input.addEventListener(
-        "input",
-        function() {
-
-            counter.textContent =
-                `${input.value.length} / 500`;
-
-        }
-    );
-
-
-    cancel.addEventListener(
-        "click",
-        function() {
-
-            container.style.display =
-                "none";
-
-            container.innerHTML = "";
-
-        }
-    );
-
-
-    send.addEventListener(
-        "click",
-        async function() {
-
-            await sendReply(
-                comment.id,
-                input,
-                send
-            );
-
-        }
-    );
-
-
-    bottom.appendChild(counter);
-
-    bottom.appendChild(cancel);
-
-    bottom.appendChild(send);
-
-
-    form.appendChild(label);
-
-    form.appendChild(input);
-
-    form.appendChild(bottom);
-
-
-    container.appendChild(
-        form
-    );
-
-
-    container.style.display =
-        "block";
-
-    input.focus();
-
-}
-
-
-// ========================================
-// SEND REPLY
-// ========================================
-
-async function sendReply(
-    parentId,
-    input,
-    button
-) {
-
-    if (!canComment()) {
-
-        alert(
-            "Guest tidak dapat membalas."
-        );
-
-        return;
-    }
-
-
-    const username =
-        getUsername();
-
-
-    const text =
-        input.value.trim();
-
-
-    if (!text) {
-
-        alert(
-            "Balasan belum diisi!"
-        );
-
-        input.focus();
-
-        return;
-    }
-
-
-    if (text.length > 500) {
-
-        alert(
-            "Balasan maksimal 500 karakter!"
-        );
-
-        return;
-    }
-
-
-    button.disabled =
-        true;
-
-    button.textContent =
-        "Mengirim...";
-
-
-    const { error } =
-        await supabaseClient
-            .from("comments")
-            .insert([
-                {
-                    name: username,
-                    message: text,
-                    reply_to: parentId
+            deleteButton.addEventListener(
+                "click",
+                () => {
+                    deleteComment(comment.id);
                 }
-            ]);
+            );
+
+            box.appendChild(
+                deleteButton
+            );
+        }
 
 
-    if (error) {
+        commentList.appendChild(box);
 
-        console.error(
-            "Reply Error:",
-            error
-        );
-
-        alert(
-            "Gagal mengirim balasan.\n\n" +
-            error.message
-        );
-
-        button.disabled =
-            false;
-
-        button.textContent =
-            "Balas";
-
-        return;
-    }
-
-
-    await loadComments();
+    });
 
 }
 
 
 // ========================================
-// ADD MAIN COMMENT
+// FORMAT TANGGAL
+// ========================================
+
+function formatDate(date) {
+
+    return new Date(date).toLocaleString(
+        "id-ID",
+        {
+            dateStyle: "medium",
+            timeStyle: "short"
+        }
+    );
+
+}
+
+
+// ========================================
+// TAMBAH KOMENTAR
 // ========================================
 
 async function addComment() {
 
-    if (!canComment()) {
+    const loginStatus =
+        sessionStorage.getItem(
+            "loginStatus"
+        );
+
+    // Guest tidak boleh komentar
+    if (loginStatus !== "user") {
 
         alert(
             "Guest tidak dapat mengirim komentar."
@@ -957,31 +196,46 @@ async function addComment() {
     }
 
 
-    const input =
-        document.getElementById(
-            "message"
+    const username =
+        sessionStorage.getItem(
+            "username"
         );
 
-    if (!input) return;
-
-
-    const text =
-        input.value.trim();
-
-
-    if (!text) {
+    if (!username) {
 
         alert(
-            "Komentar belum diisi!"
+            "Sesi login tidak ditemukan."
         );
-
-        input.focus();
 
         return;
     }
 
 
-    if (text.length > 500) {
+    const messageInput =
+        document.getElementById(
+            "message"
+        );
+
+    if (!messageInput) return;
+
+
+    const message =
+        messageInput.value.trim();
+
+
+    if (!message) {
+
+        alert(
+            "Komentar belum diisi!"
+        );
+
+        messageInput.focus();
+
+        return;
+    }
+
+
+    if (message.length > 500) {
 
         alert(
             "Komentar maksimal 500 karakter!"
@@ -999,12 +253,10 @@ async function addComment() {
 
     if (button) {
 
-        button.disabled =
-            true;
+        button.disabled = true;
 
         button.textContent =
             "Mengirim...";
-
     }
 
 
@@ -1013,9 +265,8 @@ async function addComment() {
             .from("comments")
             .insert([
                 {
-                    name: getUsername(),
-                    message: text,
-                    reply_to: null
+                    name: username,
+                    message: message
                 }
             ]);
 
@@ -1023,7 +274,7 @@ async function addComment() {
     if (error) {
 
         console.error(
-            "Insert Error:",
+            "Supabase Error:",
             error
         );
 
@@ -1034,42 +285,39 @@ async function addComment() {
 
         if (button) {
 
-            button.disabled =
-                false;
+            button.disabled = false;
 
             button.textContent =
                 "Kirim Komentar";
-
         }
 
         return;
     }
 
 
-    input.value = "";
+    // Bersihkan textarea
+    messageInput.value = "";
 
 
-    const counter =
+    // Reset counter
+    const charCount =
         document.getElementById(
             "charCount"
         );
 
-    if (counter) {
+    if (charCount) {
 
-        counter.textContent =
+        charCount.textContent =
             "0 / 500";
-
     }
 
 
     if (button) {
 
-        button.disabled =
-            false;
+        button.disabled = false;
 
         button.textContent =
             "Kirim Komentar";
-
     }
 
 
@@ -1079,15 +327,21 @@ async function addComment() {
 
 
 // ========================================
-// DELETE COMMENT / REPLY
+// HAPUS KOMENTAR - ADMIN
 // ========================================
 
 async function deleteComment(id) {
 
-    if (getRole() !== "admin") {
+    const role =
+        sessionStorage.getItem(
+            "role"
+        );
+
+
+    if (role !== "admin") {
 
         alert(
-            "Akses ditolak. Kamu bukan admin."
+            "Akses ditolak."
         );
 
         return;
@@ -1096,148 +350,48 @@ async function deleteComment(id) {
 
     const confirmed =
         confirm(
-            "Yakin ingin menghapus komentar ini?\n\nSemua balasan di dalamnya juga akan dihapus."
+            "Yakin ingin menghapus komentar ini?"
         );
 
 
     if (!confirmed) return;
 
 
-    // ====================================
-    // AMBIL SEMUA KOMENTAR
-    // ====================================
+    console.log(
+        "Menghapus komentar ID:",
+        id
+    );
 
-    const { data, error } =
+
+    const { error } =
         await supabaseClient
             .from("comments")
-            .select(
-                "id, reply_to"
-            );
+            .delete()
+            .eq("id", id);
 
 
     if (error) {
 
-        alert(
-            "Gagal mencari balasan."
-        );
-
-        console.error(error);
-
-        return;
-    }
-
-
-    // ====================================
-    // CARI SEMUA TURUNAN
-    // ====================================
-
-    const idsToDelete =
-        [id];
-
-
-    let changed = true;
-
-
-    while (changed) {
-
-        changed = false;
-
-
-        data.forEach(comment => {
-
-            if (
-                comment.reply_to !== null &&
-                idsToDelete.some(
-                    parentId =>
-                        String(parentId) ===
-                        String(comment.reply_to)
-                ) &&
-                !idsToDelete.some(
-                    existingId =>
-                        String(existingId) ===
-                        String(comment.id)
-                )
-            ) {
-
-                idsToDelete.push(
-                    comment.id
-                );
-
-                changed = true;
-
-            }
-
-        });
-
-    }
-
-
-    // ====================================
-    // DELETE
-    // ====================================
-
-    const { error: deleteError } =
-        await supabaseClient
-            .from("comments")
-            .delete()
-            .in(
-                "id",
-                idsToDelete
-            );
-
-
-    if (deleteError) {
-
         console.error(
             "Delete Error:",
-            deleteError
+            error
         );
 
         alert(
             "Gagal menghapus komentar.\n\n" +
-            deleteError.message
+            error.message
         );
 
         return;
     }
 
 
+    alert(
+        "Komentar berhasil dihapus."
+    );
+
+
     await loadComments();
-
-}
-
-
-// ========================================
-// FORMAT DATE
-// ========================================
-
-function formatDate(date) {
-
-    return new Date(date)
-        .toLocaleString(
-            "id-ID",
-            {
-                dateStyle: "medium",
-                timeStyle: "short"
-            }
-        );
-
-}
-
-
-// ========================================
-// ESCAPE HTML
-// ========================================
-
-function escapeHTML(text) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        text;
-
-    return div.innerHTML;
 
 }
 
@@ -1247,9 +401,7 @@ function escapeHTML(text) {
 // ========================================
 
 supabaseClient
-    .channel(
-        "comments-realtime"
-    )
+    .channel("comments-realtime")
     .on(
         "postgres_changes",
         {
@@ -1257,7 +409,7 @@ supabaseClient
             schema: "public",
             table: "comments"
         },
-        function() {
+        () => {
 
             loadComments();
 
@@ -1267,35 +419,35 @@ supabaseClient
 
 
 // ========================================
-// INITIALIZE
+// COUNTER KARAKTER
 // ========================================
 
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
+    () => {
 
-        const input =
+        const messageInput =
             document.getElementById(
                 "message"
             );
 
-        const counter =
+        const charCount =
             document.getElementById(
                 "charCount"
             );
 
 
         if (
-            input &&
-            counter
+            messageInput &&
+            charCount
         ) {
 
-            input.addEventListener(
+            messageInput.addEventListener(
                 "input",
-                function() {
+                () => {
 
-                    counter.textContent =
-                        `${input.value.length} / 500`;
+                    charCount.textContent =
+                        `${messageInput.value.length} / 500`;
 
                 }
             );
